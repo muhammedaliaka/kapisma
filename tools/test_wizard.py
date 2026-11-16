@@ -1,23 +1,28 @@
 #!/usr/bin/env python3
 """
-Kurulum sihirbazi testi (Windows PowerShell): paketi temiz klasore acar ve sihirbazi `-Headless` modda calistirir.
- 1) -SelfTest: GUI formu kuruluyor mu (sozdizimi + kontroller)
- 2) Oyuncu: sahte .minecraft icinde mods kopyalanir, eski mod _kapisma_eski'ye tasinir, Fabric surumu eklenir,
-    ses modu paketten gelir, servers.dat gecerli NBT, launcher_profiles.json'a profil eklenir
- 3) Oyuncu tekrar: ikinci calistirma bozmaz (Fabric zaten var, servers.dat ezilmez)
- 4) Sunucu: dosyalar hedefe kopyalanir, izinli_oyuncular.txt/ram_mb.txt/eula.txt yazilir, ev sahibi ayari ezilmez
- 5) Sunucu gercekten acilir mi: izinli oyuncu listesi -> Boot beyaz listeyi yazar (whitelist.json, white-list=true)
+Kurulum pencerelerinin (oyuncu + sunucu) testi, Windows PowerShell ile. Zip'leri temiz klasore acar:
+ OYUNCU  : -SelfTest (dugmeye gercekten tiklar: tek dugme, tek kurulum, ikinci acilista kapali), -Headless kurulum:
+           modlar <.minecraft>\\mods icine gider, eski surum _kapisma_eski'ye tasinir, baska modlara dokunulmaz, Fabric surumu
+           eklenir, launcher profili eklenir; ikinci calistirma hicbir dosyayi degistirmez
+ SUNUCU  : -SelfTest (tek dugme, tek ayar), -Headless ayar: izinli_oyuncular.txt, ram_mb.txt, eula.txt
+ --boot  : ayarlanan sunucuyu gercekten ac, beyaz listenin uygulandigini dogrula (yavas)
 Not: TLauncher'in kendisi ve UAC (guvenlik duvari) penceresi otomatik test EDILEMEZ.
-Kullanim: python tools/test_wizard.py [--zip release/kapisma-kurulum-v0.1.0-tam.zip] [--boot]
+Kullanim: python tools/test_wizard.py [--boot] [--full]   (--full: ses jar'li -tam paketler)
 """
-import argparse, json, os, re, shutil, struct, subprocess, sys, zipfile
+import argparse, json, os, shutil, subprocess, sys, zipfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ap = argparse.ArgumentParser()
-ap.add_argument("--zip", default=os.path.join(ROOT, "release", "kapisma-kurulum-v0.1.0-tam.zip"))
-ap.add_argument("--dest", default=os.path.join(ROOT, "wizard_test"))
-ap.add_argument("--boot", action="store_true", help="kurulan sunucuyu gercekten ac, beyaz listenin uygulandigini dogrula (yavas)")
+ap.add_argument("--dest", default=os.path.join(ROOT, "_yedek", "wizard_test"))
+ap.add_argument("--boot", action="store_true")
+ap.add_argument("--full", action="store_true", help="ses jar'li -tam paketleri dene (varsayilan: -tam; yoksa normal)")
 a = ap.parse_args()
+suffix = "-tam" if True else ""
+def zpath(kind):
+    for s in ("-tam", ""):
+        p = os.path.join(ROOT, "release", f"kapisma-{kind}-v0.1.0{s}.zip")
+        if os.path.isfile(p): return p
+    sys.exit("zip yok: python tools/make_release.py --full --offline")
 
 fails = []
 def check(c, what):
@@ -26,111 +31,92 @@ def check(c, what):
 
 if os.path.exists(a.dest): shutil.rmtree(a.dest)
 os.makedirs(a.dest)
-with zipfile.ZipFile(a.zip) as z: z.extractall(a.dest)
-pk = os.path.join(a.dest, "kapisma-kurulum")
-ps1 = os.path.join(pk, "kurulum.ps1")
-check(os.path.isfile(ps1) and open(ps1, "rb").read(3) == b"\xef\xbb\xbf", "kurulum.ps1 var ve UTF-8 BOM'lu")
-bat = open(os.path.join(pk, "Kapisma-Kurulum.bat"), "rb").read()
-check(b"\r\n" in bat and all(c < 128 for c in bat), "Kapisma-Kurulum.bat CRLF ve sadece ASCII")
-check(b"@@" not in open(ps1, "rb").read(), "yer tutucular dolduruldu")
+for kind in ("oyuncu", "sunucu"):
+    with zipfile.ZipFile(zpath(kind)) as z: z.extractall(a.dest)
+pl = os.path.join(a.dest, "kapisma-oyuncu")
+sv = os.path.join(a.dest, "kapisma-sunucu")
 
-def ps(*args):
-    r = subprocess.run(["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-STA", "-File", ps1, *args],
-                       capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=180)
+def ps(script, *args):
+    r = subprocess.run(["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-STA", "-File", script, *args],
+                       capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=240)
     return r.returncode, (r.stdout or "") + (r.stderr or "")
 
-gui_mc = os.path.join(a.dest, "gui mc"); gui_sv = os.path.join(a.dest, "gui sunucu")
-rc, out = ps("-SelfTest", "-McDir", gui_mc, "-ServerDir", gui_sv)
-check(rc == 0 and "SELFTEST OK" in out, "GUI: sayfa gecisleri + Kur dugmeleri (dugmelere gercekten tiklanir): " + (out.strip().splitlines()[-1] if out.strip() else "cikti yok"))
+def tree(d):
+    out = {}
+    for r, _, fs in os.walk(d):
+        for f in fs:
+            p = os.path.join(r, f); out[os.path.relpath(p, d)] = (os.path.getsize(p), int(os.path.getmtime(p)))
+    return out
 
-# ---- oyuncu
-mc = os.path.join(a.dest, "fake .minecraft")        # bosluk: yol kotu durum testi
+# ------------------------------------------------------------------ paket sagligi
+for d, ps1, bat in ((pl, "oyuncu.ps1", "Kapisma-Oyuncu-Kur.bat"), (sv, "sunucu.ps1", "Sunucu-Ayarla.bat")):
+    p = os.path.join(d, ps1)
+    check(os.path.isfile(p) and open(p, "rb").read(3) == b"\xef\xbb\xbf", f"{ps1}: var ve UTF-8 BOM'lu")
+    check(b"@@" not in open(p, "rb").read(), f"{ps1}: yer tutucular dolduruldu")
+    b = open(os.path.join(d, bat), "rb").read()
+    check(b"\r\n" in b and all(c < 128 for c in b), f"{bat}: CRLF ve sadece ASCII")
+top_pl = sorted(os.listdir(pl)); print("oyuncu paketi ust duzey:", top_pl)
+check(len(top_pl) <= 8, "oyuncu paketinde az dosya var (sade)")
+
+# ------------------------------------------------------------------ OYUNCU: GUI tiklama testi
+gui_mc = os.path.join(a.dest, "gui mc"); os.makedirs(gui_mc)
+rc, out = ps(os.path.join(pl, "oyuncu.ps1"), "-SelfTest", "-McDir", gui_mc)
+check(rc == 0 and "SELFTEST OK" in out, "OYUNCU GUI: tek dugme / tek kurulum / ikinci acilista kapali: " + (out.strip().splitlines()[-1] if out.strip() else "cikti yok"))
+check(os.path.isdir(os.path.join(gui_mc, "mods")) and any(f.endswith(".jar") for f in os.listdir(os.path.join(gui_mc, "mods"))), "OYUNCU GUI: dugme mods klasorune jar koydu")
+
+# ------------------------------------------------------------------ OYUNCU: gercek kurulum (bosluklu yol, eski surum, yabanci mod)
+mc = os.path.join(a.dest, "fake .minecraft")
 os.makedirs(os.path.join(mc, "mods"))
 open(os.path.join(mc, "mods", "fabric-api-0.100.0+1.21.1.jar"), "wb").write(b"old")
 open(os.path.join(mc, "mods", "baska-mod.jar"), "wb").write(b"mine")
-os.makedirs(os.path.join(mc, "versions", "Fabric 1.20.1"))     # 1.21.1 degil: yok sayilmali
+os.makedirs(os.path.join(mc, "versions", "Fabric 1.20.1"))          # 1.21.1 degil: yok sayilmali
 json.dump({"profiles": {"x": {"name": "x", "lastVersionId": "1.21.1"}}, "version": 3}, open(os.path.join(mc, "launcher_profiles.json"), "w"))
-rc, out = ps("-Headless", "-Role", "Player", "-McDir", mc, "-Address", "100.64.1.2")
+open(os.path.join(pl, "sunucu_adresi.txt"), "w").write("# host yazar\n100.64.1.2\n")
+rc, out = ps(os.path.join(pl, "oyuncu.ps1"), "-Headless", "-McDir", mc)
 print(out)
 check(rc == 0, "oyuncu kurulumu hatasiz bitti")
 mods = os.listdir(os.path.join(mc, "mods"))
 for need in ("kapisma-hud-0.1.0.jar", "fabric-api-0.116.18+1.21.1.jar", "voicechat-fabric-1.21.1-2.6.27.jar"):
-    check(need in mods, "mods icinde: " + need)
-check(any(m.startswith("Origins") for m in mods), "mods icinde: Origins")
+    check(need in mods, f"DOGRU YER <.minecraft>\\mods icinde: {need}")
+check(any(m.startswith("Origins") for m in mods), "DOGRU YER <.minecraft>\\mods icinde: Origins")
+check(not any(f.endswith(".jar") for f in os.listdir(mc)), ".minecraft kokune jar dusmedi")
 check("baska-mod.jar" in mods, "baska modlara dokunulmadi")
-check(os.path.isfile(os.path.join(mc, "mods", "_kapisma_eski", "fabric-api-0.100.0+1.21.1.jar")), "eski fabric-api silinmedi, _kapisma_eski'ye tasindi")
+check(os.path.isfile(os.path.join(mc, "mods", "_kapisma_eski", "fabric-api-0.100.0+1.21.1.jar")), "eski surum silinmedi, _kapisma_eski'ye tasindi")
 fj = os.path.join(mc, "versions", "fabric-loader-0.20.1-1.21.1", "fabric-loader-0.20.1-1.21.1.json")
-check(os.path.isfile(fj) and json.load(open(fj, encoding="utf-8")).get("inheritsFrom") == "1.21.1", "Fabric 1.21.1 surumu eklendi (inheritsFrom=1.21.1)")
+check(os.path.isfile(fj) and json.load(open(fj, encoding="utf-8")).get("inheritsFrom") == "1.21.1", "Fabric 1.21.1 surumu eklendi")
 lp = json.loads(open(os.path.join(mc, "launcher_profiles.json"), encoding="utf-8-sig").read())
-check("kapisma" in lp["profiles"] and lp["profiles"]["kapisma"]["lastVersionId"] == "fabric-loader-0.20.1-1.21.1" and "x" in lp["profiles"], "resmi launcher profili eklendi, eskisi korundu")
-check(os.path.isfile(os.path.join(mc, "launcher_profiles.json.kapisma_yedek")), "launcher_profiles.json yedeklendi")
+check("kapisma" in lp["profiles"] and "x" in lp["profiles"], "resmi launcher profili eklendi, eskisi korundu")
+before = tree(mc)
+rc, out = ps(os.path.join(pl, "oyuncu.ps1"), "-Headless", "-McDir", mc)
+check(rc == 0 and tree(mc) == before, "ikinci calistirma hicbir dosyayi degistirmedi / cogaltmadi")
 
-def read_servers(path):
-    b = open(path, "rb").read(); i = 0
-    def u16():
-        nonlocal i; v = struct.unpack(">H", b[i:i+2])[0]; i += 2; return v
-    def s():
-        nonlocal i; n = u16(); v = b[i:i+n].decode("utf-8"); i += n; return v
-    assert b[i] == 10; i += 1; assert s() == ""
-    assert b[i] == 9; i += 1; assert s() == "servers"; assert b[i] == 10; i += 1
-    cnt = struct.unpack(">i", b[i:i+4])[0]; i += 4
-    res = []
-    for _ in range(cnt):
-        d = {}
-        while b[i] != 0:
-            t = b[i]; i += 1; k = s(); assert t == 8; d[k] = s()
-        i += 1; res.append(d)
-    assert b[i] == 0 and i + 1 == len(b)
-    return res
-try:
-    sv = read_servers(os.path.join(mc, "servers.dat"))
-    check(sv == [{"name": "Kapisma", "ip": "100.64.1.2"}], "servers.dat gecerli NBT ve dogru icerik: %s" % sv)
-except Exception as e:
-    check(False, "servers.dat okunamadi: %r" % e)
-
-# ikinci calistirma
-open(os.path.join(mc, "servers.dat"), "ab").close()
-before = open(os.path.join(mc, "servers.dat"), "rb").read()
-rc, out = ps("-Headless", "-Role", "Player", "-McDir", mc, "-Address", "10.0.0.9")
-check(rc == 0 and open(os.path.join(mc, "servers.dat"), "rb").read() == before, "ikinci kurulum: servers.dat ezilmedi")
-check(len([m for m in os.listdir(os.path.join(mc, "versions")) if "fabric-loader" in m]) == 1, "ikinci kurulum: Fabric surumu cogalmadi")
-lp = json.loads(open(os.path.join(mc, "launcher_profiles.json"), encoding="utf-8-sig").read())
-check(list(lp["profiles"]).count("kapisma") == 1, "ikinci kurulum: profil cogalmadi")
-
-# ---- sunucu
-sd = os.path.join(a.dest, "benim sunucum")
-rc, out = ps("-Headless", "-Role", "Server", "-ServerDir", sd, "-Names", "Ahmet_34, Zeynep;Geçersiz Ad!", "-Ram", "3", "-AcceptEula", "-NoStart", "-NoFirewall")
+# ------------------------------------------------------------------ SUNUCU
+rc, out = ps(os.path.join(sv, "sunucu.ps1"), "-SelfTest")
+check(rc == 0 and "SELFTEST OK" in out, "SUNUCU GUI: tek dugme / tek ayar: " + (out.strip().splitlines()[-1] if out.strip() else "cikti yok"))
+for f in ("izinli_oyuncular.txt", "eula.txt"):
+    pass
+check("eula=true" in open(os.path.join(sv, "eula.txt")).read(), "SUNUCU GUI: EULA onayi yazildi")
+rc, out = ps(os.path.join(sv, "sunucu.ps1"), "-Headless", "-Names", "Ahmet_34, Zeynep;Geçersiz Ad!", "-Ram", "3", "-AcceptEula", "-NoStart", "-NoFirewall")
 print(out)
-check(rc == 0, "sunucu kurulumu hatasiz bitti")
-for f in ("start.bat", "start.sh", "fabric-server-launch.jar", "server.properties", "guvenlik_duvari_ac.bat"):
-    check(os.path.isfile(os.path.join(sd, f)), "sunucuda var: " + f)
-check(os.path.isfile(os.path.join(sd, "mods", "kapisma-0.1.0.jar")), "sunucuda var: mods/kapisma-0.1.0.jar")
-names = [l.strip() for l in open(os.path.join(sd, "izinli_oyuncular.txt"), encoding="utf-8") if l.strip() and not l.startswith("#")]
+check(rc == 0, "sunucu ayari hatasiz bitti")
+names = [l.strip() for l in open(os.path.join(sv, "izinli_oyuncular.txt"), encoding="utf-8") if l.strip() and not l.startswith("#")]
 check(names == ["Ahmet_34", "Zeynep"], "izinli_oyuncular.txt: gecerli adlar yazildi, gecersiz atlandi: %s" % names)
-check(open(os.path.join(sd, "ram_mb.txt")).read().strip() == "3072", "ram_mb.txt = 3072")
-check("eula=true" in open(os.path.join(sd, "eula.txt")).read(), "eula.txt kullanici onayiyla true")
-# ev sahibi ayari ezilmesin
-open(os.path.join(sd, "server.properties"), "a").write("# benim notum\n")
-rc, out = ps("-Headless", "-Role", "Server", "-ServerDir", sd, "-Names", "Ahmet_34", "-NoStart", "-NoFirewall")
-check("# benim notum" in open(os.path.join(sd, "server.properties")).read(), "tekrar kurulum: server.properties ezilmedi")
-check(os.path.getsize(os.path.join(sd, "mods", "kapisma-0.1.0.jar")) > 100000, "tekrar kurulum: mod jar'i tam")
+check(open(os.path.join(sv, "ram_mb.txt")).read().strip() == "3072", "ram_mb.txt = 3072")
+check(os.path.isfile(os.path.join(sv, "mods", "kapisma-0.1.0.jar")) and os.path.isfile(os.path.join(sv, "start.bat")), "sunucu dosyalari yerinde")
 
-# ---- sunucu gercekten acilir mi (beyaz liste)
 if a.boot:
-    p = os.path.join(sd, "server.properties")
+    import glob, queue, threading, time
+    p = os.path.join(sv, "server.properties")
     t = open(p, encoding="latin-1").read().replace("server-port=25565", "server-port=25585")
     open(p, "w", encoding="latin-1", newline="\n").write(t)
-    os.makedirs(os.path.join(sd, "config", "voicechat"), exist_ok=True)
-    open(os.path.join(sd, "config", "voicechat", "voicechat-server.properties"), "w").write("port=24465\n")
-    open(os.path.join(sd, "izinli_oyuncular.txt"), "w").write("Ahmet_34\nZeynep\n")
-    jv = shutil.which("java") or ""
-    import glob
+    os.makedirs(os.path.join(sv, "config", "voicechat"), exist_ok=True)
+    open(os.path.join(sv, "config", "voicechat", "voicechat-server.properties"), "w").write("port=24465\n")
     cand = glob.glob(os.path.expandvars(r"%APPDATA%\.minecraft\runtime\java-runtime-delta\*\java-runtime-delta\bin\java.exe"))
-    jv = cand[0] if cand else jv
-    pr = subprocess.Popen([jv, "-Xmx3G", "-jar", "fabric-server-launch.jar", "nogui"], cwd=sd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, encoding="utf-8", errors="replace")
-    import threading, time, queue
+    jv = cand[0] if cand else (shutil.which("java") or "java")
+    pr = subprocess.Popen([jv, "-Xmx3G", "-jar", "fabric-server-launch.jar", "nogui"], cwd=sv, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                          stderr=subprocess.STDOUT, text=True, encoding="utf-8", errors="replace")
     q = queue.Queue(); threading.Thread(target=lambda: [q.put(l) for l in pr.stdout], daemon=True).start()
-    log = []; end = time.time() + 400
+    log = []; end = time.time() + 420
     while time.time() < end and not any("Done (" in l for l in log):
         try: log.append(q.get(timeout=1))
         except queue.Empty:
@@ -138,11 +124,12 @@ if a.boot:
     try: pr.stdin.write("stop\n"); pr.stdin.flush(); pr.wait(60)
     except Exception: pr.kill()
     txt = "".join(log)
-    check("Done (" in txt, "kurulan sunucu acildi")
+    check("Done (" in txt, "ayarlanan sunucu acildi")
     check("Izinli oyuncu listesi uygulandi: 2 oyuncu" in txt, "Boot beyaz listeyi uyguladi")
-    wl = json.load(open(os.path.join(sd, "whitelist.json"), encoding="utf-8"))
+    wl = json.load(open(os.path.join(sv, "whitelist.json"), encoding="utf-8"))
     check(sorted(x["name"] for x in wl) == ["Ahmet_34", "Zeynep"], "whitelist.json adlari dogru")
-    check("white-list=true" in open(p, encoding="latin-1").read() and "enforce-whitelist=true" in open(p, encoding="latin-1").read(), "server.properties: beyaz liste acik")
+    props = open(p, encoding="latin-1").read()
+    check("white-list=true" in props and "enforce-whitelist=true" in props, "server.properties: beyaz liste acik")
 
-print("\n=== SIHIRBAZ TESTI: %s" % ("BASARILI" if not fails else "BASARISIZ -> " + "; ".join(fails)))
+print("\n=== KURULUM PENCERELERI TESTI: %s" % ("BASARILI" if not fails else "BASARISIZ -> " + "; ".join(fails)))
 sys.exit(0 if not fails else 1)

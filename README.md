@@ -2,12 +2,13 @@
 
 UHC, Tombala (Bingo), Manhunt, Katil Kim. En fazla 8 oyuncu. Minecraft 1.21.1 + Fabric. **Herkes sunucu kurabilir**: Windows, Linux, Mac ve Android tablet (Termux).
 
-## 0. En kolay yol: kurulum sihirbazı (Windows)
-[`dist/`](dist) içindeki **`kapisma-kurulum-vX.zip`** dosyasını indir, klasöre çıkar, **`Kapisma-Kurulum.bat`**'a çift tıkla. Açılan pencerede iki düğme var:
-- **Oyuncuyum:** modları doğru `.minecraft\mods` klasörüne kurar (eskileri silmez, `_kapisma_eski`'ye taşır), Fabric 1.21.1 sürümünü (yoksa) ekler, resmi launcher için profil ekler, sesli sohbet modunu SHA-512 doğrulamalı indirir, istersen sunucuyu "Çoklu Oyuncu" listesine yazar. Sonra TLauncher → Fabric 1.21.1 → Oyna.
-- **Sunucu kuracağım:** sunucuyu istediğin klasöre kurar, **oyuncu adlarını beyaz listeye yazar** (kimse başkasının adıyla giremez), RAM seçtirir, EULA onayını sorar, güvenlik duvarını açar, sunucuyu başlatır ve arkadaşlarının yazacağı adresi gösterir.
+## 0. En kolay yol (Windows): tek düğmeli pencereler
+İki paket var ([`dist/`](dist) klasörü):
 
-Sihirbaz çalışmazsa (PowerShell kapalı/engelli) aşağıdaki elle yollar aynı işi yapar. Linux/Mac/Android için `start.sh` (aşağıda).
+- **Oyuncu** (arkadaşının sunucusuna girecek herkes): `kapisma-oyuncu-vX.zip` → klasöre çıkar → **`Kapisma-Oyuncu-Kur.bat`**'a çift tıkla → tek düğme **KUR**. Modlar `.minecraft\mods` klasörüne konur (başka modlara dokunulmaz; farklı sürümdeki eski kapışma modları `_kapisma_eski`'ye taşınır, silinmez), Fabric 1.21.1 sürümü yoksa eklenir, sesli sohbet modu SHA-512 doğrulamalı indirilir. Bitince düğme **KURULDU** olur ve bir daha basılamaz; pencere tekrar açılırsa zaten kuruluysa hiçbir şey yapmaz. Sonra TLauncher → Fabric 1.21.1 → Oyna → Çoklu Oyuncu → hostun adresi.
+- **Host** (sunucuyu açan): `kapisma-sunucu-vX.zip` → çıkar (çıkan klasör sunucunun kendisi) → **`Sunucu-Ayarla.bat`** → oyuncu adlarını yaz (sen dahil), RAM, EULA kutusu → tek düğme **KUR VE BAŞLAT** (güvenlik duvarı izni, sunucu başlatma, arkadaşlara verilecek adres). Bir kere yeter; sonra hep `start.bat`. Host, oyunculara göndereceği oyuncu zip'inin yanına `sunucu_adresi.txt` (tek satır adres) koyarsa oyuncu penceresi adresi panoya kopyalar.
+
+Pencere açılmazsa (PowerShell kapalı/engelli): oyuncu paketinde `elle_kurulum\kurulum.bat`, host paketinde doğrudan `start.bat`. Linux/Mac/Android: `start.sh` (aşağıda).
 
 ## 1. Sunucuyu kur ve aç (host)
 Elle yol — hazır paket: [`dist/`](dist) klasöründeki **`kapisma-sunucu-vX.zip`** (GitHub'da dosyaya tıkla → **Download raw file**; varsa [Releases](../../releases) sayfasından da inebilir). Kaynaktan derlemek için bkz. §5. Bütünlük: `dist/SHA256SUMS.txt`.
@@ -31,7 +32,7 @@ Sunucu internete açılmaz; sadece [Tailscale](https://tailscale.com) ağındaki
 
 **Arkadaş:**
 1. Tailscale'i kurup (ücretsiz) giriş yapar, paylaşım davetini kabul eder.
-2. `dist/` içindeki **`kapisma-istemci-vX.zip`** dosyasını indirir, çıkarır, `kurulum.bat`'a çift tıklar (Fabric API + Origins + `kapisma-hud` + Simple Voice Chat'i `.minecraft\mods`'a kurar; eskileri `_kapisma_eski`'ye taşır).
+2. `dist/` içindeki **`kapisma-oyuncu-vX.zip`** dosyasını indirir, çıkarır, `Kapisma-Oyuncu-Kur.bat`'a çift tıklar, **KUR**'a basar (Fabric API + Origins + `kapisma-hud` + Simple Voice Chat'i `.minecraft\mods`'a kurar).
 3. TLauncher → sürüm **Fabric 1.21.1** → Çoklu oyuncu → Sunucu ekle → hostun Tailscale adresi.
 4. Oyunda **V** tuşu: mikrofon/ses ayarları.
 
@@ -114,7 +115,7 @@ Oyun **başlayınca** devreye girer (lobide kapalı), sunucu tarafında çalış
 - **Bu yapılamaz (dürüst sınırlar):** istemcide çalışan hileler sunucudan engellenemez — fullbright/gece görüşü, kendi ekranında freecam, damage/FPS göstergesi, otomatik totem/pot, yardımcı nişan (aimbot), Baritone gibi yol botları. Vanilla sunucu zaten uçmayı, aşırı hızı ve blok erişim menzilini denetler (`allow-flight=false`). Birine güvenmiyorsan oynatma ya da beyaz listeyi kullan; hile istemcisi bulunduğunda `ban` komutu var.
 
 ### Ses (sesli sohbet) her modda açık
-- Sesli sohbet için sunucuya ve herkesin istemcisine **Simple Voice Chat 2.6.27 (Fabric 1.21.1)** kurulur (sunucu ve istemci paketinde hazır). Ses UDP **24454** portundan gider.
+- Sesli sohbet için sunucuya ve herkesin istemcisine **Simple Voice Chat 2.6.27 (Fabric 1.21.1)** kurulur (sunucu ve oyuncu paketinde hazır). Ses UDP **24454** portundan gider.
 - **Her modda** (lobi, UHC, Tombala, Manhunt, Katil Kim) yakın mesafe sesi (48 blok) varsayılan olarak açıktır; Discord vb. gerekmez. Elenenler (seyirciler) sadece birbirini duyar, canlılar duymaz.
 - **Takım ses kanalı** (kural `teamVoice`, Katil Kim hariç hepsinde varsayılan açık): takım arkadaşların mesafeden bağımsız seni duyar (UHC'de 500 blok açıdan bile). Grup "açık" türdedir: yakındaki herkesle normal konuşma da sürer. Manhunt'ta avcılar kendi grubunda, runner(lar) kendi grubundadır. Elle grup kurmak/katılmak istersen oyunda `G` tuşu.
 - **Katil Kim:** grup yoktur (kimlik gizli). `voice` kuralı oyun içi sesi açar/kapar (varsayılan açık), `deepVoice` açıkken herkesin sesi aynı kalın tona çevrilir (kim konuştuğu anlaşılmaz), kapalıyken kendi sesin. SVC "konuşuyor" simgesi konumu gösterir: Katil Kim'de SVC ayarlarından simgeyi kapat.
@@ -129,14 +130,15 @@ Manhunt "temiz" ana dünya ister. Dünya daha önce Manhunt'ta kullanıldıysa *
 ## 5. Dosyalar, derleme ve paketleme
 - `PLAN.md` plan ve kararlar, `docs\ORIGINS_BALANCE.md` ırk dengesi (13 ırk), `docs\DENEY_PLANI.md` adım adım deney listesi.
 - `mod\kapisma\` sunucu modu kaynağı (derleme: `cd mod/kapisma && ./gradlew build`, Java 21), `mod\kapisma-hud\` istemci modu.
-- `pack\server`, `pack\client`, `pack\wizard` paketlerin başlatıcı/kurulum betikleri ve belgeleri; **`python tools/make_release.py`** `release\` klasörüne `kapisma-sunucu-vX.zip`, `kapisma-istemci-vX.zip`, `kapisma-kurulum-vX.zip` (sihirbaz + ikisi) ve `SHA256SUMS.txt` üretir; `python tools/test_wizard.py [--boot]` sihirbazı otomatik dener (ses jar'sız olanlar ayrıca `dist\`'e kopyalanır ve depoya eklenir) (jar'lar zip içinde olduğu gibi kalır). Simple Voice Chat lisansı (All Rights Reserved) yüzünden pakete **konmaz**, ilk çalıştırmada doğrulamalı indirilir; kendi cihazların arasında dağıtmak için `--full` ile jar'lı `-tam` paketler üretilir (herkese açık yere yükleme).
+- `pack\server` (host paketi: başlatıcılar + `Sunucu-Ayarla.bat`/`sunucu.ps1` + seed havuzu `seeds.json`) ve `pack\player` (oyuncu paketi: `Kapisma-Oyuncu-Kur.bat`/`oyuncu.ps1` + `elle_kurulum\`) paketlerin kaynağıdır; **`python tools/make_release.py`** `release\` klasörüne `kapisma-sunucu-vX.zip`, `kapisma-oyuncu-vX.zip` ve `SHA256SUMS.txt` üretir (ses jar'sız olanlar ayrıca `dist\`'e kopyalanır ve depoya eklenir; jar'lar zip içinde olduğu gibi kalır). Simple Voice Chat lisansı (All Rights Reserved) yüzünden pakete **konmaz**, ilk çalıştırmada doğrulamalı indirilir; kendi cihazların arasında dağıtmak için `--full` ile jar'lı `-tam` paketler üretilir (herkese açık yere yükleme).
+- `python tools/test_wizard.py [--boot]` iki pencerenin düğmelerine gerçekten tıklayıp (tek kurulum, ikinci açılışta kapalı), kurulumun doğru klasöre yazdığını ve ayarlanan sunucunun beyaz listeyi uyguladığını doğrular.
 - `python tools/test_pack.py` sunucu paketini temiz klasöre açıp gerçek `start.bat` ile açar, seed seçimini, ses modunu, yeni dünya döngüsünü ve temiz kapanışı doğrular (`--sh` start.sh, `--lite` zayıf cihaz).
-- `knowledge\`, `tools\mcknow.py` Minecraft bilgi kütüphanesi (resmî veriden üretilir). `tools\` ayrıca seed tarama ve test araçlarını içerir. `seeds.json` doğrulanmış seed havuzu.
-- Yerel çalışma kopyası: `server\` canlı sunucu, `server_test\` test kopyası, `client-pack\` eski elle derlenmiş istemci jar'ları (artık `release\` kullanılır).
+- `tools\` test/paket/seed araçları (bkz. `tools\README.md`). Doğrulanmış seed havuzu `pack\server\seeds.json`.
+- Yerel çalışma kopyaları (git dışı): `server\` canlı sunucu, `server_test\` test kopyası, `release\` üretilen paketler, `_yedek\` eski/gereksiz dosyaların yedeği (silmeden önce buraya taşınır).
 
 ## 6. Sorun giderme
 - Arkadaş bağlanamıyor: Tailscale açık mı, paylaşım kabul edildi mi, güvenlik duvarı kuralı eklendi mi (`guvenlik_duvari_ac.bat`), host sunucusu `Done` yazdı mı?
-- Ses yok: UDP 24454 açık mı, oyuncuda voicechat modu kurulu mu (istemci paketi kurar), oyunda V tuşundan mikrofon seçili mi?
+- Ses yok: UDP 24454 açık mı, oyuncuda voicechat modu kurulu mu (oyuncu paketi kurar), oyunda V tuşundan mikrofon seçili mi?
 - Tablet çok yavaş: LITE profil açık mı (açılışta `Donanim profili` yazar), arka plan uygulamalarını kapat, `ram_mb.txt` ile belleği artır, 4–5 oyuncuyla dene.
-- "Mismatched mods" / bağlanırken hata: istemcide Fabric API ve Origins jar'ları client-pack'tekiyle aynı sürüm olmalı.
+- "Mismatched mods" / bağlanırken hata: istemcide Fabric API ve Origins jar'ları oyuncu paketindekiyle aynı sürüm olmalı (oyuncu penceresi "GÜNCELLE" diyorsa bas).
 - Oyun dünyası açılırken 4–7 sn takılma normaldir (dünya üretiliyor).

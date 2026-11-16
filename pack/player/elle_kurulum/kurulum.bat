@@ -36,14 +36,14 @@ for %%p in (kapisma-hud fabric-api Origins voicechat) do (
 )
 
 rem ---- paketteki modlar ----
-for %%f in ("%~dp0mods\*.jar") do (
+for %%f in ("%~dp0..\mods\*.jar") do (
   copy /y "%%~f" "%MODS%\" >nul
   echo Kuruldu: %%~nxf
 )
 
 rem ---- ses modu (dogrulamali indirme) ----
 set "VCOK=0"
-powershell -NoProfile -ExecutionPolicy Bypass -Command "$ErrorActionPreference='Stop'; $ProgressPreference='SilentlyContinue'; [Net.ServicePointManager]::SecurityProtocol=[Net.SecurityProtocolType]::Tls12; $d='%MODS%\@@VC_FILE@@'; $src='%~dp0mods\@@VC_FILE@@'; if (Test-Path $src) { Copy-Item $src $d -Force } else { Invoke-WebRequest -UseBasicParsing -Uri '@@VC_URL@@' -OutFile ($d + '.part'); $h=(Get-FileHash ($d + '.part') -Algorithm SHA512).Hash.ToLower(); if ($h -ne '@@VC_SHA512@@') { Remove-Item ($d + '.part') -Force; throw 'dogrulama basarisiz' }; Move-Item ($d + '.part') $d -Force }"
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$ErrorActionPreference='Stop'; $ProgressPreference='SilentlyContinue'; [Net.ServicePointManager]::SecurityProtocol=[Net.SecurityProtocolType]::Tls12; $d='%MODS%\@@VC_FILE@@'; $src='%~dp0..\mods\@@VC_FILE@@'; if (Test-Path $src) { Copy-Item $src $d -Force } else { Invoke-WebRequest -UseBasicParsing -Uri '@@VC_URL@@' -OutFile ($d + '.part'); $h=(Get-FileHash ($d + '.part') -Algorithm SHA512).Hash.ToLower(); if ($h -ne '@@VC_SHA512@@') { Remove-Item ($d + '.part') -Force; throw 'dogrulama basarisiz' }; Move-Item ($d + '.part') $d -Force }"
 if not errorlevel 1 set "VCOK=1"
 if "!VCOK!"=="1" (
   echo Kuruldu: @@VC_FILE@@ ^(sesli sohbet^)

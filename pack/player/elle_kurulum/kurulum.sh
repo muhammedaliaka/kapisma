@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Kapisma istemci kurulumu (Linux / macOS). Kullanim: bash kurulum.sh [~/.minecraft]
 cd "$(dirname "$0")" || exit 1
-HERE="$(pwd)"
+HERE="$(cd .. && pwd)"
 case "$(uname -s)" in Darwin) DEF="$HOME/Library/Application Support/minecraft" ;; *) DEF="$HOME/.minecraft" ;; esac
 MC="${1:-$DEF}"
 if [ ! -d "$MC" ]; then echo "HATA: Minecraft klasoru yok: $MC (once Minecraft'i bir kere ac)"; exit 1; fi

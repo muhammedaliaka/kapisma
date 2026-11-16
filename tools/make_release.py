@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-Kapisma yayin paketlerini uretir (release/ klasorune):
-  kapisma-sunucu-vX.zip   sunucu paketi (start.bat/start.sh, mod jar'lari, ayarlar)
-  kapisma-istemci-vX.zip  oyuncu paketi (mod jar'lari + kurulum.bat/.sh)
+Kapisma yayin paketlerini uretir (release/ klasorune; ses jar'i icermeyenler ayrica dist/'e):
+  kapisma-sunucu-vX.zip   host paketi: start.bat/start.sh + Sunucu-Ayarla.bat (tek dugmeli ayar penceresi) + mod jar'lari
+  kapisma-oyuncu-vX.zip   oyuncu paketi: Kapisma-Oyuncu-Kur.bat (tek dugme) + mod jar'lari + elle kurulum yedegi
   SHA256SUMS.txt
 Zip'ler jar'lari oldugu gibi icerir (jar'lar acilmaz/yeniden paketlenmez).
 
-Simple Voice Chat "All Rights Reserved" lisansli oldugu icin varsayilan paketlere KONMAZ; start/kurulum
-dosyalari onu Modrinth'ten indirir ve SHA-512 ile dogrular. Sadece kendi cihazlarin arasinda dagitmak icin
+Simple Voice Chat "All Rights Reserved" lisansli oldugu icin varsayilan paketlere KONMAZ; baslaticilar onu Modrinth'ten
+indirir ve SHA-512 ile dogrular. Sadece kendi cihazlarin arasinda dagitmak icin
   python tools/make_release.py --full
 ile jar'in icinde oldugu "-tam" paketler de uretilir (bunlari herkese acik yerlere YUKLEME).
 
@@ -29,7 +29,7 @@ MODS = {
     "voicechat": os.path.join(ROOT, "server", "mods", "voicechat-fabric-1.21.1-2.6.27.jar"),
 }
 LAUNCHER = os.path.join(ROOT, "server", "fabric-server-launch.jar")
-SEEDS = os.path.join(ROOT, "server", "config", "kapisma", "seeds.json")
+SEEDS = os.path.join(ROOT, "pack", "server", "seeds.json")
 VC_FILE = os.path.basename(MODS["voicechat"])
 VC_PROJECT = "9eGKb6K1"          # Modrinth: simple-voice-chat
 VC_VERSION_ID = "dyhq1XyO"       # fabric-1.21.1-2.6.27
@@ -128,11 +128,11 @@ def info(kind, include_vc):
     for name in ("kapisma", "kapisma-hud", "fabric-api", "origins") + (("voicechat",) if include_vc else ()):
         if kind == "sunucu" and name == "kapisma-hud":
             continue
-        if kind == "istemci" and name == "kapisma":
+        if kind == "oyuncu" and name == "kapisma":
             continue
         p = MODS[name]
         lines.append(f"  {os.path.basename(p)}  {sha(p, 'sha256')}")
-    if kind in ("sunucu", "kurulum"):
+    if kind == "sunucu":
         lines.append(f"  fabric-server-launch.jar  {sha(LAUNCHER, 'sha256')}")
     if not include_vc:
         lines += ["", f"Ses modu pakette degil; ilk calistirmada indirilir (SHA-512 dogrulamali): {VC_FILE}"]
@@ -141,7 +141,8 @@ def info(kind, include_vc):
 
 def write_server(z, top, include_vc):
     src = os.path.join(ROOT, "pack", "server")
-    for fn in ("start.bat", "guvenlik_duvari_ac.bat", "adres_goster.bat", "BENI_OKU.txt", "eula.txt", "server.properties", "izinli_oyuncular.txt"):
+    for fn in ("start.bat", "Sunucu-Ayarla.bat", "sunucu.ps1", "guvenlik_duvari_ac.bat", "adres_goster.bat", "BENI_OKU.txt",
+               "eula.txt", "server.properties", "izinli_oyuncular.txt"):
         add_text(z, top + fn, os.path.join(src, fn))
     add_text(z, top + "start.sh", os.path.join(src, "start.sh"), 0o755)
     add_file(z, top + "fabric-server-launch.jar", LAUNCHER)
@@ -150,11 +151,13 @@ def write_server(z, top, include_vc):
     add_file(z, top + "config/kapisma/seeds.json", SEEDS)
 
 
-def write_client(z, top, include_vc):
-    src = os.path.join(ROOT, "pack", "client")
-    add_text(z, top + "kurulum.bat", os.path.join(src, "kurulum.bat"))
-    add_text(z, top + "BENI_OKU.txt", os.path.join(src, "BENI_OKU.txt"))
-    add_text(z, top + "kurulum.sh", os.path.join(src, "kurulum.sh"), 0o755)
+def write_player(z, top, include_vc):
+    src = os.path.join(ROOT, "pack", "player")
+    for fn in ("Kapisma-Oyuncu-Kur.bat", "oyuncu.ps1", "BENI_OKU.txt"):
+        add_text(z, top + fn, os.path.join(src, fn))
+    add_file(z, top + "fabric-loader-0.20.1-1.21.1.json", os.path.join(src, "fabric-loader-0.20.1-1.21.1.json"))
+    add_text(z, top + "elle_kurulum/kurulum.bat", os.path.join(src, "elle_kurulum", "kurulum.bat"))
+    add_text(z, top + "elle_kurulum/kurulum.sh", os.path.join(src, "elle_kurulum", "kurulum.sh"), 0o755)
     for k in ("kapisma-hud", "fabric-api", "origins") + (("voicechat",) if include_vc else ()):
         add_file(z, top + "mods/" + os.path.basename(MODS[k]), MODS[k])
 
@@ -173,27 +176,11 @@ def build_server(include_vc):
     return path
 
 
-def build_client(include_vc):
-    path = os.path.join(OUT, f"kapisma-istemci-v{VERSION}" + ("-tam" if include_vc else "") + ".zip")
+def build_player(include_vc):
+    path = os.path.join(OUT, f"kapisma-oyuncu-v{VERSION}" + ("-tam" if include_vc else "") + ".zip")
     with zipfile.ZipFile(path, "w") as z:
-        write_client(z, "kapisma-istemci/", include_vc)
-        write_legal(z, "kapisma-istemci/", "istemci", include_vc)
-    return path
-
-
-def build_wizard(include_vc):
-    """Tek zip: sihirbaz (Windows) + sunucu + istemci. Cift tikla, rol sec, kurulur."""
-    path = os.path.join(OUT, f"kapisma-kurulum-v{VERSION}" + ("-tam" if include_vc else "") + ".zip")
-    top = "kapisma-kurulum/"
-    src = os.path.join(ROOT, "pack", "wizard")
-    with zipfile.ZipFile(path, "w") as z:
-        add_text(z, top + "Kapisma-Kurulum.bat", os.path.join(src, "Kapisma-Kurulum.bat"))
-        add_text(z, top + "kurulum.ps1", os.path.join(src, "kurulum.ps1"))
-        add_text(z, top + "BENI_OKU.txt", os.path.join(src, "BENI_OKU.txt"))
-        add_file(z, top + "istemci/fabric-loader-0.20.1-1.21.1.json", os.path.join(src, "fabric-loader-0.20.1-1.21.1.json"))
-        write_server(z, top + "sunucu/", include_vc)
-        write_client(z, top + "istemci/", include_vc)
-        write_legal(z, top, "kurulum", include_vc)
+        write_player(z, "kapisma-oyuncu/", include_vc)
+        write_legal(z, "kapisma-oyuncu/", "oyuncu", include_vc)
     return path
 
 
@@ -201,9 +188,9 @@ os.makedirs(OUT, exist_ok=True)
 for f in os.listdir(OUT):
     if f.endswith(".zip") or f == "SHA256SUMS.txt":
         os.remove(os.path.join(OUT, f))
-made = [build_server(False), build_client(False), build_wizard(False)]
+made = [build_server(False), build_player(False)]
 if FULL:
-    made += [build_server(True), build_client(True), build_wizard(True)]
+    made += [build_server(True), build_player(True)]
 with open(os.path.join(OUT, "SHA256SUMS.txt"), "w", encoding="utf-8", newline="\n") as f:
     for p in made:
         f.write(f"{sha(p, 'sha256')}  {os.path.basename(p)}\n")

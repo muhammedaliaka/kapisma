@@ -9,6 +9,9 @@ NE GEREKIR
  - Java 21: start dosyasi yoksa kendisi kurar/indirir, sen bir sey yapmazsin.
 
 1) WINDOWS
+ - EN KOLAY: zip'i klasore cikar, Sunucu-Ayarla.bat'a cift tikla: oyuncu adlari + RAM + EULA kutusu, tek dugme
+   KUR VE BASLAT (guvenlik duvari ve baslatma dahil). Bir kere yeter; sonra hep start.bat.
+ - Elle yol (ayni is):
  - Zip'i bir klasore cikar (masaustu veya D:\kapisma gibi; zip'in icinden calistirma).
  - start.bat'a cift tikla. Ilk seferde Mojang EULA onayi sorar (E yaz).
    "Windows bilgisayarinizi korudu" uyarisi cikarsa: Daha fazla bilgi > Yine de calistir. Guvenlik duvari
@@ -43,7 +46,7 @@ NE GEREKIR
 ARKADASLAR NASIL BAGLANIR (en guvenli yol: Tailscale)
  - Sunucu internete acilmaz; port yonlendirme YAPMA. Herkes ucretsiz Tailscale kurar (tailscale.com),
    host arkadaslarini kendi agina/cihazina davet eder (Share / Invite).
- - Oyuncu "kapisma-istemci" paketini kurar (kendi BENI_OKU.txt dosyasi var), Minecraft'ta
+ - Oyuncu "kapisma-oyuncu" paketini kurar (Kapisma-Oyuncu-Kur.bat, tek dugme), Minecraft'ta
    Coklu Oyuncu > Sunucu Ekle > adres: hostun Tailscale IP'si (100.x.x.x) yazar.
  - Ayni evdeki aga bagliysaniz yerel IP (192.168.x.x) de calisir.
  - Sunucu "online-mode=false" (TLauncher/korsan hesaplar da girebilsin diye). Bu yuzden herkesin adi
@@ -67,9 +70,9 @@ ILERI AYARLAR (isteyene)
 
 SORUN GIDERME
  - "Baglanti zaman asimi": Tailscale acik mi, guvenlik duvari (guvenlik_duvari_ac.bat), adres dogru mu?
- - Ses yok: UDP 24454 acik mi? Oyuncuda voicechat modu kurulu mu? (istemci paketi kurar). Oyunda V tusuyla
+ - Ses yok: UDP 24454 acik mi? Oyuncuda voicechat modu kurulu mu? (oyuncu paketi kurar). Oyunda V tusuyla
    mikrofonu sec; ses ayarlarinda "Sesli sohbet baglandi" gorunmeli.
- - "Incompatible mod set" / mod hatasi: istemci paketini ayni surumle yeniden kur.
+ - "Incompatible mod set" / mod hatasi: oyuncu paketini ayni surumle yeniden kur.
  - Sunucu cok yavas: ram_mb.txt ile bellegi artir, view-distance dusur, arka plandaki uygulamalari kapat.
  - Java hatasi: Java 21 gerekir; start dosyasi kendisi kurar, olmazsa https://adoptium.net adresinden JRE 21.
 

@@ -1,0 +1,30 @@
+KAPISMA OYUNCU PAKETI  (Minecraft 1.21.1, Fabric)
+=================================================
+Arkadasinin sunucusuna girmek icin tek yapman gereken:
+
+  1) Bu zip'i bir klasore CIKAR (zip'in icinden calistirma).
+  2) Kapisma-Oyuncu-Kur.bat dosyasina cift tikla.
+     (Windows "bilgisayarinizi korudu" derse: Daha fazla bilgi > Yine de calistir.)
+  3) Acilan pencerede KUR dugmesine bas. Bitince dugme "KURULDU" olur; bir sey daha yapman gerekmez.
+  4) TLauncher'i ac > surum: Fabric 1.21.1 > Oyna > Coklu Oyuncu > Sunucu Ekle > hostun verdigi adres.
+     (Host sana Tailscale adresi (100.x.x.x) verir; once tailscale.com'dan Tailscale'i kurup giris yap,
+      hostun davetini kabul et.)
+  5) Oyunda V tusu: mikrofon / sesli sohbet ayari.
+
+Ne yapar? Modlari .minecraft\mods klasorune koyar, Fabric 1.21.1 surumu yoksa ekler, sesli sohbet modunu
+dogrulamali indirir. Zaten kuruluysa hicbir sey yapmaz. Eski mod surumlerin silinmez: mods\_kapisma_eski.
+Hicbir hesap/sifre sormaz. Internetten sadece Simple Voice Chat indirilir (SHA-512 ile dogrulanir).
+Minecraft klasorun baska yerdeyse pencerenin altindaki "degistir"e bas.
+
+Pencere acilmazsa (PowerShell kapali): elle_kurulum\kurulum.bat (Windows) veya bash elle_kurulum/kurulum.sh
+(Linux/Mac). O da olmazsa mods klasorundeki .jar dosyalarini .minecraft\mods icine kopyala.
+
+SORUN GIDERME
+ - "Incompatible mod set": host ile ayni paket surumunu kullandiginizdan emin ol; yeniden kur.
+ - Oyun acilmiyor: Java 21 gerekir (TLauncher / Mojang launcher 1.21.1 icin kendi Java'sini getirir).
+ - Ses yok: hostta UDP 24454 acik olmali; oyunda V tusunda mikrofon secili mi bak.
+ - Katil Kim modunda skin'ler herkes icin ayni gorunur (kapisma-hud yapar), bu normaldir.
+ - Kurulum gunlugu: %TEMP%\kapisma-oyuncu-kurulum.txt
+
+LISANS: Kapisma ve kapisma-hud (MIT). Fabric API (Apache-2.0), Origins (MIT), Simple Voice Chat (All Rights Reserved;
+yazara aittir, dogrudan Modrinth'ten indirilir). Ayrintilar: LICENSES klasoru.

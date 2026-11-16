@@ -15,7 +15,7 @@ ap.add_argument("--sh", action="store_true", help="start.sh'i (Git Bash) dene")
 ap.add_argument("--lite", action="store_true", help="profil.txt = lite yaz")
 ap.add_argument("--nojava", action="store_true", help="Java'siz makineyi taklit et: baslatici Java 21'i kendisi indirmeli (Windows)")
 ap.add_argument("--zip", default=os.path.join(ROOT, "release", "kapisma-sunucu-v0.1.0.zip"))
-ap.add_argument("--dest", default=os.path.join(ROOT, "pack_test"))
+ap.add_argument("--dest", default=os.path.join(ROOT, "_yedek", "pack_test"))
 a = ap.parse_args()
 
 dest = a.dest

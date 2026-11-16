@@ -163,10 +163,10 @@ Puan kuralı: oyuna katılım 5, her öldürme 10, kazanan takıma 100 (en az 2 
 | O5 | İstemci zip'i: `kurulum.bat` | mods klasörüne 4 jar; eski sürümler `_kapisma_eski`'ye taşınır |
 | O6 | Android tablet (Termux): `pkg install openjdk-21 curl unzip`, zip'i aç, `bash start.sh` | Aynı sunucu; arkadaşlar tabletin Tailscale IP'sine bağlanır |
 
-## P. Kurulum sihirbazı (Windows)
+## P. Kurulum pencereleri (Windows)
 | # | Yap | Görmelisin |
 |---|---|---|
-| P1 | `python tools/make_release.py --full --offline` sonra `python tools/test_wizard.py --boot` | "SIHIRBAZ TESTI: BASARILI": form kuruluyor, oyuncu kurulumu (mods, eski modlar taşındı, Fabric sürümü, launcher profili, servers.dat), tekrar kurulumda bozulmuyor, sunucu kurulumu (izinli oyuncular, RAM, EULA, ev sahibi ayarı ezilmiyor), kurulan sunucu açılıp beyaz listeyi uyguluyor |
-| P2 | (GERÇEK, bir kere) `dist/kapisma-kurulum-v0.1.0.zip` → çıkar → `Kapisma-Kurulum.bat` → Oyuncuyum | Pencere açılır, Minecraft klasörü otomatik dolu; Kur → günlükte "HAZIR". TLauncher'ı aç: sürüm listesinde `fabric-loader-0.20.1-1.21.1` (veya mevcut Fabric 1.21.1) var; Oyna → ana menüde mod listesinde Kapışma HUD / Origins / Voice Chat |
-| P3 | (GERÇEK) Sunucu kuracağım | Adlar + RAM + EULA kutusu → Kur: güvenlik duvarı (UAC'a Evet), sunucu penceresi açılır, adresler yazılır; listede olmayan bir adla girmek reddedilir |
-Sınır: TLauncher'ın kendisi ve UAC penceresi otomatik denenemez; P2/P3 gerçek bilgisayarda bir kere elle doğrulanmalıdır. TLauncher, eklenen sürümün kütüphanelerini ilk açılışta indirir (internet gerekir). PowerShell engelliyse sihirbaz açılmaz; paket içindeki `istemci\kurulum.bat` / `sunucu\start.bat` aynı işi yapar.
+| P1 | `python tools/make_release.py --full --offline` sonra `python tools/test_wizard.py --boot` | "KURULUM PENCERELERI TESTI: BASARILI": düğmeye tıklayınca tek kurulum, ikinci tıklamada/ikinci açılışta kapalı; modlar `<.minecraft>\mods` içinde, eski sürüm `_kapisma_eski`'de, yabancı modlara dokunulmamış; ikinci çalıştırma hiçbir dosyayı değiştirmiyor; ayarlanan sunucu açılıp beyaz listeyi uyguluyor |
+| P2 | (GERÇEK, bir kere) `dist/kapisma-oyuncu-v0.1.0.zip` → çıkar → `Kapisma-Oyuncu-Kur.bat` | Büyük **KUR** düğmesi; basınca günlükte "Doğrulandı: 4 mod doğru klasörde" ve "KURULUM TAMAM"; düğme **KURULDU**. Pencereyi kapatıp tekrar aç: düğme baştan KURULDU (kapalı). TLauncher'da sürüm listesinde Fabric 1.21.1 → Oyna → Mods'ta Kapışma HUD / Origins / Voice Chat |
+| P3 | (GERÇEK) host: `kapisma-sunucu-v0.1.0.zip` → çıkar → `Sunucu-Ayarla.bat` | Adlar + RAM + EULA kutusu → **KUR VE BAŞLAT**: güvenlik duvarı (UAC'a Evet), sunucu penceresi açılır, adresler yazılır; listede olmayan bir adla girmek reddedilir |
+Sınır: TLauncher'ın kendisi ve UAC penceresi otomatik denenemez; P2/P3 gerçek bilgisayarda bir kere elle doğrulanmalıdır. TLauncher, eklenen sürümün kütüphanelerini ilk açılışta indirir (internet gerekir). TLauncher'da oyun klasörünü özel bir yere ayarladıysan pencerenin altındaki "değiştir"le o klasörü seç. PowerShell engelliyse pencere açılmaz; `elle_kurulum\kurulum.bat` (oyuncu) / `start.bat` (host) aynı işi yapar.
