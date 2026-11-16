@@ -39,3 +39,4 @@ Thumbs.db
 /mod/tpl/
 /mod/tpl121/
 /tools/vendor/
+/dist/*/

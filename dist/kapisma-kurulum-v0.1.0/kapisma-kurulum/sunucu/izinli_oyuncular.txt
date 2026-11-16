@@ -1,6 +1,0 @@
-# Sadece bu adlar sunucuya girebilir (satir basina bir Minecraft adi, SEN DAHIL).
-# Ornek:
-#   Ahmet_34
-#   Zeynep
-# Bu dosyada en az bir ad varsa beyaz liste otomatik acilir; bos birakirsan kapali kalir
-# (o durumda sunucuyu sadece Tailscale/yerel agda ac: herkes istedigi adla girebilir).
