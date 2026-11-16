@@ -2,8 +2,15 @@
 
 UHC, Tombala (Bingo), Manhunt, Katil Kim. En fazla 8 oyuncu. Minecraft 1.21.1 + Fabric. **Herkes sunucu kurabilir**: Windows, Linux, Mac ve Android tablet (Termux).
 
+## 0. En kolay yol: kurulum sihirbazı (Windows)
+[`dist/`](dist) içindeki **`kapisma-kurulum-vX.zip`** dosyasını indir, klasöre çıkar, **`Kapisma-Kurulum.bat`**'a çift tıkla. Açılan pencerede iki düğme var:
+- **Oyuncuyum:** modları doğru `.minecraft\mods` klasörüne kurar (eskileri silmez, `_kapisma_eski`'ye taşır), Fabric 1.21.1 sürümünü (yoksa) ekler, resmi launcher için profil ekler, sesli sohbet modunu SHA-512 doğrulamalı indirir, istersen sunucuyu "Çoklu Oyuncu" listesine yazar. Sonra TLauncher → Fabric 1.21.1 → Oyna.
+- **Sunucu kuracağım:** sunucuyu istediğin klasöre kurar, **oyuncu adlarını beyaz listeye yazar** (kimse başkasının adıyla giremez), RAM seçtirir, EULA onayını sorar, güvenlik duvarını açar, sunucuyu başlatır ve arkadaşlarının yazacağı adresi gösterir.
+
+Sihirbaz çalışmazsa (PowerShell kapalı/engelli) aşağıdaki elle yollar aynı işi yapar. Linux/Mac/Android için `start.sh` (aşağıda).
+
 ## 1. Sunucuyu kur ve aç (host)
-En kolay yol hazır paket: [`dist/`](dist) klasöründeki **`kapisma-sunucu-vX.zip`** (GitHub'da dosyaya tıkla → **Download raw file**; varsa [Releases](../../releases) sayfasından da inebilir). Kaynaktan derlemek için bkz. §5. Bütünlük: `dist/SHA256SUMS.txt`.
+Elle yol — hazır paket: [`dist/`](dist) klasöründeki **`kapisma-sunucu-vX.zip`** (GitHub'da dosyaya tıkla → **Download raw file**; varsa [Releases](../../releases) sayfasından da inebilir). Kaynaktan derlemek için bkz. §5. Bütünlük: `dist/SHA256SUMS.txt`.
 
 | Cihaz | Nasıl |
 |---|---|
@@ -18,7 +25,7 @@ En kolay yol hazır paket: [`dist/`](dist) klasöründeki **`kapisma-sunucu-vX.z
 **Seed ve yeni dünya** artık Java içinde (Fabric `preLaunch`) yapılır; PowerShell/bash betiği gerekmez: ilk açılışta seed havuzundan kullanılmamış bir seed seçilir; Manhunt yeni dünya isterse sunucu kapanır, yeniden açılırken eski dünya silinip yeni seed yazılır.
 
 ## 2. Arkadaşlar nasıl bağlanır (Tailscale)
-Sunucu internete açılmaz; sadece [Tailscale](https://tailscale.com) ağındakiler girebilir (korsan/TLauncher hesapları sunucuya `online-mode=false` ile girdiği için en güvenli yol budur; ek olarak konsolda `whitelist add <ad>` + `whitelist on`).
+Sunucu internete açılmaz; sadece [Tailscale](https://tailscale.com) ağındakiler girebilir (korsan/TLauncher hesapları sunucuya `online-mode=false` ile girdiği için en güvenli yol budur). **Ad taklidi:** bu modda sunucu kimlik doğrulamaz, yani biri başkasının (ya da host'un) adıyla girebilir. Bunu kapatmak için sunucu klasöründeki **`izinli_oyuncular.txt`** dosyasına izinli adları yaz (satır başına bir ad, sen dahil; sihirbaz bunu kendisi yapar): sunucu açılırken beyaz liste otomatik açılır ve yalnızca bu adlar girebilir.
 
 **Host:** Tailscale uygulaması → bu cihazın satırı → **Share…** → arkadaşın e-postası. (Paylaşım yalnızca bu cihazı gösterir.) `adres_goster.bat` Tailscale IP'ni (100.x.x.x) yazar.
 
@@ -85,6 +92,9 @@ New-NetFirewallRule -DisplayName "Kapisma Ses" -Direction Inbound -Protocol UDP 
 | Katil Kim | Ortak noktanın ±100 bloğunda (200x200) rastgele |
 | Tombala, Manhunt | Hepsi aynı noktada, aynı anda (kıyak yok) |
 
+### UHC oyun içi ekran
+Sağ ortada **yan panel** (kural `sidebar`): süre, PvP durumu/geri sayım, sınır yarıçapı (daralıyorsa hedefi de), kalan takım/oyuncu, **en çok öldürenler**. Altta eylem çubuğunda **merkez yönü oku + mesafe** (`Merkez: 340 ↗`; sınır dışındaysan kırmızı uyarı) ve kendi öldürme sayın. **Can göstergesi** (kural `showHealth`, UHC/Manhunt açık, Tombala kapalı): Tab listesinde ve isim etiketinin altında kalpler — doğal yenilenme kapalı UHC'de rakibin canını görmek için. Takım arkadaşın ölünce sana **ölüm konumu** yazılır (eşyaları orada). Katil Kim'de kimlik gizli olduğu için can gösterimi yoktur.
+
 ### Hile koruması ("halüsinasyon")
 Kural `antiXray` (UHC, Tombala, Manhunt, Katil Kim; 0 kapalı, 1 cevher koruması, 2 tam koruma — varsayılan 2). Sunucu, istemciye giden dünya verisini değiştirir; oyun mantığı gerçek dünyayla çalışır:
 - **Gömülü cevherler gizlenir:** havaya açık olmayan kömür, demir, bakır, altın, kızıltaş, lapis, elmas, zümrüt (ve Nether'de altın, kuvars, antik kalıntı) yerine taş görünür; gerçek yeri istemciye hiç gönderilmez.
@@ -94,6 +104,14 @@ Kural `antiXray` (UHC, Tombala, Manhunt, Katil Kim; 0 kapalı, 1 cevher korumas�
 - Nether ve End'de boşluk gizleme yoktur (ufuk görüşü oyunun parçası); Nether'de sadece cevher koruması çalışır.
 - Test: `/kapisma debug xray audit` (op): chunk paketini istemci gibi çözer, sızıntı/belirsizlik/açılma doğrular; `... status`, `... simulate`, `... tpcave`.
 - Bilinen sınır: yaratıklar (ESP) ve ışık verisi korunmaz; yapı sandığı gibi şeyler yalnızca "yeraltında ve açığa çıkmamışsa" saklanır.
+
+### Oyuncu hile koruması (`antiCheat`, UHC / Tombala / Manhunt / Katil Kim; varsayılan açık)
+Oyun **başlayınca** devreye girer (lobide kapalı), sunucu tarafında çalışır:
+- **ESP / wallhack / oyuncu radarı:** duvar, zemin ya da dağ gibi **tam opak blok** arkasındaki oyuncu, bakan oyuncunun istemcisine **hiç gönderilmez** (paket seviyesinde; istemci o oyuncunun var olduğunu bilmez). Köşeyi dönerken göz kırpma olmasın diye görüş hattı geniş payla (köşeden ~1 blok önce) ve 0,8 sn bekletmeyle hesaplanır; cam/yaprak/yarım blok/çit görüşü engellemez. Muaf: 8 blok yakın, takım arkadaşı, parlayan (final) oyuncu, seyirci. 144 bloktan uzaktakiler hiç gönderilmez. Maliyet: oyuncu çifti başına 4 tikte bir birkaç ışın; LITE profilde 8 tikte bir.
+- **Vuruş denetimi:** menzil aşımı (normal erişim + 1,3 blok; vanilla sunucu +3 payı verir), katı blok arkasından vuruş ve aşırı tıklama (1 sn'de 18'den fazla) engellenir; olaylar sunucu günlüğüne `[koruma]` olarak yazılır.
+- **Seed gizleme:** istemciye giden "hashed seed" uydurma bir değerle değiştirilir; hile istemcisi seed'i doğrulayamaz. Gerçek seed'i (ve bununla yapı/biyom konumlarını) istemci hiçbir yoldan öğrenemez.
+- Komutlar (op): `/kapisma debug guard status|force 0/1/-1|probe <bakan> <hedef>|hit <bakan> <hedef> <adet>`.
+- **Bu yapılamaz (dürüst sınırlar):** istemcide çalışan hileler sunucudan engellenemez — fullbright/gece görüşü, kendi ekranında freecam, damage/FPS göstergesi, otomatik totem/pot, yardımcı nişan (aimbot), Baritone gibi yol botları. Vanilla sunucu zaten uçmayı, aşırı hızı ve blok erişim menzilini denetler (`allow-flight=false`). Birine güvenmiyorsan oynatma ya da beyaz listeyi kullan; hile istemcisi bulunduğunda `ban` komutu var.
 
 ### Ses (sesli sohbet) her modda açık
 - Sesli sohbet için sunucuya ve herkesin istemcisine **Simple Voice Chat 2.6.27 (Fabric 1.21.1)** kurulur (sunucu ve istemci paketinde hazır). Ses UDP **24454** portundan gider.
@@ -111,7 +129,7 @@ Manhunt "temiz" ana dünya ister. Dünya daha önce Manhunt'ta kullanıldıysa *
 ## 5. Dosyalar, derleme ve paketleme
 - `PLAN.md` plan ve kararlar, `docs\ORIGINS_BALANCE.md` ırk dengesi (13 ırk), `docs\DENEY_PLANI.md` adım adım deney listesi.
 - `mod\kapisma\` sunucu modu kaynağı (derleme: `cd mod/kapisma && ./gradlew build`, Java 21), `mod\kapisma-hud\` istemci modu.
-- `pack\server`, `pack\client` paketlerin başlatıcı/kurulum betikleri ve belgeleri; **`python tools/make_release.py`** `release\` klasörüne `kapisma-sunucu-vX.zip`, `kapisma-istemci-vX.zip` ve `SHA256SUMS.txt` üretir (ses jar'sız olanlar ayrıca `dist\`'e kopyalanır ve depoya eklenir) (jar'lar zip içinde olduğu gibi kalır). Simple Voice Chat lisansı (All Rights Reserved) yüzünden pakete **konmaz**, ilk çalıştırmada doğrulamalı indirilir; kendi cihazların arasında dağıtmak için `--full` ile jar'lı `-tam` paketler üretilir (herkese açık yere yükleme).
+- `pack\server`, `pack\client`, `pack\wizard` paketlerin başlatıcı/kurulum betikleri ve belgeleri; **`python tools/make_release.py`** `release\` klasörüne `kapisma-sunucu-vX.zip`, `kapisma-istemci-vX.zip`, `kapisma-kurulum-vX.zip` (sihirbaz + ikisi) ve `SHA256SUMS.txt` üretir; `python tools/test_wizard.py [--boot]` sihirbazı otomatik dener (ses jar'sız olanlar ayrıca `dist\`'e kopyalanır ve depoya eklenir) (jar'lar zip içinde olduğu gibi kalır). Simple Voice Chat lisansı (All Rights Reserved) yüzünden pakete **konmaz**, ilk çalıştırmada doğrulamalı indirilir; kendi cihazların arasında dağıtmak için `--full` ile jar'lı `-tam` paketler üretilir (herkese açık yere yükleme).
 - `python tools/test_pack.py` sunucu paketini temiz klasöre açıp gerçek `start.bat` ile açar, seed seçimini, ses modunu, yeni dünya döngüsünü ve temiz kapanışı doğrular (`--sh` start.sh, `--lite` zayıf cihaz).
 - `knowledge\`, `tools\mcknow.py` Minecraft bilgi kütüphanesi (resmî veriden üretilir). `tools\` ayrıca seed tarama ve test araçlarını içerir. `seeds.json` doğrulanmış seed havuzu.
 - Yerel çalışma kopyası: `server\` canlı sunucu, `server_test\` test kopyası, `client-pack\` eski elle derlenmiş istemci jar'ları (artık `release\` kullanılır).

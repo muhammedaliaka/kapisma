@@ -1,0 +1,79 @@
+# Oyuncu hile korumasi: gorus hatti (ESP), vurus denetimi (menzil/duvar/tiklama), seed. Oyun disinda zorla acilir.
+kapisma debug guard force 1
+fill -30 90 -10 30 110 50 minecraft:air
+player Bot1 spawn
+player Bot2 spawn
+wait 3
+gamemode survival Bot1
+gamemode survival Bot2
+attribute Bot1 minecraft:generic.gravity base set 0
+attribute Bot2 minecraft:generic.gravity base set 0
+execute in minecraft:overworld run tp Bot1 0 100 0
+execute in minecraft:overworld run tp Bot2 0 100 30
+kapisma debug guard ack
+wait 1
+kapisma debug guard ack
+wait 1
+kapisma debug guard ack
+wait 1
+kapisma debug guard ack
+wait 1
+kapisma debug guard ack
+wait 1
+kapisma debug guard ack
+wait 2
+kapisma debug guard refresh
+wait 2
+# 1) acik arazi: 30 blok, arada duvar yok -> gorunur
+kapisma debug guard probe Bot1 Bot2
+expect hide=false seenBy=true
+# 2) araya tam opak duvar -> gizli (paket duzeyinde: seenBy=false)
+fill -25 94 14 25 106 16 minecraft:stone
+wait 1
+kapisma debug guard ack
+kapisma debug guard refresh
+wait 2
+kapisma debug guard probe Bot1 Bot2
+kapisma debug guard probe Bot2 Bot1
+expect hide=true seenBy=false
+# 3) cam duvar -> gorus engellenmez
+fill -25 94 14 25 106 16 minecraft:glass
+wait 1
+kapisma debug guard ack
+kapisma debug guard refresh
+wait 2
+kapisma debug guard probe Bot1 Bot2
+# 4) duvari kaldir -> tekrar gorunur
+fill -25 94 14 25 106 16 minecraft:air
+wait 1
+kapisma debug guard ack
+kapisma debug guard refresh
+wait 2
+kapisma debug guard probe Bot1 Bot2
+expect seenBy=true
+# 5) vurus denetimi: 30 blok uzak -> menzil engeli
+kapisma debug guard hit Bot1 Bot2 1
+expect engellenen=1 gecen=0
+# 6) yakin (2.5 blok), arada duvar yok -> gecer
+execute in minecraft:overworld run tp Bot2 0 100 2.5
+wait 1
+kapisma debug guard hit Bot1 Bot2 1
+expect engellenen=0 gecen=1
+# 7) yakin ama arada opak duvar -> engellenir
+fill -2 98 1 2 103 1 minecraft:stone
+kapisma debug guard hit Bot1 Bot2 1
+expect engellenen=1 gecen=0
+fill -2 98 1 2 103 1 minecraft:air
+# 8) asiri tiklama: ayni tikte 30 vurus -> ilk 18 gecer, kalani engellenir
+kapisma debug guard hit Bot1 Bot2 30
+expect engellenen=12 gecen=18
+kapisma debug guard status
+# 9) koruma kapaliyken hicbir sey engellenmez
+kapisma debug guard force 0
+wait 1
+kapisma debug guard hit Bot1 Bot2 30
+expect engellenen=0 gecen=30
+kapisma debug guard force -1
+# 10) seed: istemciye giden paketteki hashed seed gercek degil
+kapisma debug guard seed Bot1
+expect UYDURMA

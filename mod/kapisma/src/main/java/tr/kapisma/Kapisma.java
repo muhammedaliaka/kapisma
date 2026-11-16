@@ -43,6 +43,7 @@ public class Kapisma implements ModInitializer {
 				// Tablet / eski cihaz: hile korumasinin aciga cikarma maliyeti kucultulur (koruma ayni kalir)
 				tr.kapisma.xray.Xray.revealRadius = 8;
 				tr.kapisma.xray.Xray.bfsCap = 1200;
+				tr.kapisma.guard.AntiCheat.interval = 8;
 			}
 			LOG.info("Donanim profili: {} ({})", tr.kapisma.boot.Boot.PROFILE, tr.kapisma.boot.Boot.PROFILE_WHY);
 			Lobby.ensureBuilt(server);
@@ -56,6 +57,7 @@ public class Kapisma implements ModInitializer {
 			if (GM != null) GM.tick();
 			Lobby.tick(server);
 			tr.kapisma.xray.Xray.tick(server);
+			tr.kapisma.guard.AntiCheat.tick(server);
 			tr.kapisma.voice.VoiceBridge.tick(server);
 		});
 
@@ -68,6 +70,8 @@ public class Kapisma implements ModInitializer {
 			tr.kapisma.voice.VoiceBridge.onDisconnect(handler.getPlayer());
 			if (GM != null) GM.onDisconnect(handler.getPlayer());
 		});
+
+		net.fabricmc.fabric.api.event.player.AttackEntityCallback.EVENT.register(tr.kapisma.guard.AntiCheat::onAttack);
 
 		UseItemCallback.EVENT.register((player, world, hand) -> {
 			var stack = player.getItemInHand(hand);

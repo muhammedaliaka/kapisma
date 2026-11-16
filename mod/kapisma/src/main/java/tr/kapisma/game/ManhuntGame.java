@@ -109,6 +109,13 @@ public final class ManhuntGame extends WorldGame {
 		return 0;
 	}
 
+	@Override
+	public boolean cheatGuard(net.minecraft.world.level.Level level) {
+		if (phase != Phase.RUNNING || !st.flag(id(), "antiCheat")) return false;
+		var d = level.dimension();
+		return level == server.overworld() || d == net.minecraft.world.level.Level.NETHER || d == net.minecraft.world.level.Level.END;
+	}
+
 	public static Path usedFlag(net.minecraft.server.MinecraftServer s) {
 		return s.getWorldPath(LevelResource.ROOT).resolve("kapisma_manhunt_used");
 	}

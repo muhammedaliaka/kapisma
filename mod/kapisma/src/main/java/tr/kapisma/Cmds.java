@@ -105,6 +105,47 @@ public final class Cmds {
 						tr.kapisma.xray.Xray.forceMode = m < 0 ? null : m;
 						return say(c, "xray zorla: " + (m < 0 ? "kapalı (oyuna bağlı)" : m));
 					}))))
+				.then(Commands.literal("guard")
+					.then(Commands.literal("status").executes(c -> { String r = tr.kapisma.guard.AntiCheat.status(); Kapisma.LOG.info("{}", r); return say(c, r); }))
+					.then(Commands.literal("force").then(Commands.argument("mod", com.mojang.brigadier.arguments.IntegerArgumentType.integer(-1, 1)).executes(c -> {
+						int m = com.mojang.brigadier.arguments.IntegerArgumentType.getInteger(c, "mod");
+						tr.kapisma.guard.AntiCheat.force = m < 0 ? null : m == 1;
+						return say(c, "koruma zorla: " + (m < 0 ? "oyuna bağlı" : m == 1 ? "açık" : "kapalı"));
+					}))
+					)
+					.then(Commands.literal("ack").executes(c -> {   // test: sahte oyuncular chunk paketini onaylamaz; onaylamis gibi davran
+						for (ServerPlayer p : c.getSource().getServer().getPlayerList().getPlayers()) p.connection.chunkSender.onChunkBatchReceivedByClient(20.0f);
+						return say(c, "onaylandı");
+					}))
+					.then(Commands.literal("seed").then(Commands.argument("oyuncu", EntityArgument.player()).executes(c -> {   // test: paket yazilinca seed uydurma mi
+						ServerPlayer p = EntityArgument.getPlayer(c, "oyuncu");
+						var info = p.createCommonSpawnInfo(p.serverLevel());
+						var buf = new net.minecraft.network.RegistryFriendlyByteBuf(io.netty.buffer.Unpooled.buffer(), c.getSource().getServer().registryAccess());
+						info.write(buf);
+						long sent = new net.minecraft.network.protocol.game.CommonPlayerSpawnInfo(buf).seed();
+						String r = "seed: gercek=" + info.seed() + " gonderilen=" + sent + " " + (sent != info.seed() ? "UYDURMA" : "ACIK");
+						Kapisma.LOG.info("{}", r);
+						return say(c, r);
+					})))
+					.then(Commands.literal("refresh").executes(c -> { tr.kapisma.guard.AntiCheat.refresh(c.getSource().getLevel()); return say(c, "yenilendi"); }))
+					.then(Commands.literal("hit")
+						.then(Commands.argument("bakan", EntityArgument.player()).then(Commands.argument("hedef", EntityArgument.player()).then(Commands.argument("adet", com.mojang.brigadier.arguments.IntegerArgumentType.integer(1, 60)).executes(c -> {
+							ServerPlayer a = EntityArgument.getPlayer(c, "bakan"), t = EntityArgument.getPlayer(c, "hedef");
+							int n = com.mojang.brigadier.arguments.IntegerArgumentType.getInteger(c, "adet"), fails = 0;
+							for (int i = 0; i < n; i++)
+								if (tr.kapisma.guard.AntiCheat.onAttack(a, a.level(), net.minecraft.world.InteractionHand.MAIN_HAND, t, null) == net.minecraft.world.InteractionResult.FAIL) fails++;
+							String r = "hit " + a.getGameProfile().getName() + " -> " + t.getGameProfile().getName() + ": engellenen=" + fails + " gecen=" + (n - fails);
+							Kapisma.LOG.info("{}", r);
+							return say(c, r);
+						})))))
+					.then(Commands.literal("probe")
+						.then(Commands.argument("bakan", EntityArgument.player()).then(Commands.argument("hedef", EntityArgument.player()).executes(c -> {
+							ServerPlayer v = EntityArgument.getPlayer(c, "bakan"), t = EntityArgument.getPlayer(c, "hedef");
+							String r = "probe " + v.getGameProfile().getName() + " -> " + t.getGameProfile().getName() + ": hide=" + tr.kapisma.guard.AntiCheat.hide(t, v)
+								+ " seenBy=" + tr.kapisma.guard.AntiCheat.seenBy(t, v);
+							Kapisma.LOG.info("{}", r);
+							return say(c, r);
+						})))))
 				.then(Commands.literal("seedscan").executes(c -> say(c, tr.kapisma.seed.SeedScan.running() ? "Tarama sürüyor: " + tr.kapisma.seed.SeedScan.progress() : tr.kapisma.seed.SeedScan.start(1000)))
 					.then(Commands.argument("yaricap", com.mojang.brigadier.arguments.IntegerArgumentType.integer(200, 2000)).executes(c ->
 						say(c, tr.kapisma.seed.SeedScan.start(com.mojang.brigadier.arguments.IntegerArgumentType.getInteger(c, "yaricap"))))))

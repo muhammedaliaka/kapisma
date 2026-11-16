@@ -113,6 +113,9 @@ public abstract class Game {
 	/** Bu seviyede Nether/End portali kapali mi (gecici UHC/Tombala dunyalari)? */
 	public boolean blocksPortals(net.minecraft.world.level.Level level) { return false; }
 
+	/** Oyuncu hile korumasi (gorus hatti, vurus denetimi) bu dunyada simdi acik mi. */
+	public boolean cheatGuard(net.minecraft.world.level.Level level) { return false; }
+
 	/** Hile korumasi modu bu seviyede: 0 kapali, 1 cevher gizle + sahte cevher, 2 + yeralti bosluklari duz tas. */
 	public int xrayMode(net.minecraft.world.level.Level level) { return 0; }
 

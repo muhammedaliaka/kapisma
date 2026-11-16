@@ -2,6 +2,9 @@ KAPISMA ISTEMCI PAKETI  (Minecraft 1.21.1, Fabric)
 ===================================================
 Arkadasinin kurdugu Kapisma sunucusuna girmek icin gereken modlar. Zip'i bir klasore cikar.
 
+EN KOLAY YOL: kapisma-kurulum zip'indeki Kapisma-Kurulum.bat sihirbazi (Oyuncuyum'u sec): modlari, Fabric
+surumunu ve sesi kendisi kurar. Asagidaki elle yol sihirbaz acilmazsa icindir.
+
 KURULUM (Windows, TLauncher veya resmi launcher)
  1) TLauncher'i ac, surum listesinden "Fabric 1.21.1" sec ve bir kere "Oyna"ya bas (kendisi indirir),
     ana menu gelince oyunu kapat.  (Resmi launcher kullaniyorsan Fabric Installer ile 1.21.1 profili olustur:

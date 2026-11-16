@@ -136,8 +136,18 @@ Puan kuralı: oyuna katılım 5, her öldürme 10, kazanan takıma 100 (en az 2 
 | K1 | Her bölümde merdiven kulesi | Merdivene ileri basılı tutarak çıkılır, üstte platform |
 | K2 | Kızıltaş köprüsü (ORTA, ZOR, ÇOK ZOR) | Platformlar sırayla belirir/kaybolur; 0,5 sn önce cam |
 
+## L2. Oyuncu hile koruması (gerçek istemci ile, 2 kişi)
+| # | Yap | Görmelisin |
+|---|---|---|
+| L8 | UHC başlasın; arkadaşın bir dağın/duvarın arkasında dursun (20+ blok), sen bak | Onu hiç görmezsin (isim etiketi, gölge, kılıç sallama yok); duvar kalkınca/köşeyi dönünce yanına varmadan belirir, göz kırpmaz |
+| L9 | Aynı yerde arkadaşın cam/yaprak arkasında | Görünür kalır (cam ve yaprak görüşü kesmez) |
+| L10 | Final parlama (`glowFinal`) açılınca duvar arkasındakiler | Parlayanlar duvardan görünür |
+| L11 | Seyirci (elenmiş) olarak herkese bak | Herkes görünür |
+| L12 | `/kapisma debug guard status` (op) | `aktif=true`, gizleme sayacı artıyor; vuruş ihlali yok (normal oyunda `[koruma]` satırı çıkmamalı) |
+| L13 | Yakın dövüş, bol tıklama, kenarlarda vur-kaç | Hasar normal işler; yanlışlıkla "engellendi" olmaz (olursa `[koruma]` günlüğünü gönder, payı artırırız) |
+
 ## Otomatik testler (ben çalıştırırım)
-`bash tools/run_all.sh` → `tools/run_all.out`: uhc_basic, uhc_kill, uhc_select, bingo_basic, bingo_lines, bingo_tasks, manhunt_basic, manhunt_runner, katil_basic, katil_rules, katil_scatter, origin_join, balance_check, avian_kit, new_races, lobby_parkour, xray_audit, xray_nether, voice_groups (19) + xray_audit, uhc_basic, bingo_basic LITE profilde (3). Canlı sunucudan ayrı `server_test` kopyasında çalışır. Beklenen: hepsinde "hata satırı = 0", xray satırlarında "SORUN satırı: 0" (authlib "Failed to read value" satırları kimlik sorgusu gürültüsüdür, zararsız).
+`bash tools/run_all.sh` → `tools/run_all.out`: player_guard, uhc_basic, uhc_kill, uhc_select, bingo_basic, bingo_lines, bingo_tasks, manhunt_basic, manhunt_runner, katil_basic, katil_rules, katil_scatter, origin_join, balance_check, avian_kit, new_races, lobby_parkour, xray_audit, xray_nether, voice_groups (20) + xray_audit, uhc_basic, bingo_basic LITE profilde (3). Canlı sunucudan ayrı `server_test` kopyasında çalışır. Beklenen: hepsinde "hata satırı = 0", xray satırlarında "SORUN satırı: 0" (authlib "Failed to read value" satırları kimlik sorgusu gürültüsüdür, zararsız).
 
 ## Bilinen sınırlar
 - Carpet botu yer çekimi uygulamaz: parkurda "düşme" davranışı sadece gerçek oyuncuyla denenebilir (B3).
@@ -152,3 +162,11 @@ Puan kuralı: oyuna katılım 5, her öldürme 10, kazanan takıma 100 (en az 2 
 | O4 | `python tools/test_pack.py` (+ `--sh`, `--lite`) | "PAKET TESTI: BASARILI" |
 | O5 | İstemci zip'i: `kurulum.bat` | mods klasörüne 4 jar; eski sürümler `_kapisma_eski`'ye taşınır |
 | O6 | Android tablet (Termux): `pkg install openjdk-21 curl unzip`, zip'i aç, `bash start.sh` | Aynı sunucu; arkadaşlar tabletin Tailscale IP'sine bağlanır |
+
+## P. Kurulum sihirbazı (Windows)
+| # | Yap | Görmelisin |
+|---|---|---|
+| P1 | `python tools/make_release.py --full --offline` sonra `python tools/test_wizard.py --boot` | "SIHIRBAZ TESTI: BASARILI": form kuruluyor, oyuncu kurulumu (mods, eski modlar taşındı, Fabric sürümü, launcher profili, servers.dat), tekrar kurulumda bozulmuyor, sunucu kurulumu (izinli oyuncular, RAM, EULA, ev sahibi ayarı ezilmiyor), kurulan sunucu açılıp beyaz listeyi uyguluyor |
+| P2 | (GERÇEK, bir kere) `dist/kapisma-kurulum-v0.1.0.zip` → çıkar → `Kapisma-Kurulum.bat` → Oyuncuyum | Pencere açılır, Minecraft klasörü otomatik dolu; Kur → günlükte "HAZIR". TLauncher'ı aç: sürüm listesinde `fabric-loader-0.20.1-1.21.1` (veya mevcut Fabric 1.21.1) var; Oyna → ana menüde mod listesinde Kapışma HUD / Origins / Voice Chat |
+| P3 | (GERÇEK) Sunucu kuracağım | Adlar + RAM + EULA kutusu → Kur: güvenlik duvarı (UAC'a Evet), sunucu penceresi açılır, adresler yazılır; listede olmayan bir adla girmek reddedilir |
+Sınır: TLauncher'ın kendisi ve UAC penceresi otomatik denenemez; P2/P3 gerçek bilgisayarda bir kere elle doğrulanmalıdır. TLauncher, eklenen sürümün kütüphanelerini ilk açılışta indirir (internet gerekir). PowerShell engelliyse sihirbaz açılmaz; paket içindeki `istemci\kurulum.bat` / `sunucu\start.bat` aynı işi yapar.

@@ -48,8 +48,8 @@ ARKADASLAR NASIL BAGLANIR (en guvenli yol: Tailscale)
  - Ayni evdeki aga bagliysaniz yerel IP (192.168.x.x) de calisir.
  - Sunucu "online-mode=false" (TLauncher/korsan hesaplar da girebilsin diye). Bu yuzden herkesin adi
    taklit edilebilir: sunucuyu internete acma, ya da konsolda:
-      whitelist add ARKADAS_ADI     (her arkadas icin)
-      whitelist on
+      izinli_oyuncular.txt dosyasina izinli adlari yaz (satir basina bir ad, sen dahil): sunucu
+      acilirken beyaz listeyi kendisi acar, listede olmayan giremez. (Kurulum sihirbazi bunu kendisi yapar.)
 
 OYUN
  - Sunucuya ilk giren oyuncu host olur (kurallari o ayarlar). Menu: envanterdeki Nether Yildizi'na sag tik

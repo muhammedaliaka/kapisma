@@ -34,6 +34,8 @@ public final class UhcGame extends WorldGame {
 		Map.entry(Items.POTATO, Items.BAKED_POTATO));
 
 	private int pvpTick, shrinkStart, shrinkEnd, limit;
+	private SideBoard board;
+	private static final String[] ARROWS = {"↑", "↗", "→", "↘", "↓", "↙", "←", "↖"};
 	private boolean shrinkAnnounced;
 
 	public UhcGame(GameManager mgr) {
@@ -77,6 +79,7 @@ public final class UhcGame extends WorldGame {
 		shrinkStart = (int) st.num("UHC", "shrinkStartMin") * 1200;
 		shrinkEnd = Math.max(shrinkStart + 1200, (int) st.num("UHC", "shrinkEndMin") * 1200);
 		limit = (int) st.num("UHC", "timeLimitMin") * 1200;
+		if (st.flag("UHC", "sidebar")) board = new SideBoard(server, "kp_uhc", "UHC");
 		int buff = (int) st.num("UHC", "earlyBuffSec");
 		for (ServerPlayer p : onlinePlayers()) {
 			if (buff > 0) {
@@ -120,10 +123,44 @@ public final class UhcGame extends WorldGame {
 
 	private void hud() {
 		int sec = ticks / 20;
-		String pvp = pvpActive() ? "AÇIK" : Msg.mmss((pvpTick - ticks) / 20);
-		Component c = Component.literal("⏱ " + Msg.mmss(sec) + "   PvP: " + pvp + "   Sınır: ±" + (int) world.borderRadius()
-			+ "   Takım: " + aliveTeams().size()).withStyle(ChatFormatting.WHITE);
-		for (ServerPlayer p : onlinePlayers()) Msg.actionbar(p, c);
+		boolean pvpOn = pvpActive();
+		String pvp = pvpOn ? "AÇIK" : Msg.mmss((pvpTick - ticks) / 20);
+		int alivePlayers = (int) players.stream().filter(this::isAlive).count();
+		var wb = world.level.getWorldBorder();
+		int radius = (int) world.borderRadius();
+		if (board != null) {
+			java.util.List<String> lines = new java.util.ArrayList<>();
+			lines.add("§7Süre §f" + Msg.mmss(sec));
+			lines.add("§7PvP " + (pvpOn ? "§c§lAÇIK" : "§e" + pvp));
+			lines.add("§7Sınır §f±" + radius + (shrinkAnnounced ? " §7→ ±" + (int) st.num("UHC", "borderEnd") : ""));
+			lines.add("§7Takım §f" + aliveTeams().size() + "  §7Oyuncu §f" + alivePlayers);
+			var top = players.stream().filter(id -> kills.getOrDefault(id, 0) > 0)
+				.sorted((x, y) -> Integer.compare(kills.getOrDefault(y, 0), kills.getOrDefault(x, 0))).limit(3).toList();
+			if (!top.isEmpty()) lines.add("§c§lEN ÇOK ÖLDÜREN");
+			for (var id : top) lines.add("§f" + names.getOrDefault(id, "?") + " §c" + kills.getOrDefault(id, 0));
+			board.update(lines);
+		}
+		for (ServerPlayer p : onlinePlayers()) {
+			StringBuilder sb = new StringBuilder("⏱ " + Msg.mmss(sec) + "   PvP: " + pvp + "   Sınır: ±" + radius + "   Takım: " + aliveTeams().size());
+			if (p.level() == world.level && !p.isSpectator()) {
+				sb.append("   Öldürme: ").append(kills.getOrDefault(p.getUUID(), 0));
+				double dx = wb.getCenterX() - p.getX(), dz = wb.getCenterZ() - p.getZ();
+				int dist = (int) Math.sqrt(dx * dx + dz * dz);
+				if (dist > 12) {
+					double rel = Math.toDegrees(Math.atan2(-dx, dz)) - p.getYRot();
+					int idx = Math.floorMod(Math.round((float) (rel / 45.0)), 8);
+					sb.append("   Merkez: ").append(dist).append(' ').append(ARROWS[idx]);
+				}
+				if (Math.abs(p.getX() - wb.getCenterX()) > wb.getSize() / 2 || Math.abs(p.getZ() - wb.getCenterZ()) > wb.getSize() / 2) sb.append("   §c§lSINIR DIŞI!");
+			}
+			Msg.actionbar(p, Component.literal(sb.toString()).withStyle(ChatFormatting.WHITE));
+		}
+	}
+
+	@Override
+	protected void onClose() {
+		if (board != null) board.close();
+		board = null;
 	}
 
 	private void finishByHealth() {
@@ -152,6 +189,14 @@ public final class UhcGame extends WorldGame {
 
 	@Override
 	protected void onEliminated(ServerPlayer p, DamageSource src) {
+		GameTeam mine = teamOf(p.getUUID());
+		if (mine != null) {
+			for (var id : mine.members) {
+				ServerPlayer m = id.equals(p.getUUID()) ? null : player(id);
+				if (m != null && isAlive(id)) Msg.tell(m, "☠ Takım arkadaşın " + p.getGameProfile().getName() + " öldü. Konum: "
+					+ p.getBlockX() + " " + p.getBlockY() + " " + p.getBlockZ() + " (eşyaları orada)");
+			}
+		}
 		if (!st.flag("UHC", "goldenHead")) return;
 		ItemStack head = new ItemStack(Items.PLAYER_HEAD);
 		head.set(DataComponents.PROFILE, new ResolvableProfile(p.getGameProfile()));

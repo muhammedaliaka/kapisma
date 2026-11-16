@@ -85,7 +85,35 @@ public final class Boot implements PreLaunchEntrypoint {
 			}
 		}
 
+		// ---- 3) izinli oyuncular (offline-mode sunucuda baskasinin adini kullanmayi engeller: ad listesi) ----
+		changed |= applyAllowList(root, props);
+
 		if (changed) Files.write(propsFile, props, StandardCharsets.ISO_8859_1);
+	}
+
+	/** izinli_oyuncular.txt'te (satir basina bir ad, # yorum) en az bir ad varsa whitelist.json yazilir ve beyaz liste acilir. */
+	private static boolean applyAllowList(Path root, List<String> props) throws IOException {
+		Path f = root.resolve("izinli_oyuncular.txt");
+		if (!Files.exists(f)) return false;
+		JsonArray arr = new JsonArray();
+		Set<String> seen = new HashSet<>();
+		for (String raw : Files.readAllLines(f, StandardCharsets.UTF_8)) {
+			String n = raw.replace("﻿", "").trim();
+			if (n.isEmpty() || n.startsWith("#")) continue;
+			if (!n.matches("[A-Za-z0-9_]{3,16}")) { System.err.println("[Kapisma] izinli_oyuncular.txt: gecersiz ad atlandi: " + n); continue; }
+			if (!seen.add(n.toLowerCase(Locale.ROOT))) continue;
+			JsonObject o = new JsonObject();
+			o.addProperty("uuid", java.util.UUID.nameUUIDFromBytes(("OfflinePlayer:" + n).getBytes(StandardCharsets.UTF_8)).toString());
+			o.addProperty("name", n);
+			arr.add(o);
+		}
+		if (arr.size() == 0) return false;
+		Files.writeString(root.resolve("whitelist.json"), new Gson().toJson(arr), StandardCharsets.UTF_8);
+		boolean ch = !"true".equals(get(props, "white-list", "false")) || !"true".equals(get(props, "enforce-whitelist", "false"));
+		set(props, "white-list", "true");
+		set(props, "enforce-whitelist", "true");
+		System.out.println("[Kapisma] Izinli oyuncu listesi uygulandi: " + arr.size() + " oyuncu (beyaz liste acik)");
+		return ch;
 	}
 
 	// ------------------------------------------------------------------ profil

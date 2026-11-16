@@ -55,6 +55,34 @@ public abstract class WorldGame extends Game {
 
 	protected abstract void onRunningTick();
 
+	// ---- can gostergesi (tab listesi + isim etiketinin alti) ----
+	private static final String HP_OBJ = "kp_hp";
+	private boolean healthShown;
+
+	private void setupHealth() {
+		boolean has = tr.kapisma.config.Rules.of(id()).stream().anyMatch(r -> r.key().equals("showHealth"));
+		if (!has || !st.flag(id(), "showHealth")) return;
+		var sb = server.getScoreboard();
+		var old = sb.getObjective(HP_OBJ);
+		if (old != null) sb.removeObjective(old);
+		var o = sb.addObjective(HP_OBJ, net.minecraft.world.scores.criteria.ObjectiveCriteria.HEALTH, Component.literal("❤").withStyle(ChatFormatting.RED),
+			net.minecraft.world.scores.criteria.ObjectiveCriteria.RenderType.HEARTS, true, null);
+		sb.setDisplayObjective(net.minecraft.world.scores.DisplaySlot.LIST, o);
+		sb.setDisplayObjective(net.minecraft.world.scores.DisplaySlot.BELOW_NAME, o);
+		healthShown = true;
+	}
+
+	private void clearHealth() {
+		if (!healthShown) return;
+		healthShown = false;
+		var sb = server.getScoreboard();
+		var o = sb.getObjective(HP_OBJ);
+		if (o == null) return;
+		sb.setDisplayObjective(net.minecraft.world.scores.DisplaySlot.LIST, null);
+		sb.setDisplayObjective(net.minecraft.world.scores.DisplaySlot.BELOW_NAME, null);
+		sb.removeObjective(o);
+	}
+
 	// ---- mini harita (kapisma-hud) ----
 	/** Alt sinif: bu oyunda mini harita acik mi? */
 	protected boolean minimapEnabled() { return false; }
@@ -134,6 +162,11 @@ public abstract class WorldGame extends Game {
 	@Override
 	public int xrayMode(net.minecraft.world.level.Level level) {
 		return world != null && level == world.level ? (int) st.num(id(), "antiXray") : 0;
+	}
+
+	@Override
+	public boolean cheatGuard(net.minecraft.world.level.Level level) {
+		return phase == Phase.RUNNING && world != null && level == world.level && st.flag(id(), "antiCheat");
 	}
 
 	protected boolean friendlyFire() {
@@ -386,6 +419,7 @@ public abstract class WorldGame extends Game {
 					}
 					phase = Phase.RUNNING;
 					ticks = 0;
+					setupHealth();
 					onStart();
 				}
 			}
@@ -543,6 +577,7 @@ public abstract class WorldGame extends Game {
 		}
 		clearMinimap();
 		TeamService.clear(server);
+		clearHealth();
 		onClose();
 		if (world != null) world.delete();
 		Kapisma.LOG.info("{} kapandi, lobiye donuldu", id());
