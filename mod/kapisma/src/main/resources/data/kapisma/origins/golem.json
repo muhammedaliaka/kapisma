@@ -1,0 +1,12 @@
+{
+  "powers": [
+    "kapisma:golem_hp",
+    "kapisma:golem_heavy",
+    "kapisma:golem_slow"
+  ],
+  "icon": {
+    "id": "minecraft:iron_block"
+  },
+  "order": 20,
+  "impact": 2
+}

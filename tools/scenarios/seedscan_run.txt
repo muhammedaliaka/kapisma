@@ -1,0 +1,2 @@
+kapisma debug seedscan
+wait 3000

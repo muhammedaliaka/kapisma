@@ -1,0 +1,13 @@
+{
+  "powers": [
+    "kapisma:frost_immune",
+    "kapisma:frost_snow_speed",
+    "kapisma:frost_fire_weak",
+    "kapisma:frost_chill"
+  ],
+  "icon": {
+    "id": "minecraft:snowball"
+  },
+  "order": 23,
+  "impact": 2
+}

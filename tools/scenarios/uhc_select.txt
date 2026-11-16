@@ -1,0 +1,12 @@
+# Irk SECME modu: botlar otomatik secer; secim bitince oyun tek kez baslamali (dongu hatasi regresyonu)
+kapisma game UHC
+kapisma origins select
+player Bot1 spawn
+player Bot2 spawn
+wait 3
+kapisma rule UHC pvpGraceMin 0
+kapisma start
+wait 25
+kapisma status
+kapisma stop
+wait 3

@@ -1,0 +1,25 @@
+# Manhunt: 3 oyuncu, 1 runner, pusula, runner olunce hunter'lar kazanir, sonra yeni dunya istegi
+player Bot1 spawn
+player Bot2 spawn
+player Bot3 spawn
+wait 3
+kapisma game MANHUNT
+kapisma rule MANHUNT headStartSec 0
+kapisma origins off
+kapisma runner Bot1
+kapisma start
+wait 18
+kapisma status
+data get entity Bot1 Inventory
+data get entity Bot2 Inventory
+execute as Bot1 run kapisma menu
+wait 3
+kapisma status
+damage Bot1 1000 minecraft:out_of_world
+wait 3
+kapisma status
+expect KAZANAN
+wait 18
+kapisma status
+kapisma start
+wait 3

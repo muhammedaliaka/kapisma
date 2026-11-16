@@ -1,0 +1,22 @@
+{
+	"schemaVersion": 1,
+	"id": "kapisma",
+	"version": "${version}",
+	"name": "Kapisma",
+	"description": "UHC / Tombala (Bingo) / Manhunt oyun yoneticisi: lobi, menu, takim, irk atama, seed havuzu.",
+	"authors": ["Kapisma"],
+	"license": "MIT",
+	"environment": "server",
+	"mixins": ["kapisma.mixins.json"],
+	"entrypoints": {
+		"preLaunch": ["tr.kapisma.boot.Boot"],
+		"main": ["tr.kapisma.Kapisma"],
+		"voicechat": ["tr.kapisma.voice.KapismaVoice"]
+	},
+	"depends": {
+		"fabricloader": ">=0.16.5",
+		"minecraft": "~1.21.1",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}

@@ -1,0 +1,28 @@
+{
+  "replace": true,
+  "order": 0,
+  "enabled": true,
+  "origins": [
+    "origins:arachnid",
+    "origins:avian",
+    "origins:blazeborn",
+    "origins:enderian",
+    "origins:feline",
+    "origins:human",
+    "origins:merling",
+    "origins:shulk",
+    "kapisma:golem",
+    "kapisma:fox",
+    "kapisma:dwarf",
+    "kapisma:frostborn",
+    "kapisma:wolf"
+  ],
+  "allow_random": true,
+  "exclude_random": [
+    "origins:human"
+  ],
+  "allow_random_unchoosable": false,
+  "hidden": false,
+  "auto_choose": true,
+  "default_origin": "origins:human"
+}

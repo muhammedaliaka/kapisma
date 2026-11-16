@@ -1,0 +1,16 @@
+# Hile korumasi Nether'de (mod 1: ancient debris/altin/kuvars gizlenir, bosluk gizleme yok) ve oyun disinda zorlama
+kapisma debug xray force 1
+player Bot1 spawn
+wait 2
+gamemode spectator Bot1
+attribute Bot1 minecraft:generic.gravity base set 0
+execute as Bot1 in minecraft:the_nether run tp @s 0 40 0
+wait 6
+execute as Bot1 run kapisma debug xray audit
+execute as Bot1 in minecraft:the_nether run tp @s 300 20 300
+wait 6
+execute as Bot1 run kapisma debug xray audit
+execute as Bot1 in minecraft:the_nether run tp @s -500 15 200
+wait 6
+execute as Bot1 run kapisma debug xray audit
+kapisma debug xray status

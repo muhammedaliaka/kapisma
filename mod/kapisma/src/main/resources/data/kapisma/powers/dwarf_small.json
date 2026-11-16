@@ -1,0 +1,9 @@
+{
+  "type": "origins:attribute",
+  "modifier": {
+    "id": "*:*",
+    "attribute": "minecraft:generic.scale",
+    "amount": -0.15,
+    "operation": "add_multiplied_base"
+  }
+}

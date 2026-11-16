@@ -1,0 +1,11 @@
+{
+  "type": "origins:modify_break_speed",
+  "modifier": {
+    "amount": 0.5,
+    "operation": "multiply_base_additive"
+  },
+  "block_condition": {
+    "type": "origins:in_tag",
+    "tag": "origins:natural_stone"
+  }
+}

@@ -1,0 +1,20 @@
+{
+	"schemaVersion": 1,
+	"id": "kapisma_hud",
+	"version": "${version}",
+	"name": "Kapisma HUD",
+	"description": "Kapisma sunucusu icin sol ustte Tombala karti ve takim durumu gosterir. Sadece istemci.",
+	"authors": ["Kapisma"],
+	"license": "MIT",
+	"environment": "client",
+	"mixins": ["kapisma_hud.mixins.json"],
+	"entrypoints": {
+		"client": ["tr.kapismahud.KapismaHudClient"]
+	},
+	"depends": {
+		"fabricloader": ">=0.16.5",
+		"minecraft": "~1.21.1",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}

@@ -1,0 +1,40 @@
+# --- calisma kopyalari ve buyuk/uretilmis veri ---
+/server/
+/server_test/
+/pack_test/
+/release/
+/client-pack/
+/knowledge/
+/tools/verify/
+/tools/seedscan/out/
+/tools/seedscan/out_test/
+/tools/seedscan/w*/
+/tools/seedscan/*.exe
+/tools/seedscan/*.jsonl
+/tools/test-mods/*.jar
+/tools/last_*.log
+/tools/run_all.out
+/tools/serve*.log
+/tools/serve_cmds.txt
+/tools/serve_py.out
+/tools/serve_stdout.log
+/tools/__pycache__/
+
+# --- Gradle / IDE ---
+.gradle/
+build/
+out/
+run/
+*.class
+.idea/
+*.iml
+.vscode/
+
+# --- sistem ---
+Thumbs.db
+.DS_Store
+
+# --- yerel sablon / ucuncu taraf klonlari (kendin klonla; bkz. tools/README.md) ---
+/mod/tpl/
+/mod/tpl121/
+/tools/vendor/

@@ -1,0 +1,102 @@
+# Otomatik uretildi (tools/gen_parkour_scenario.py): lobi + parkur (tirmanma kuleleri, zamanli kizil tas kopruleri dahil)
+player Bot1 spawn
+wait 5
+data get entity Bot1 Dimension
+data get entity Bot1 Pos
+data get entity Bot1 Inventory
+execute as Bot1 at @s if entity @e[type=text_display,distance=..40]
+execute as Bot1 at @s run tp @s 19.5 101 0.5
+wait 3
+expect PARKUR Bot1 basladi
+data get entity Bot1 Inventory
+execute as Bot1 at @s run tp @s 12.5 103 21.5
+wait 3
+expect cp platformuna ulasti
+execute as Bot1 at @s run tp @s -20.5 112 -11.5
+wait 3
+expect end platformuna ulasti (bolum KOLAY
+# yuksekten dus: son checkpoint'e donmeli (bot yercekimi uygulamaz, dogrudan asagi isinlaniyor)
+execute as Bot1 at @s run tp @s 12.5 94 21.5
+wait 5
+data get entity Bot1 Pos
+# merdiven kulesi idx 14 (h=5)
+execute as Bot1 at @s if block -11 106 21 minecraft:ladder
+expect Test passed
+execute as Bot1 at @s if block -11 110 21 minecraft:ladder
+expect Test passed
+execute as Bot1 at @s unless block -13 110 21 minecraft:air
+expect Test passed
+# merdiven kulesi idx 35 (h=7)
+execute as Bot1 at @s if block 15 117 -24 minecraft:ladder
+expect Test passed
+execute as Bot1 at @s if block 15 123 -24 minecraft:ladder
+expect Test passed
+execute as Bot1 at @s unless block 17 123 -24 minecraft:air
+expect Test passed
+# merdiven kulesi idx 63 (h=9)
+execute as Bot1 at @s if block -30 137 27 minecraft:ladder
+expect Test passed
+execute as Bot1 at @s if block -30 145 27 minecraft:ladder
+expect Test passed
+execute as Bot1 at @s unless block -30 145 25 minecraft:air
+expect Test passed
+# merdiven kulesi idx 92 (h=12)
+execute as Bot1 at @s if block 28 159 -30 minecraft:ladder
+expect Test passed
+execute as Bot1 at @s if block 28 170 -30 minecraft:ladder
+expect Test passed
+execute as Bot1 at @s unless block 30 170 -30 minecraft:air
+expect Test passed
+# zamanli kizil tas kopru idx 44: 5 sn boyunca 1 sn arayla durum
+execute as Bot1 at @s if block 23 130 3 minecraft:redstone_block run say BLINK_ON
+execute as Bot1 at @s if block 23 130 3 minecraft:air run say BLINK_OFF
+wait 1
+execute as Bot1 at @s if block 23 130 3 minecraft:redstone_block run say BLINK_ON
+execute as Bot1 at @s if block 23 130 3 minecraft:air run say BLINK_OFF
+wait 1
+execute as Bot1 at @s if block 23 130 3 minecraft:redstone_block run say BLINK_ON
+execute as Bot1 at @s if block 23 130 3 minecraft:air run say BLINK_OFF
+wait 1
+execute as Bot1 at @s if block 23 130 3 minecraft:redstone_block run say BLINK_ON
+execute as Bot1 at @s if block 23 130 3 minecraft:air run say BLINK_OFF
+wait 1
+execute as Bot1 at @s if block 23 130 3 minecraft:redstone_block run say BLINK_ON
+execute as Bot1 at @s if block 23 130 3 minecraft:air run say BLINK_OFF
+wait 1
+execute as Bot1 at @s if block 23 130 3 minecraft:redstone_block run say BLINK_ON
+execute as Bot1 at @s if block 23 130 3 minecraft:air run say BLINK_OFF
+wait 1
+execute as Bot1 at @s if block 23 130 3 minecraft:redstone_block run say BLINK_ON
+execute as Bot1 at @s if block 23 130 3 minecraft:air run say BLINK_OFF
+wait 1
+execute as Bot1 at @s if block 23 130 3 minecraft:redstone_block run say BLINK_ON
+execute as Bot1 at @s if block 23 130 3 minecraft:air run say BLINK_OFF
+wait 1
+execute as Bot1 at @s if block 23 130 3 minecraft:redstone_block run say BLINK_ON
+execute as Bot1 at @s if block 23 130 3 minecraft:air run say BLINK_OFF
+wait 1
+execute as Bot1 at @s if block 23 130 3 minecraft:redstone_block run say BLINK_ON
+execute as Bot1 at @s if block 23 130 3 minecraft:air run say BLINK_OFF
+wait 1
+execute as Bot1 at @s if block 23 130 3 minecraft:redstone_block run say BLINK_ON
+execute as Bot1 at @s if block 23 130 3 minecraft:air run say BLINK_OFF
+wait 1
+execute as Bot1 at @s if block 23 130 3 minecraft:redstone_block run say BLINK_ON
+execute as Bot1 at @s if block 23 130 3 minecraft:air run say BLINK_OFF
+wait 1
+expect BLINK_ON
+expect BLINK_OFF
+execute as Bot1 at @s run tp @s 19.5 133 29.5
+wait 3
+execute as Bot1 at @s run tp @s -18.5 156 -31.5
+wait 3
+execute as Bot1 at @s run tp @s 34.5 170 39.5
+wait 3
+expect end platformuna ulasti (bolum ÇOK ZOR
+wait 12
+data get entity Bot1 Pos
+data get entity Bot1 Inventory
+execute as Bot1 at @s run tp @s 0.5 80 60
+wait 4
+data get entity Bot1 Pos
+execute as Bot1 run puan

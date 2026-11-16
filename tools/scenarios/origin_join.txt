@@ -1,0 +1,4 @@
+# Katilimda irk istemi: join reset kapali, katman auto_choose ile Human vermeli
+player Bot1 spawn
+wait 4
+origin get Bot1 origins:origin

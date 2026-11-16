@@ -1,0 +1,16 @@
+player Bot1 spawn
+wait 4
+kapisma host Bot1
+kapisma game UHC
+kapisma ban arachnid
+kapisma ban blazeborn
+kapisma ban enderian
+kapisma ban feline
+kapisma ban human
+kapisma ban merling
+kapisma ban shulk
+kapisma start
+wait 20
+data get entity Bot1 Inventory
+kapisma stop
+wait 3

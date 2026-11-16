@@ -1,0 +1,12 @@
+{
+  "type": "origins:target_action_on_hit",
+  "cooldown": 100,
+  "entity_action": {
+    "type": "origins:apply_effect",
+    "effect": {
+      "id": "minecraft:slowness",
+      "duration": 60,
+      "amplifier": 0
+    }
+  }
+}

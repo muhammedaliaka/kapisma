@@ -1,0 +1,50 @@
+### uhc_basic
+=== OZET: hata satiri = 0, senaryo OK
+### uhc_kill
+=== OZET: hata satiri = 0, senaryo OK
+### uhc_select
+=== OZET: hata satiri = 0, senaryo OK
+### bingo_basic
+=== OZET: hata satiri = 0, senaryo OK
+### bingo_lines
+=== OZET: hata satiri = 3, senaryo OK
+### bingo_tasks
+=== OZET: hata satiri = 0, senaryo OK
+### manhunt_basic
+=== OZET: hata satiri = 0, senaryo OK
+### manhunt_runner
+=== OZET: hata satiri = 3, senaryo OK
+### katil_basic
+=== OZET: hata satiri = 3, senaryo OK
+### katil_rules
+=== OZET: hata satiri = 0, senaryo OK
+### katil_scatter
+=== OZET: hata satiri = 3, senaryo OK
+### origin_join
+=== OZET: hata satiri = 0, senaryo OK
+### balance_check
+=== OZET: hata satiri = 3, senaryo OK
+### avian_kit
+=== OZET: hata satiri = 0, senaryo OK
+### new_races
+=== OZET: hata satiri = 3, senaryo OK
+### lobby_parkour
+=== OZET: hata satiri = 0, senaryo OK
+### xray_audit
+=== OZET: hata satiri = 3, senaryo OK
+xray SORUN satiri: 0, TEMIZ satiri: 6
+### xray_nether
+=== OZET: hata satiri = 0, senaryo OK
+xray SORUN satiri: 0, TEMIZ satiri: 6
+### voice_groups
+=== OZET: hata satiri = 0, senaryo OK
+### xray_audit (LITE profil)
+=== OZET: hata satiri = 3, senaryo OK
+profil LITE dogrulandi
+### uhc_basic (LITE profil)
+=== OZET: hata satiri = 3, senaryo OK
+profil LITE dogrulandi
+### bingo_basic (LITE profil)
+=== OZET: hata satiri = 0, senaryo OK
+profil LITE dogrulandi
+### BITTI

@@ -1,0 +1,12 @@
+{
+  "powers": [
+    "kapisma:wolf_speed",
+    "kapisma:wolf_rage",
+    "origins:carnivore"
+  ],
+  "icon": {
+    "id": "minecraft:bone"
+  },
+  "order": 24,
+  "impact": 1
+}

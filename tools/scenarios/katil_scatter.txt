@@ -1,0 +1,13 @@
+# Katil Kim: herkes 200x200 alanda rastgele dogar (konumlar farkli ve +-100 icinde)
+player Bot1 spawn
+player Bot2 spawn
+player Bot3 spawn
+wait 3
+kapisma game KATIL
+kapisma rule KATIL graceSec 0
+kapisma start
+wait 18
+data get entity Bot1 Pos
+data get entity Bot2 Pos
+data get entity Bot3 Pos
+expect Katil Kim başladı

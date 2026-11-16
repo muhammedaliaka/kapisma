@@ -1,0 +1,12 @@
+{
+  "powers": [
+    "kapisma:dwarf_miner",
+    "kapisma:dwarf_small",
+    "kapisma:dwarf_frail"
+  ],
+  "icon": {
+    "id": "minecraft:iron_pickaxe"
+  },
+  "order": 22,
+  "impact": 1
+}

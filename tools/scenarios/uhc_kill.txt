@@ -1,0 +1,16 @@
+# UHC: oldurme sayaci, ozet ekrani, takim sohbeti/koordinat, host devri
+kapisma game UHC
+player Bot1 spawn
+player Bot2 spawn
+wait 3
+kapisma rule UHC pvpGraceMin 0
+kapisma start
+wait 20
+execute as Bot1 run tc merhaba takim
+execute as Bot1 run koord
+execute as Bot1 run kapisma host Bot2
+wait 22
+damage Bot2 1000 minecraft:player_attack by Bot1
+wait 3
+expect KAZANAN
+wait 3

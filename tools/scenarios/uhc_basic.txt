@@ -1,0 +1,26 @@
+# UHC temel akis: 2 fake oyuncu, baslat, birini oldur, kazanan, lobiye donus
+kapisma game UHC
+player Bot1 spawn
+player Bot2 spawn
+wait 3
+kapisma status
+kapisma rule UHC pvpGraceMin 0
+kapisma start
+wait 8
+kapisma status
+data get entity Bot1 Dimension
+data get entity Bot1 Pos
+data get entity Bot2 Pos
+origin set Bot1 origins:origin origins:merling
+origin get Bot1 origins:origin
+origin get Bot2 origins:origin
+wait 8
+kapisma status
+damage Bot2 1000 minecraft:out_of_world
+wait 3
+kapisma status
+expect KAZANAN
+wait 18
+kapisma status
+data get entity Bot1 Dimension
+data get entity Bot1 Pos

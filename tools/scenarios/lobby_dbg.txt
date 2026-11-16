@@ -1,0 +1,14 @@
+player Bot1 spawn
+wait 5
+execute as Bot1 at @s if block 19 100 0 minecraft:lime_concrete
+execute as Bot1 at @s if block 0 100 5 minecraft:grass_block
+tp Bot1 19.5 101 0.5
+wait 1
+data get entity Bot1 Pos
+data get entity Bot1 OnGround
+execute as Bot1 at @s if block 19 100 0 minecraft:lime_concrete
+wait 2
+data get entity Bot1 Pos
+data get entity Bot1 OnGround
+wait 3
+data get entity Bot1 Pos

@@ -1,0 +1,16 @@
+# Tombala 3 cizgi: Bot2 bir esyayi once alip Bot1'in satirini bozar; Bot1 yine de 3 cizgiyi baska satirlarla tamamlar
+kapisma game BINGO
+kapisma origins off
+kapisma rule BINGO tasks 0
+player Bot1 spawn
+player Bot2 spawn
+wait 3
+kapisma start
+wait 20
+kapisma debug givecard Bot2 1
+wait 2
+kapisma debug givecard Bot1 25
+wait 3
+expect KAZANAN
+kapisma status
+wait 3

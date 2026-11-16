@@ -1,0 +1,11 @@
+{
+  "loading_priority": 1,
+  "type": "origins:modify_damage_dealt",
+  "condition": {
+    "type": "origins:on_fire"
+  },
+  "modifier": {
+    "amount": 4,
+    "operation": "add_base_early"
+  }
+}

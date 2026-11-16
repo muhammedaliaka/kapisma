@@ -1,0 +1,12 @@
+# Tombala: gorev kareleri (ilerleme) takim icin sayilir
+player Bot1 spawn
+player Bot2 spawn
+wait 3
+kapisma game BINGO
+kapisma rule BINGO tasks 8
+kapisma rule BINGO difficulty 3
+kapisma start
+wait 18
+advancement grant Bot1 everything
+wait 6
+expect tamamladı

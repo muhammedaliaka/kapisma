@@ -1,0 +1,13 @@
+# Takim ses gruplari: duo takim kur, oyunu baslat, grup kurulumu hata vermemeli (bot'larin ses baglantisi yok)
+kapisma game UHC
+kapisma team duo
+player Bot1 spawn
+player Bot2 spawn
+wait 3
+kapisma rule UHC pvpGraceMin 0
+kapisma start
+wait 20
+kapisma status
+kapisma stop
+wait 5
+kapisma team solo

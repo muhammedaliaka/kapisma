@@ -1,0 +1,15 @@
+# Irk dengesi: datapack hatasiz yuklenmeli, Avian ile UHC baslangic kiti calismali
+player Bot1 spawn
+player Bot2 spawn
+wait 4
+kapisma host Bot1
+kapisma game UHC
+origin set Bot1 origins:origin origins:avian
+origin set Bot2 origins:origin origins:blazeborn
+wait 2
+kapisma start
+wait 20
+data get entity Bot1 Inventory
+data get entity Bot2 Inventory
+kapisma stop
+wait 3

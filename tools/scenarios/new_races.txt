@@ -1,0 +1,21 @@
+# Yeni irklar (Kapisma veri paketi): yuklenme, atama ve ozellik dogrulama
+player Bot1 spawn
+wait 4
+origin set Bot1 origins:origin kapisma:golem
+origin get Bot1 origins:origin
+attribute Bot1 minecraft:generic.max_health get
+attribute Bot1 minecraft:generic.knockback_resistance get
+attribute Bot1 minecraft:generic.movement_speed get
+origin set Bot1 origins:origin kapisma:fox
+attribute Bot1 minecraft:generic.max_health get
+attribute Bot1 minecraft:generic.movement_speed get
+origin set Bot1 origins:origin kapisma:dwarf
+attribute Bot1 minecraft:generic.max_health get
+attribute Bot1 minecraft:generic.scale get
+origin set Bot1 origins:origin kapisma:frostborn
+origin get Bot1 origins:origin
+origin set Bot1 origins:origin kapisma:wolf
+attribute Bot1 minecraft:generic.movement_speed get
+origin get Bot1 origins:origin
+origin set Bot1 origins:origin origins:human
+attribute Bot1 minecraft:generic.max_health get

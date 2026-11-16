@@ -1,0 +1,10 @@
+{
+  "loading_priority": 1,
+  "type": "origins:exhaust",
+  "interval": 20,
+  "exhaustion": 1.2,
+  "condition": {
+    "type": "origins:power_active",
+    "power": "*:phantomize"
+  }
+}

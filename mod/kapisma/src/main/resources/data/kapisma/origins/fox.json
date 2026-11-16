@@ -1,0 +1,13 @@
+{
+  "powers": [
+    "kapisma:fox_speed",
+    "kapisma:fox_jump",
+    "kapisma:fox_frail",
+    "origins:fall_immunity"
+  ],
+  "icon": {
+    "id": "minecraft:sweet_berries"
+  },
+  "order": 21,
+  "impact": 1
+}

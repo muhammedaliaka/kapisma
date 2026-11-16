@@ -1,0 +1,24 @@
+# Katil Kim: yeni kurallar (compass/voice/deepVoice) menude ve pusula isimsiz
+player Bot1 spawn
+player Bot2 spawn
+player Bot3 spawn
+wait 3
+kapisma game KATIL
+kapisma rule KATIL graceSec 0
+kapisma rule KATIL natureEliminates 1
+kapisma rule KATIL voice 1
+kapisma rule KATIL deepVoice 1
+kapisma rule KATIL compass 1
+kapisma start
+wait 18
+data get entity Bot1 Inventory
+kapisma rule KATIL compass 0
+kapisma rule KATIL voice 0
+kapisma rule KATIL deepVoice 0
+wait 3
+kapisma status
+damage Bot1 1000 minecraft:out_of_world
+damage Bot2 1000 minecraft:out_of_world
+damage Bot3 1000 minecraft:out_of_world
+wait 3
+expect KAZANAN

@@ -1,0 +1,17 @@
+{
+  "type": "origins:conditioned_attribute",
+  "modifier": {
+    "id": "*:*",
+    "attribute": "minecraft:generic.movement_speed",
+    "amount": 0.25,
+    "operation": "add_multiplied_base"
+  },
+  "tick_rate": 5,
+  "condition": {
+    "type": "origins:on_block",
+    "block_condition": {
+      "type": "origins:in_tag",
+      "tag": "minecraft:snow"
+    }
+  }
+}

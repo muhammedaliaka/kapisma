@@ -1,0 +1,2 @@
+0dc53db7002bab057734be722634c7d5a18f5d196ceb26af46fbcff0df96c224  kapisma-sunucu-v0.1.0.zip
+d4cc4aadfd42c3e132bdd1fd203773b98fe8de01fb0228c3eb4f81dbd39f6685  kapisma-istemci-v0.1.0.zip

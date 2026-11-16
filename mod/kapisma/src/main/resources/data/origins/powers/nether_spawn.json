@@ -1,0 +1,10 @@
+{
+  "loading_priority": 1,
+	"type": "origins:attribute",
+	"modifier": {
+		"id": "*:*",
+		"attribute": "minecraft:generic.luck",
+		"amount": 0.0,
+		"operation": "add_value"
+	}
+}

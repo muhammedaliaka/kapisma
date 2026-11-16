@@ -1,0 +1,22 @@
+# Tombala: 2 takim, Bot1 kart esyalarini toplar -> lockout ile kazanir
+player Bot1 spawn
+player Bot2 spawn
+wait 3
+kapisma game BINGO
+kapisma origins off
+kapisma rule BINGO tasks 0
+kapisma rule BINGO lines 1
+kapisma start
+wait 20
+kapisma status
+execute as Bot1 run kart
+kapisma debug givecard Bot1 3
+wait 2
+kapisma debug givecard Bot2 2
+wait 2
+kapisma debug givecard Bot1 6
+wait 3
+kapisma status
+expect KAZANAN
+wait 18
+kapisma status

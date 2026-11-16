@@ -1,0 +1,21 @@
+# Manhunt: host runner'i secer (Bot2). Bot2 olunce hunter'lar kazanir; pusula sadece hunter'larda
+kapisma game MANHUNT
+player Bot1 spawn
+player Bot2 spawn
+player Bot3 spawn
+wait 3
+kapisma rule MANHUNT headStartSec 0
+kapisma origins off
+kapisma runner Bot2
+kapisma status
+kapisma start
+wait 18
+data get entity Bot1 Inventory
+data get entity Bot2 Inventory
+data get entity Bot3 Inventory
+execute as Bot1 run kapisma menu
+wait 2
+damage Bot2 1000 minecraft:out_of_world
+wait 3
+expect KAZANAN
+wait 3

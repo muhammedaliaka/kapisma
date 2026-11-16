@@ -1,0 +1,21 @@
+# Hile korumasi (halusinasyon) denetimi: gizli cevher/bosluk, sahte cevher, determinizm, paket cozme, acigi cikarma, canli acma yolu
+kapisma game UHC
+player Bot1 spawn
+player Bot2 spawn
+wait 3
+kapisma rule UHC pvpGraceMin 0
+kapisma start
+wait 14
+gamemode spectator Bot1
+attribute Bot1 minecraft:generic.gravity base set 0
+execute as Bot1 run kapisma debug xray audit
+execute as Bot1 at @s run tp @s ~ 30 ~
+wait 2
+execute as Bot1 run kapisma debug xray audit
+execute as Bot1 at @s run tp @s ~100 -30 ~100
+wait 4
+execute as Bot1 run kapisma debug xray audit
+execute as Bot1 run kapisma debug xray tpcave
+execute as Bot1 run kapisma debug xray simulate
+execute as Bot1 run kapisma debug xray audit
+kapisma debug xray status
