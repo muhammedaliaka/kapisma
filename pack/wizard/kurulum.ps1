@@ -191,6 +191,31 @@ function Install-Server([string]$dest, [string[]]$names, [string]$ramGb, [bool]$
 }
 
 # ---------------------------------------------------------------- GUI
+function Show-Page([string]$which) {
+  $script:pgHome.Visible = ($which -eq 'home')
+  $script:pgPlayer.Visible = ($which -eq 'player')
+  $script:pgServer.Visible = ($which -eq 'server')
+  $script:LogBox.Visible = ($which -ne 'home')
+}
+
+function Select-Folder($tb) {
+  $d = New-Object System.Windows.Forms.FolderBrowserDialog
+  $d.SelectedPath = $tb.Text
+  if ($d.ShowDialog() -eq 'OK') { $tb.Text = $d.SelectedPath }
+}
+
+# test: kontrolun kendi gorunur bayragi (form henuz gosterilmediginde Control.Visible hep false doner)
+function Get-Vis($c) {
+  $m = [System.Windows.Forms.Control].GetMethod('GetState', [Reflection.BindingFlags]'NonPublic,Instance', $null, @([int]), $null)
+  return [bool]$m.Invoke($c, @(2))
+}
+
+# test: dugmeye gercekten tikla (form gosterilmeden de calisir)
+function Invoke-Click($btn) {
+  $m = [System.Windows.Forms.Control].GetMethod('OnClick', [Reflection.BindingFlags]'NonPublic,Instance')
+  [void]$m.Invoke($btn, @([EventArgs]::Empty))
+}
+
 function New-WizardForm {
   Add-Type -AssemblyName System.Windows.Forms
   Add-Type -AssemblyName System.Drawing
@@ -206,16 +231,16 @@ function New-WizardForm {
   $f.StartPosition = 'CenterScreen'; $f.Font = $font; $f.FormBorderStyle = 'FixedDialog'; $f.MaximizeBox = $false
 
   # ---- ana sayfa
-  $pgHome = C 'System.Windows.Forms.Panel' '' 0 0 744 400
+  $script:pgHome = C 'System.Windows.Forms.Panel' '' 0 0 744 400
   $t1 = C 'System.Windows.Forms.Label' 'Kapışma - kurulum sihirbazı' 24 20 700 34; $t1.Font = New-Object Drawing.Font('Segoe UI', 18, [Drawing.FontStyle]::Bold)
   $t2 = C 'System.Windows.Forms.Label' ("Ne yapmak istiyorsun?`r`n`r`nSen sadece oyuna gireceksen 'Oyuncuyum' de: modlar doğru klasöre kendiliğinden kurulur.`r`nSunucuyu sen açacaksan 'Sunucu kuracağım' de.") 28 70 690 100
   $bp = C 'System.Windows.Forms.Button' "Oyuncuyum`r`n(arkadaşımın sunucusuna gireceğim)" 28 190 330 110; $bp.Font = $big
   $bs = C 'System.Windows.Forms.Button' "Sunucu kuracağım`r`n(host benim)" 380 190 330 110; $bs.Font = $big
   $t3 = C 'System.Windows.Forms.Label' "İnternetten sadece 'Simple Voice Chat' (sesli sohbet) indirilir ve SHA-512 ile doğrulanır.`r`nEski modların silinmez; mods\_kapisma_eski klasörüne taşınır." 28 330 690 60
-  $pgHome.Controls.AddRange(@($t1, $t2, $bp, $bs, $t3))
+  $script:pgHome.Controls.AddRange(@($t1, $t2, $bp, $bs, $t3))
 
   # ---- oyuncu sayfasi
-  $pl = C 'System.Windows.Forms.Panel' '' 0 0 744 400; $pl.Visible = $false
+  $script:pgPlayer = C 'System.Windows.Forms.Panel' '' 0 0 744 400; $script:pgPlayer.Visible = $false
   $p1 = C 'System.Windows.Forms.Label' 'Oyuncu kurulumu' 24 14 500 30; $p1.Font = $big
   $p2 = C 'System.Windows.Forms.Label' "Minecraft klasörü (TLauncher / resmi launcher aynı klasörü kullanır):" 28 54 690 24
   $script:tbMc = C 'System.Windows.Forms.TextBox' (Join-Path $env:APPDATA '.minecraft') 28 80 560 28
@@ -225,10 +250,10 @@ function New-WizardForm {
   $p4 = C 'System.Windows.Forms.Label' "Önce Tailscale'i kur ve hostun davetini kabul et: https://tailscale.com" 28 190 690 24
   $script:btnPInstall = C 'System.Windows.Forms.Button' 'Kur' 28 232 200 50; $script:btnPInstall.Font = $big
   $pBack = C 'System.Windows.Forms.Button' 'Geri' 250 232 110 50
-  $pl.Controls.AddRange(@($p1, $p2, $script:tbMc, $pBrowse, $p3, $script:tbAddr, $p4, $script:btnPInstall, $pBack))
+  $script:pgPlayer.Controls.AddRange(@($p1, $p2, $script:tbMc, $pBrowse, $p3, $script:tbAddr, $p4, $script:btnPInstall, $pBack))
 
   # ---- sunucu sayfasi
-  $sv = C 'System.Windows.Forms.Panel' '' 0 0 744 400; $sv.Visible = $false
+  $script:pgServer = C 'System.Windows.Forms.Panel' '' 0 0 744 400; $script:pgServer.Visible = $false
   $s1 = C 'System.Windows.Forms.Label' 'Sunucu kurulumu' 24 10 500 30; $s1.Font = $big
   $s2 = C 'System.Windows.Forms.Label' 'Sunucu nereye kurulsun:' 28 46 300 22
   $script:tbDest = C 'System.Windows.Forms.TextBox' (Join-Path $env:USERPROFILE 'kapisma-sunucu') 28 70 560 28
@@ -243,26 +268,20 @@ function New-WizardForm {
   $script:ckStart = C 'System.Windows.Forms.CheckBox' 'Kurulunca sunucuyu başlat' 28 318 400 26; $script:ckStart.Checked = $true
   $script:btnSInstall = C 'System.Windows.Forms.Button' 'Kur' 28 352 200 44; $script:btnSInstall.Font = $big
   $sBack = C 'System.Windows.Forms.Button' 'Geri' 250 352 110 44
-  $sv.Controls.AddRange(@($s1, $s2, $script:tbDest, $sBrowse, $s3, $script:tbNames, $s4, $script:cbRam, $script:ckEula, $script:ckFw, $script:ckStart, $script:btnSInstall, $sBack))
+  $script:pgServer.Controls.AddRange(@($s1, $s2, $script:tbDest, $sBrowse, $s3, $script:tbNames, $s4, $script:cbRam, $script:ckEula, $script:ckFw, $script:ckStart, $script:btnSInstall, $sBack))
 
   $script:LogBox = C 'System.Windows.Forms.TextBox' '' 14 406 716 188
   $script:LogBox.Multiline = $true; $script:LogBox.ReadOnly = $true; $script:LogBox.ScrollBars = 'Vertical'; $script:LogBox.Font = New-Object Drawing.Font('Consolas', 9)
   $script:LogBox.Visible = $false
-  $f.Controls.AddRange(@($pgHome, $pl, $sv, $script:LogBox))
+  $f.Controls.AddRange(@($script:pgHome, $script:pgPlayer, $script:pgServer, $script:LogBox))
 
-  $show = { param($which) $pgHome.Visible = ($which -eq 'home'); $pl.Visible = ($which -eq 'player'); $sv.Visible = ($which -eq 'server'); $script:LogBox.Visible = ($which -ne 'home') }
-  $bp.Add_Click({ & $show 'player' }.GetNewClosure())
-  $bs.Add_Click({ & $show 'server' }.GetNewClosure())
-  $pBack.Add_Click({ & $show 'home' }.GetNewClosure())
-  $sBack.Add_Click({ & $show 'home' }.GetNewClosure())
-  $browse = {
-    param($tb)
-    $d = New-Object System.Windows.Forms.FolderBrowserDialog
-    $d.SelectedPath = $tb.Text
-    if ($d.ShowDialog() -eq 'OK') { $tb.Text = $d.SelectedPath }
-  }
-  $pBrowse.Add_Click({ & $browse $script:tbMc }.GetNewClosure())
-  $sBrowse.Add_Click({ & $browse $script:tbDest }.GetNewClosure())
+  $script:btnHomePlayer = $bp; $script:btnHomeServer = $bs; $script:btnBackP = $pBack; $script:btnBackS = $sBack
+  $bp.Add_Click({ Show-Page 'player' })
+  $bs.Add_Click({ Show-Page 'server' })
+  $pBack.Add_Click({ Show-Page 'home' })
+  $sBack.Add_Click({ Show-Page 'home' })
+  $pBrowse.Add_Click({ Select-Folder $script:tbMc })
+  $sBrowse.Add_Click({ Select-Folder $script:tbDest })
 
   $script:btnPInstall.Add_Click({
     $script:btnPInstall.Enabled = $false
@@ -287,7 +306,29 @@ function New-WizardForm {
 # ---------------------------------------------------------------- giris
 if ($SelfTest) {
   $f = New-WizardForm
-  "SELFTEST OK: form kuruldu, $($f.Controls.Count) ana kontrol"
+  function Expect($c, $what) { if (-not $c) { Write-Host "SELFTEST HATA: $what"; exit 3 } }
+  Expect ((Get-Vis $script:pgHome) -and -not (Get-Vis $script:pgPlayer) -and -not (Get-Vis $script:pgServer)) 'baslangic: sadece ana sayfa gorunmeli'
+  Invoke-Click $script:btnHomePlayer
+  Expect ((Get-Vis $script:pgPlayer) -and -not (Get-Vis $script:pgHome) -and (Get-Vis $script:LogBox)) 'Oyuncuyum tiklaninca oyuncu sayfasi acilmali'
+  Invoke-Click $script:btnBackP
+  Expect ((Get-Vis $script:pgHome) -and -not (Get-Vis $script:pgPlayer) -and -not (Get-Vis $script:LogBox)) 'Geri tiklaninca ana sayfa donmeli'
+  Invoke-Click $script:btnHomeServer
+  Expect ((Get-Vis $script:pgServer) -and -not (Get-Vis $script:pgHome)) 'Sunucu kuracagim tiklaninca sunucu sayfasi acilmali'
+  Invoke-Click $script:btnBackS
+  Expect (Get-Vis $script:pgHome) 'Geri (sunucu) ana sayfaya donmeli'
+  # Kur dugmeleri: gecici klasore gercek kurulum
+  if ($McDir) {
+    $script:tbMc.Text = $McDir; $script:tbAddr.Text = '10.1.2.3'
+    Invoke-Click $script:btnPInstall
+    Expect (Test-Path (Join-Path $McDir 'mods')) 'Oyuncu Kur dugmesi mods klasorunu olusturmali'
+  }
+  if ($ServerDir) {
+    $script:tbDest.Text = $ServerDir; $script:tbNames.Text = "Ahmet_34`r`nZeynep"; $script:ckEula.Checked = $true; $script:ckFw.Checked = $false; $script:ckStart.Checked = $false
+    Invoke-Click $script:btnSInstall
+    Expect (Test-Path (Join-Path $ServerDir 'start.bat')) 'Sunucu Kur dugmesi start.bat kopyalamali'
+    Expect ((Get-Content (Join-Path $ServerDir 'eula.txt') -Raw) -match 'eula=true') 'EULA onayi yazilmali'
+  }
+  "SELFTEST OK: form kuruldu, sayfa gecisleri ve Kur dugmeleri calisti"
   $f.Dispose()
   exit 0
 }

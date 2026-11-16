@@ -1,0 +1,11 @@
+Kapisma kurulum paketi v0.1.0  (2026-11-16)
+Minecraft 1.21.1 / Fabric Loader 0.20.1
+
+Dosyalar (SHA-256):
+  kapisma-0.1.0.jar  8f242bb273c12abd07d66740f55a836ff98a92b92f62499aac6220f328e27945
+  kapisma-hud-0.1.0.jar  7c4d5349cbdc32b87a65eaf00e309b997a2dd58a1b5dfce9348100f9fdf55e6e
+  fabric-api-0.116.18+1.21.1.jar  1cb46442dda6d3be9979a2619610eb1c1f6641cd7ed7cb3eec058589ce9eed46
+  Origins-1.13.0-pre.3+mc.1.21.1.jar  c7e06f8fd49a279d566c3e778ff0c71bbb371f1c4358ab9b2190d1e3b6c36d33
+  fabric-server-launch.jar  7638dc69ef2cecb27d1cff1a1b0a6e2c3ced7ece0000d584039a3f4e1386123c
+
+Ses modu pakette degil; ilk calistirmada indirilir (SHA-512 dogrulamali): voicechat-fabric-1.21.1-2.6.27.jar

@@ -1,0 +1,3 @@
+#Mojang EULA: https://aka.ms/MinecraftEULA
+#start.bat / start.sh ilk acilista onay ister ve bunu true yapar.
+eula=false

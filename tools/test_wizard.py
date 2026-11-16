@@ -39,8 +39,9 @@ def ps(*args):
                        capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=180)
     return r.returncode, (r.stdout or "") + (r.stderr or "")
 
-rc, out = ps("-SelfTest")
-check(rc == 0 and "SELFTEST OK" in out, "GUI formu kuruldu (-SelfTest): " + out.strip().splitlines()[-1] if out.strip() else "SelfTest cikti yok")
+gui_mc = os.path.join(a.dest, "gui mc"); gui_sv = os.path.join(a.dest, "gui sunucu")
+rc, out = ps("-SelfTest", "-McDir", gui_mc, "-ServerDir", gui_sv)
+check(rc == 0 and "SELFTEST OK" in out, "GUI: sayfa gecisleri + Kur dugmeleri (dugmelere gercekten tiklanir): " + (out.strip().splitlines()[-1] if out.strip() else "cikti yok"))
 
 # ---- oyuncu
 mc = os.path.join(a.dest, "fake .minecraft")        # bosluk: yol kotu durum testi

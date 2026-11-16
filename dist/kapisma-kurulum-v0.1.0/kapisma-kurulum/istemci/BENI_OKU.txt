@@ -1,0 +1,37 @@
+KAPISMA ISTEMCI PAKETI  (Minecraft 1.21.1, Fabric)
+===================================================
+Arkadasinin kurdugu Kapisma sunucusuna girmek icin gereken modlar. Zip'i bir klasore cikar.
+
+EN KOLAY YOL: kapisma-kurulum zip'indeki Kapisma-Kurulum.bat sihirbazi (Oyuncuyum'u sec): modlari, Fabric
+surumunu ve sesi kendisi kurar. Asagidaki elle yol sihirbaz acilmazsa icindir.
+
+KURULUM (Windows, TLauncher veya resmi launcher)
+ 1) TLauncher'i ac, surum listesinden "Fabric 1.21.1" sec ve bir kere "Oyna"ya bas (kendisi indirir),
+    ana menu gelince oyunu kapat.  (Resmi launcher kullaniyorsan Fabric Installer ile 1.21.1 profili olustur:
+    https://fabricmc.net/use/installer/ )
+ 2) kurulum.bat'a cift tikla ("Windows bilgisayarinizi korudu" uyarisi cikarsa: Daha fazla bilgi > Yine de
+    calistir). Su modlar .minecraft\mods klasorune kopyalanir:
+      - Fabric API         (zorunlu)
+      - Origins            (zorunlu; irklar)
+      - kapisma-hud        (HUD: Tombala karti, mini harita, Turkce irk adlari)
+      - Simple Voice Chat  (sesli sohbet; dogrulamali olarak indirilir)
+    Eski surumler silinmez, mods\_kapisma_eski klasorune tasinir.
+ 3) TLauncher > Fabric 1.21.1 > Oyna > Coklu Oyuncu > Sunucu Ekle > hostun verdigi adres.
+    (Host sana Tailscale adresi (100.x.x.x) verecek; once tailscale.com'dan Tailscale'i kurup giris yap,
+    hostun davetini kabul et.)
+ 4) Sesli sohbet: oyunda V tusu ayarlari acar; mikrofonunu sec. Tum modlarda ses acik.
+
+MANUEL KURULUM
+ Bu zip'teki mods klasorundeki .jar dosyalarini kendi .minecraft\mods klasorune kopyala ve
+ Simple Voice Chat 2.6.27 (Fabric 1.21.1) modunu da koy: https://modrinth.com/plugin/simple-voice-chat
+
+LINUX / MAC:   bash kurulum.sh
+
+SORUN GIDERME
+ - "Incompatible mod set": host ile ayni paket surumunu kullandiginizdan emin ol; yeniden kur.
+ - Oyun acilmiyor: Java 21 gerekir (TLauncher/Mojang launcher kendi Java'sini getirir, 1.21.1 icin 21 secili olmali).
+ - Ses yok: hostta UDP 24454 acik olmali; oyunda V tusunda mikrofon secili mi bak.
+ - Katil Kim modunda skin'ler herkes icin ayni gorunur (kapisma-hud bunu yapar), bu normaldir.
+
+LISANS: Kapisma ve kapisma-hud (MIT). Fabric API (Apache-2.0), Origins (MIT), Simple Voice Chat (All Rights Reserved;
+yazara aittir, dogrudan Modrinth'ten indirilir). Ayrintilar: LICENSES klasoru.
