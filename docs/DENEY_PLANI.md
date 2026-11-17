@@ -162,6 +162,8 @@ Puan kuralı: oyuna katılım 5, her öldürme 10, kazanan takıma 100 (en az 2 
 | O4 | `python tools/test_pack.py` (+ `--sh`, `--lite`) | "PAKET TESTI: BASARILI" |
 | O5 | İstemci zip'i: `kurulum.bat` | mods klasörüne 4 jar; eski sürümler `_kapisma_eski`'ye taşınır |
 | O6 | Android tablet (Termux): `pkg install openjdk-21 curl unzip`, zip'i aç, `bash start.sh` | Aynı sunucu; arkadaşlar tabletin Tailscale IP'sine bağlanır |
+| O7 | Telefonda 7 sahte oyunculu stres (2026-11-17, Dimensity 7200, LITE, 3 GB): `python tools/stress_phone.py --key <anahtar> --eula` | Ölçüm: boş lobi MSPT ~20, UHC doğuş/koşu ~35-55 (TPS düşmeye başlar), toplu PvP ~25; açılış 11-14 sn; sunucu ana parçacığında kapışma modu ~0 örnek (yük: dünya üretimi, Origins, Carpet). Sahte oyuncu üretilmemiş bölgeye koşunca senkron chunk beklemesiyle 10-80 sn takılma olur (gerçek oyuncuda olmaz). Tablette aynı komut sonucu karşılaştır |
+| O8 | Tablet sınıfı simülasyonu (6 GB cihaz: 2,5 GB yığın, 4 yavaş çekirdek, profil otomatik → LITE): `python tools/stress_phone.py --key <anahtar> --eula --profile auto --ram 2560 --cores 0-3` | Yeni dünyada ilk açılış ~104 sn (sunucu 44 sn). UHC doğuş artık ortalama ~19 ms; "Dünya hazırlanıyor" ~70 sn sürer ve tek donma ≤15 sn (düzeltme öncesi 60 sn zaman aşımı sonrası senkron üretimle 34 sn donma → gerçek oyuncular düşerdi). Dağınık keşifte 7 oyuncuyla MSPT ~100-130 (TPS ~8): zayıf tablette 7 kişi geniş keşif kaldırmaz; 4-5 oyuncu veya sınırı küçült |
 
 ## P. Kurulum pencereleri (Windows)
 | # | Yap | Görmelisin |

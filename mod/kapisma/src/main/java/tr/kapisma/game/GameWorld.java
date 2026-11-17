@@ -149,6 +149,12 @@ public final class GameWorld {
 		return out;
 	}
 
+	/** Merkezdeki guvenli nokta (yoksa yuzey yuksekligi): zaman asiminda yedek baslangic. */
+	public BlockPos centerSpot() {
+		BlockPos m = safeSurface(centerX, centerZ);
+		return m != null ? m : new BlockPos(centerX, level.getHeight(Heightmap.Types.WORLD_SURFACE, centerX, centerZ), centerZ);
+	}
+
 	public boolean loaded(int x, int z) {
 		return level.getChunkSource().getChunkNow(x >> 4, z >> 4) != null;
 	}
@@ -157,9 +163,9 @@ public final class GameWorld {
 	public void force(int x, int z, boolean on) {
 		var cp = new net.minecraft.world.level.ChunkPos(x >> 4, z >> 4);
 		var cache = level.getChunkSource();
-		// setChunkForced chunk'i senkron yukler; bilet asenkron yukler (sunucu donmaz).
-		if (on) cache.addRegionTicket(net.minecraft.server.level.TicketType.FORCED, cp, 2, cp);
-		else cache.removeRegionTicket(net.minecraft.server.level.TicketType.FORCED, cp, 2, cp);
+		// setChunkForced chunk'i senkron yukler; bilet asenkron yukler (sunucu donmaz). Uzaklik 1: merkez + komsular yeterli.
+		if (on) cache.addRegionTicket(net.minecraft.server.level.TicketType.FORCED, cp, 1, cp);
+		else cache.removeRegionTicket(net.minecraft.server.level.TicketType.FORCED, cp, 1, cp);
 	}
 
 	public void delete() {

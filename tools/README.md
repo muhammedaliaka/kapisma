@@ -7,6 +7,8 @@
 | `test_pack.py` | Sunucu zip'ini temiz klasöre açıp gerçek `start.bat` / `start.sh` ile doğrular |
 | `make_release.py` | `release/` altına sunucu ve oyuncu zip'lerini üretir (`dist/`: ses jar'sız herkese açık kopyalar) |
 | `test_wizard.py` | Oyuncu ve sunucu kurulum pencerelerinin testi (düğmelere gerçekten tıklar; `--boot` sunucuyu da açar) |
+| `stress_phone.py` | Android (Termux) sunucuda 7 sahte oyunculu stres testi: PC'den adb+SSH ile yönetir, `start.sh` ile açar, MSPT/bellek/pil/"Can't keep up" ve takılma anında `jstack` raporlar (`--cores 0-3` zayıf tablet simülasyonu) |
+| `profile_phone.py` | Aynı kurulumda `jstack` örneklemesiyle sunucu ana parçacığı profili (JFR Termux JVM'ini çökertir, kullanma) |
 | `serve.py` | Etkileşimli deneme sunucusu (bot ekleme vb.) |
 | `mcknow.py` | Minecraft jar'ından bilgi kütüphanesi (`knowledge/`, git dışı) üretir; çıktı `knowledge.json` zaten modun içinde, yeniden üretmek istersen **kendi jar'ından üret** (Mojang verisi depoya eklenmez) |
 | `seedscan/`, `vendor/cubiomes` | Seed havuzu üretimi. cubiomes için: `git clone https://github.com/Cubitect/cubiomes tools/vendor/cubiomes` |

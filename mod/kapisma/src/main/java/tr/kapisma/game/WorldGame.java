@@ -235,6 +235,9 @@ public abstract class WorldGame extends Game {
 
 	private List<Cand> cands;
 	private int loadTicks;
+	private long loadStartNs;
+	/** Dunya hazirlama siniri (gercek saniye): zayif cihazda uzak bolgelerin uretimi uzun surebilir. */
+	private static final int LOAD_TIMEOUT_S = 240;
 
 	private Cand newCand(int teamIndex, int tries) {
 		Cand c = new Cand();
@@ -251,6 +254,8 @@ public abstract class WorldGame extends Game {
 	private void startLoading() {
 		cands = new ArrayList<>();
 		loadTicks = 0;
+		loadStartNs = System.nanoTime();
+		world.force(world.centerX, world.centerZ, true);   // merkez chunk once: zaman asiminda yedek nokta hazir olsun
 		for (int i = 0; i < teams.size(); i++) cands.add(newCand(i, 0));
 		Msg.broadcast(server, "Dünya hazırlanıyor, birkaç saniye...");
 	}
@@ -258,14 +263,25 @@ public abstract class WorldGame extends Game {
 	private void loadingTick() {
 		if (cands == null) return;
 		loadTicks++;
-		if (loadTicks > 60 * 20) {          // zaman asimi: eski yontemle anlik uret
-			for (Cand c : cands) world.force(c.x, c.z, false);
+		long waited = (System.nanoTime() - loadStartNs) / 1_000_000_000L;
+		if (waited > LOAD_TIMEOUT_S) {      // zaman asimi: hazir olmayanlar merkeze (sinirli, senkron uretim YOK)
+			List<BlockPos> pts = new ArrayList<>();
+			for (Cand c : cands) {
+				world.force(c.x, c.z, false);
+				pts.add(c.pos != null ? c.pos : world.centerSpot());
+			}
+			world.force(world.centerX, world.centerZ, false);
 			cands = null;
-			Kapisma.LOG.warn("Chunk yukleme zaman asimi, anlik yerlestirme");
-			placePlayers();
+			Kapisma.LOG.warn("Dunya hazirlama zaman asimi ({} sn): hazir olmayan baslangiclar merkeze alindi", waited);
+			placeAt(pts);
 			phase = Phase.COUNTDOWN;
 			ticks = 0;
 			return;
+		}
+		if (loadTicks % 200 == 0) {
+			int ready = 0;
+			for (Cand c : cands) if (c.pos != null) ready++;
+			Msg.broadcast(server, "Dünya hazırlanıyor... (" + ready + "/" + cands.size() + " başlangıç hazır, " + waited + " sn)");
 		}
 		if (loadTicks % 4 != 0) return;
 		boolean done = true;
@@ -277,8 +293,7 @@ public abstract class WorldGame extends Game {
 			world.force(c.x, c.z, false);
 			if (pos != null) { c.pos = pos; continue; }
 			if (c.tries >= 10) {            // cok denendi: merkeze dus
-				BlockPos m = world.safeSurface(world.centerX, world.centerZ);
-				c.pos = m != null ? m : new BlockPos(world.centerX, world.level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.WORLD_SURFACE, world.centerX, world.centerZ), world.centerZ);
+				c.pos = world.centerSpot();
 				continue;
 			}
 			cands.set(i, newCand(i, c.tries + 1));
@@ -288,6 +303,7 @@ public abstract class WorldGame extends Game {
 		List<BlockPos> pts = new ArrayList<>();
 		for (Cand c : cands) pts.add(c.pos);
 		cands = null;
+		world.force(world.centerX, world.centerZ, false);
 		placeAt(pts);
 		phase = Phase.COUNTDOWN;
 		ticks = 0;
