@@ -76,6 +76,9 @@ function Set-Server([string[]]$names, [string]$ramGb, [bool]$eula, [bool]$firewa
   Log ''
   Log 'Arkadaşlarının Minecraft''a yazacağı adres:'
   foreach ($a in (Get-Addresses)) { Log ('   ' + $a) }
+  Log 'Sen de oynayacaksan: önce oyuncu paketini kur, sonra Minecraft''ta adres olarak  localhost  yaz.'
+  Log 'Oyuncu adları, oyuncunun Minecraft''taki adıyla BÜYÜK/küçük harfi dahil aynı olmalı.'
+  Log 'İlk giren oyuncu oyunun hostu olur; istersen menüden "Host devret" ile başkasına ver.'
   if ($firewall) {
     Log 'Güvenlik duvarı izni isteniyor (açılan pencerede Evet de)...'
     Start-Process -FilePath (Join-Path $Root 'guvenlik_duvari_ac.bat') -WorkingDirectory $Root

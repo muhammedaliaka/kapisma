@@ -30,7 +30,13 @@ Sunucu internete açılmaz; sadece [Tailscale](https://tailscale.com) ağındaki
 
 **Host:** Tailscale uygulaması → bu cihazın satırı → **Share…** → arkadaşın e-postası. (Paylaşım yalnızca bu cihazı gösterir.) `adres_goster.bat` Tailscale IP'ni (100.x.x.x) yazar.
 
-**Arkadaş:**
+**Adım adım (arkadaşın host, sen oyuncu):**
+1. Arkadaşın `kapisma-sunucu` paketinde `Sunucu-Ayarla.bat` açar, oyuncu adlarına **senin Minecraft adını (büyük/küçük harf aynen)** yazar, KUR VE BAŞLAT'a basar, `Done` yazısını bekler.
+2. Arkadaşın Tailscale'den bu cihazı sana **Share…** eder; sen e-postandaki daveti kabul edersin (bir kere).
+3. Arkadaşın sana Tailscale adresini (100.x.x.x) söyler. Bağlantı denemesi (PowerShell): `Test-NetConnection 100.x.x.x -Port 25565` → `TcpTestSucceeded : True` olmalı.
+4. Aşağıdaki oyuncu kurulumunu yap, sonra Çoklu oyuncu → adres. Arkadaşın kendisi de oynayacaksa adres olarak `localhost` yazar. İlk giren host olur (menüden "Host devret").
+
+**Arkadaş (oyuncu kurulumu):**
 1. Tailscale'i kurup (ücretsiz) giriş yapar, paylaşım davetini kabul eder.
 2. `dist/` içindeki **`kapisma-oyuncu-vX.zip`** dosyasını indirir, çıkarır, `Kapisma-Oyuncu-Kur.bat`'a çift tıklar, **KUR**'a basar (Fabric API + Origins + `kapisma-hud` + Simple Voice Chat'i `.minecraft\mods`'a kurar).
 3. TLauncher → sürüm **Fabric 1.21.1** → Çoklu oyuncu → Sunucu ekle → hostun Tailscale adresi.
