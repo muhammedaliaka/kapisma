@@ -70,6 +70,21 @@ public final class UhcGame extends WorldGame {
 	protected boolean minimapEnabled() { return st.flag("UHC", "minimap"); }
 
 	@Override
+	protected java.util.List<Compass.Opt> compassOptions(ServerPlayer p) {
+		int lv = (int) st.num("UHC", "compass");
+		if (lv <= 0) return java.util.List.of();
+		java.util.List<Compass.Opt> r = new java.util.ArrayList<>();
+		if (lv >= 2) r.addAll(rivalOpts());
+		r.addAll(mateOpts(p));
+		r.add(new Compass.Opt("center", "Sınır merkezi", h -> {
+			var wb = world.level.getWorldBorder();
+			return new Compass.Spot(net.minecraft.core.BlockPos.containing(wb.getCenterX(), h.getY(), wb.getCenterZ()), world.level.dimension());
+		}));
+		r.add(spawnOpt("Başlangıç noktam"));
+		return r;
+	}
+
+	@Override
 	protected double minimapEndRadius() { return st.num("UHC", "borderEnd"); }
 
 	@Override
@@ -210,6 +225,7 @@ public final class UhcGame extends WorldGame {
 
 	@Override
 	public void onUseItem(ServerPlayer p, ItemStack stack) {
+		super.onUseItem(p, stack);
 		if (phase != Phase.RUNNING || !contains(p.getUUID())) return;
 		CustomData d = stack.get(DataComponents.CUSTOM_DATA);
 		if (d == null || !d.copyTag().getBoolean(HEAD_TAG)) return;

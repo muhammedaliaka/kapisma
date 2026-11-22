@@ -41,8 +41,6 @@ import tr.kapisma.team.TeamService.GameTeam;
  * (kullanilmis dunyada yeni dunya icin sunucu yeniden baslatilir, bkz. GameManager.requestNewWorld).
  */
 public final class ManhuntGame extends WorldGame {
-	public static final String COMPASS_TAG = "kapisma_compass";
-
 	private GameTeam runnerTeam, hunterTeam;
 	private final List<UUID> runnerIds = new ArrayList<>();
 
@@ -192,19 +190,35 @@ public final class ManhuntGame extends WorldGame {
 	}
 
 	@Override
-	protected void giveStartKit(ServerPlayer p) {
-		super.giveStartKit(p);
-		if (!katil && !isRunner(p.getUUID())) p.getInventory().add(compass());
-		if (katil && st.flag("KATIL", "compass")) p.getInventory().add(compass());
+	protected List<Compass.Opt> compassOptions(ServerPlayer p) {
+		if (katil) {
+			if (!st.flag("KATIL", "compass")) return List.of();
+			return List.of(
+				new Compass.Opt("near", "En yakın oyuncu", h -> { var o = othersNear(h); return o.isEmpty() ? null : spotOf(o.get(0)); }),
+				new Compass.Opt("far", "En uzak oyuncu", h -> { var o = othersNear(h); return o.isEmpty() ? null : spotOf(o.get(o.size() - 1)); }));
+		}
+		if (isRunner(p.getUUID())) return List.of();
+		List<Compass.Opt> r = new ArrayList<>();
+		r.add(new Compass.Opt("near", "En yakın runner", h -> { Trace tr = traceFor(h); return tr == null ? null : new Compass.Spot(tr.pos(), h.level().dimension()); }));
+		r.add(new Compass.Opt("far", "En uzak runner", h -> spotOf(farthestRunner(h))));
+		for (UUID id : runnerIds) r.add(new Compass.Opt("run:" + id, "Runner: " + names.getOrDefault(id, "?"), h -> runnerSpot(id, h)));
+		r.addAll(mateOpts(p));
+		return r;
 	}
 
-	private ItemStack compass() {
-		ItemStack s = new ItemStack(Items.COMPASS);
-		s.set(DataComponents.CUSTOM_NAME, Component.literal(katil ? "Yakınlık Pusulası" : "Runner Pusulası").withStyle(x -> x.withItalic(false).withColor(ChatFormatting.RED).withBold(true)));
-		CompoundTag tag = new CompoundTag();
-		tag.putBoolean(COMPASS_TAG, true);
-		s.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
-		return s;
+	@Override
+	protected int compassIntervalTicks() {
+		return katil ? 10 : Math.max(5, (int) st.num("MANHUNT", "compassIntervalSec") * 20);
+	}
+
+	/** Belirli runner: ayni boyutta canli konum, degilse o boyuttaki son izi (portal). */
+	private Compass.Spot runnerSpot(UUID id, ServerPlayer h) {
+		if (eliminated.contains(id)) return null;
+		ServerPlayer r = player(id);
+		if (r != null && !r.isSpectator() && r.level() == h.level()) return spotOf(r);
+		var m = lastSeen.get(id);
+		BlockPos b = m == null ? null : m.get(h.level().dimension());
+		return b == null ? null : new Compass.Spot(b, h.level().dimension());
 	}
 
 	@Override
@@ -257,12 +271,6 @@ public final class ManhuntGame extends WorldGame {
 		if (katil) katilTick();
 		if (ticks % 10 == 0) trackRunners();
 		if (ticks % 20 == 0) offlineCheck();
-		if (!katil) {
-			int every = Math.max(1, (int) st.num("MANHUNT", "compassIntervalSec")) * 20;
-			if (ticks % every == 0) updateCompasses();
-		} else if (ticks % 40 == 0 && st.flag("KATIL", "compass")) {
-			updateKatilCompasses();
-		}
 		if (ticks % 20 == 0) hud();
 	}
 
@@ -302,41 +310,6 @@ public final class ManhuntGame extends WorldGame {
 		}
 		r.sort(java.util.Comparator.comparingDouble(o -> o.distanceToSqr(p)));
 		return r;
-	}
-
-	/** Herkesin pusulasi en yakin canli oyuncuyu gosterir (kim oldugu belli olmaz). */
-	private void updateKatilCompasses() {
-		for (ServerPlayer p : onlinePlayers()) {
-			if (p.isSpectator() || eliminated.contains(p.getUUID())) continue;
-			var near = othersNear(p);
-			var tracker = near.isEmpty() ? new LodestoneTracker(Optional.empty(), false)
-				: new LodestoneTracker(Optional.of(GlobalPos.of(near.get(0).level().dimension(), near.get(0).blockPosition())), false);
-			var inv = p.getInventory();
-			for (int i = 0; i < inv.getContainerSize(); i++) {
-				ItemStack s = inv.getItem(i);
-				if (s.is(Items.COMPASS)) {
-					CustomData d = s.get(DataComponents.CUSTOM_DATA);
-					if (d != null && d.copyTag().getBoolean(COMPASS_TAG)) s.set(DataComponents.LODESTONE_TRACKER, tracker);
-				}
-			}
-		}
-	}
-
-	private void updateCompasses() {
-		for (UUID id : hunterTeam.members) {
-			ServerPlayer h = player(id);
-			if (h == null || h.isSpectator()) continue;
-			Trace tr = traceFor(h);
-			var tracker = new LodestoneTracker(tr == null ? Optional.empty() : Optional.of(GlobalPos.of(h.level().dimension(), tr.pos())), false);
-			var inv = h.getInventory();
-			for (int i = 0; i < inv.getContainerSize(); i++) {
-				ItemStack s = inv.getItem(i);
-				if (s.is(Items.COMPASS)) {
-					CustomData d = s.get(DataComponents.CUSTOM_DATA);
-					if (d != null && d.copyTag().getBoolean(COMPASS_TAG)) s.set(DataComponents.LODESTONE_TRACKER, tracker);
-				}
-			}
-		}
 	}
 
 	// ---------------- yan panel: runner / hunter durumu ----------------
@@ -487,12 +460,6 @@ public final class ManhuntGame extends WorldGame {
 	@Override
 	public void onRespawn(ServerPlayer p) {
 		super.onRespawn(p);
-		if (katil && contains(p.getUUID()) && phase == Phase.RUNNING && !eliminated.contains(p.getUUID())) {
-			if (st.flag("KATIL", "compass")) p.getInventory().add(compass());
-		}
-		if (!katil && contains(p.getUUID()) && phase == Phase.RUNNING && !isRunner(p.getUUID()) && !eliminated.contains(p.getUUID())) {
-			p.getInventory().add(compass());
-		}
 	}
 
 	@Override

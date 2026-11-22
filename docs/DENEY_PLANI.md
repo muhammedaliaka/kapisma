@@ -133,7 +133,11 @@ Puan kuralı: oyuna katılım 5, her öldürme 10, kazanan takıma 100 (en az 2 
 ## K. Parkur v2
 | # | Yap | Görmelisin |
 |---|---|---|
-| K1 | Her bölümde merdiven kulesi | Merdivene ileri basılı tutarak çıkılır, üstte platform |
+| K1 | Her bölümde spiral merdiven kulesi | Direğin etrafında basamak/sahanlık dolanarak çıkılır; tepede bir sonraki platform bitişik. Altın olmayan hiçbir platform (kızıl, merdiven) checkpoint sayılmaz |
+| K2 | Kızıltaş köprüsünde ilk platform önce, sonrakiler sırayla açılır | Dalga gidiş yönünde ilerler; ileri koşarak geçilir |
+| K3 | `/hud boyut 0.6`, `/hud harita kapat`, `/hud sifirla` | Kart/harita küçülür, kapanır, sıfırlanır; harita altında renk açıklaması ve pusula hedefi (altın baklava) görünür |
+| K4 | Tombala başlangıcı | Sohbette `PvP: N dk sonra açılır`; N dk dolana kadar vuramazsın (yan panelde PvP sayacı), sonra `PvP AÇILDI`. Lobi panosu 2 oyuncu varken `Oyuncu 2/8`, doğru oyun özetini gösterir |
+| K5 | Pusulaya sağ tık / Shift+sağ tık / `/pusula` | Hedef sırayla değişir (eylem çubuğu + harita baklavası); elde tutarken mesafe ve yön oku canlı yenilenir |
 | K2 | Kızıltaş köprüsü (ORTA, ZOR, ÇOK ZOR) | Platformlar sırayla belirir/kaybolur; 0,5 sn önce cam |
 
 ## L2. Oyuncu hile koruması (gerçek istemci ile, 2 kişi)

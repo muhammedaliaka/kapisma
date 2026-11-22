@@ -117,6 +117,16 @@ public abstract class WorldGame extends Game {
 					m.mates.add(new tr.kapisma.net.MapPayload.Mate(o.getGameProfile().getName(), c != null ? c : 0xFFFFFF, o.getBlockX(), o.getBlockZ()));
 				}
 			}
+			if (Compass.has(p)) {
+				var o = compass.selected(p, compassOptions(p));
+				var sp = o == null ? null : o.finder().find(p);
+				if (sp != null && sp.dim() == p.level().dimension()) {
+					m.hasTarget = true;
+					m.targetX = sp.pos().getX();
+					m.targetZ = sp.pos().getZ();
+					m.targetLabel = o.label();
+				}
+			}
 			net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.send(p, m);
 		}
 	}
@@ -144,6 +154,7 @@ public abstract class WorldGame extends Game {
 	}
 
 	protected void giveStartKit(ServerPlayer p) {
+		if (!Compass.has(p) && !compassOptions(p).isEmpty()) p.getInventory().add(Compass.item());
 		int food = (int) st.num(id(), "startFood");
 		if (food <= 0) return;
 		// Avian et yiyemez (vegetarian gucu): esdeger doygunlukta altin havuc ver.
@@ -152,6 +163,74 @@ public abstract class WorldGame extends Game {
 		} else {
 			p.getInventory().add(new ItemStack(Items.COOKED_BEEF, food));
 		}
+	}
+
+	// ---- pusula (bkz. Compass) ----
+	protected final Compass compass = new Compass();
+
+	/** Pusula hedefleri (oyuna gore). Bos liste: bu modda pusula yok. */
+	protected java.util.List<Compass.Opt> compassOptions(ServerPlayer p) { return java.util.List.of(); }
+
+	/** Pusula ibresini yenileme araligi (tik). */
+	protected int compassIntervalTicks() { return 5; }
+
+	protected final Compass.Spot spotOf(ServerPlayer o) {
+		return o == null || o.isSpectator() ? null : new Compass.Spot(o.blockPosition(), o.level().dimension());
+	}
+
+	/** Takim arkadaslari: her biri ayri hedef. */
+	protected final java.util.List<Compass.Opt> mateOpts(ServerPlayer p) {
+		java.util.List<Compass.Opt> r = new ArrayList<>();
+		GameTeam t = teamOf(p.getUUID());
+		if (t == null) return r;
+		for (UUID id : t.members) {
+			if (id.equals(p.getUUID()) || eliminated.contains(id)) continue;
+			String nm = names.getOrDefault(id, "?");
+			r.add(new Compass.Opt("mate:" + id, "Takım: " + nm, h -> spotOf(player(id))));
+		}
+		return r;
+	}
+
+	/** Rakipler: baska takimdan, hayatta, ayni boyutta cevrimici oyuncular; p'ye yakindan uzaga. */
+	protected final java.util.List<ServerPlayer> rivalsOf(ServerPlayer p) {
+		GameTeam mine = teamOf(p.getUUID());
+		java.util.List<ServerPlayer> r = new ArrayList<>();
+		for (UUID id : players) {
+			if (id.equals(p.getUUID()) || eliminated.contains(id)) continue;
+			if (mine != null && mine.members.contains(id)) continue;
+			ServerPlayer o = player(id);
+			if (o != null && !o.isSpectator() && o.level() == p.level()) r.add(o);
+		}
+		r.sort(java.util.Comparator.comparingDouble(o -> o.distanceToSqr(p)));
+		return r;
+	}
+
+	protected final java.util.List<Compass.Opt> rivalOpts() {
+		return java.util.List.of(
+			new Compass.Opt("near", "En yakın rakip", h -> { var r = rivalsOf(h); return r.isEmpty() ? null : spotOf(r.get(0)); }),
+			new Compass.Opt("far", "En uzak rakip", h -> { var r = rivalsOf(h); return r.isEmpty() ? null : spotOf(r.get(r.size() - 1)); }));
+	}
+
+	protected final Compass.Opt spawnOpt(String label) {
+		return new Compass.Opt("spawn", label, h -> {
+			BlockPos b = spawnOf.get(h.getUUID());
+			return b == null ? null : new Compass.Spot(b, gameLevel().dimension());
+		});
+	}
+
+	/** Pusula hedefini kaydirir (esyaya sag tik ya da /pusula). Doner: kullanilabildi mi. */
+	public boolean cycleCompass(ServerPlayer p, int dir) {
+		if (phase != Phase.RUNNING || !contains(p.getUUID())) return false;
+		var opts = compassOptions(p);
+		if (opts.isEmpty()) return false;
+		compass.cycle(p, opts, dir);
+		compass.update(java.util.List.of(p), this::compassOptions, true);
+		return true;
+	}
+
+	@Override
+	public void onUseItem(ServerPlayer p, ItemStack stack) {
+		if (Compass.isCompass(stack)) cycleCompass(p, p.isShiftKeyDown() ? -1 : 1);
 	}
 
 	@Override
@@ -445,6 +524,7 @@ public abstract class WorldGame extends Game {
 				trackOffline();
 				onRunningTick();
 				if (ticks % 10 == 0) sendMinimap();
+				if (ticks % compassIntervalTicks() == 0) compass.update(onlinePlayers(), this::compassOptions, true);
 			}
 			case ENDED -> {
 				ticks++;
@@ -624,6 +704,7 @@ public abstract class WorldGame extends Game {
 		ServerLevel lvl = gameLevel();
 		BlockPos pos = spawnOf.getOrDefault(p.getUUID(), lvl.getSharedSpawnPos());
 		if (p.level() != lvl) p.teleportTo(lvl, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0f, 0f);
+		if (phase == Phase.RUNNING && !eliminated.contains(p.getUUID()) && !Compass.has(p) && !compassOptions(p).isEmpty()) p.getInventory().add(Compass.item());
 	}
 
 	@Override

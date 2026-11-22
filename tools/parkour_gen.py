@@ -252,7 +252,7 @@ def build(seed=7, verbose=False):
                 bl = lv["blink"]
                 n += place_x(lv, li, "cp", (3, 3))           # dusunce buradan devam
                 for k in range(bl["m"]):
-                    n += place_x(lv, li, "blink", bl["size"], dict(period=bl["period"], on=bl["on"], phase=k * bl["stagger"]))
+                    n += place_x(lv, li, "blink", bl["size"], dict(period=bl["period"], on=bl["on"], phase=(bl["period"] - k * bl["stagger"]) % bl["period"]))
                 n += place_x(lv, li, "cp", (3, 3))
                 continue
             r = place(lv, li, "step")
@@ -307,7 +307,7 @@ def validate(plats):
             else:
                 touching = abs(abs(b["cz"] - a["cz"]) - (a["sz"] + b["sz"]) / 2) < 1e-6
                 lat_ok = abs(b["cx"] - a["cx"]) < 1e-6
-            if not (touching and lat_ok and 2 <= b["h"] <= 14 and a["sx"] >= 3 and a["sz"] >= 3):
+            if not (touching and lat_ok and 2 <= b["h"] <= 14 and a["sx"] == 3 and a["sz"] == 3):
                 problems.append((i, "merdiven gecersiz", dict(touching=touching, lat_ok=lat_ok, h=b["h"])))
             continue
         ok, info = jump_ok(a, b)

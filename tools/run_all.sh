@@ -6,7 +6,7 @@ OUT=tools/run_all.out
 : > $OUT
 cp mod/kapisma/build/libs/kapisma-0.1.0.jar server_test/mods/ || exit 1
 python tools/gen_parkour_scenario.py > /dev/null
-for s in player_guard uhc_basic uhc_kill uhc_select bingo_basic bingo_lines bingo_tasks manhunt_basic manhunt_runner katil_basic katil_rules katil_scatter origin_join balance_check avian_kit new_races lobby_parkour xray_audit xray_nether voice_groups; do
+for s in lobby_board compass_pvp player_guard uhc_basic uhc_kill uhc_select bingo_basic bingo_lines bingo_tasks manhunt_basic manhunt_runner katil_basic katil_rules katil_scatter origin_join balance_check avian_kit new_races lobby_parkour xray_audit xray_nether voice_groups; do
   echo "### $s" >> $OUT
   PYTHONIOENCODING=utf-8 timeout 420 python tools/mctest.py tools/scenarios/$s.txt --dir server_test --xmx 4G > tools/last_$s.log 2>&1
   grep -a "OZET\|BEKLENEN YOK" tools/last_$s.log >> $OUT

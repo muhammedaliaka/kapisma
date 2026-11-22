@@ -72,7 +72,7 @@ public final class BingoGame extends WorldGame {
 	private final Map<Item, BingoTasks.Task> taskOf = new HashMap<>();
 	private List<BingoTasks.Task> taskList = new ArrayList<>();
 	private final Map<Item, GameTeam> claimed = new HashMap<>();
-	private int goal, limit, needLines;
+	private int goal, limit, needLines, pvpTick;
 
 	/** Takim basina hedef secilen (isaretlenen) esyalar: kagittan secilir, yan panelde gorunur. */
 	private final Map<GameTeam, Set<Item>> targets = new HashMap<>();
@@ -306,11 +306,23 @@ public final class BingoGame extends WorldGame {
 	protected boolean minimapEnabled() { return st.flag("BINGO", "minimap"); }
 
 	@Override
+	protected java.util.List<Compass.Opt> compassOptions(ServerPlayer p) {
+		int lv = (int) st.num("BINGO", "compass");
+		if (lv <= 0) return java.util.List.of();
+		java.util.List<Compass.Opt> r = new java.util.ArrayList<>();
+		if (lv >= 2) r.addAll(rivalOpts());
+		r.addAll(mateOpts(p));
+		r.add(spawnOpt("Başlangıç noktası"));
+		return r;
+	}
+
+	@Override
 	protected void onStart() {
 		if (minimapEnabled()) giveWorldMap();
 		goal = (int) st.num("BINGO", "goal");
 		needLines = (int) st.num("BINGO", "lines");
 		limit = (int) st.num("BINGO", "timeLimitMin") * 1200;
+		pvpTick = (int) st.num("BINGO", "pvpGraceMin") * 1200;
 		makeCard();
 		Map<Item, String> hh = new HashMap<>(st.flag("BINGO", "hints") ? ItemHints.build(server, card, facts) : Map.of());
 		for (var en : taskOf.entrySet()) hh.remove(en.getKey());
@@ -322,12 +334,24 @@ public final class BingoGame extends WorldGame {
 		}
 		StringBuilder sb = new StringBuilder("Tombala başladı! Hedef: " + needLines + " çizgi (satır/sütun/çapraz)"
 			+ (goal > 0 ? " veya " + goal + " eşya" : "") + ". Lockout: eşyayı ilk alan takım sayar." + (taskList.isEmpty() ? "" : " Kartta " + taskList.size() + " görev karesi var (ilerleme tamamla).") + " Kart: kâğıda sağ tık veya /kart");
+		sb.append(" PvP: ").append(!st.flag("BINGO", "pvp") ? "kapalı" : pvpTick > 0 ? (pvpTick / 1200) + " dk sonra açılır." : "açık.");
 		Msg.broadcast(server, sb.toString());
 	}
+
+	private boolean pvpActive() { return st.flag("BINGO", "pvp") && ticks >= pvpTick; }
 
 	@Override
 	protected void onRunningTick() {
 		if (ticks % 20 != 0) return;
+		if (st.flag("BINGO", "pvp") && pvpTick > 0) {
+			if (ticks == pvpTick) {
+				Msg.broadcast(server, "PvP AÇILDI! Artık takımlar birbirine vurabilir.");
+				for (ServerPlayer p : onlinePlayers()) { Msg.title(p, "PvP AÇIK", "Eşya yarışı kapışmaya döndü!", 5, 40, 10); Msg.sound(p, net.minecraft.sounds.SoundEvents.ENDER_DRAGON_GROWL, 0.7f, 1f); }
+			} else if (pvpTick > 1200 && ticks == pvpTick - 1200) {
+				Msg.broadcast(server, "PvP 1 dakika sonra açılıyor.");
+				Msg.soundAll(server, net.minecraft.sounds.SoundEvents.BELL_BLOCK, 1f, 1f);
+			}
+		}
 		scan();
 		updateBoards();
 		if (phase != Phase.RUNNING) return;
@@ -466,13 +490,14 @@ public final class BingoGame extends WorldGame {
 		if (!(e instanceof ServerPlayer target) || !contains(target.getUUID())) return true;
 		if (phase == Phase.COUNTDOWN) return false;
 		if (src.getEntity() instanceof ServerPlayer attacker && attacker != target && contains(attacker.getUUID())) {
-			return st.flag("BINGO", "pvp");
+			return pvpActive();
 		}
 		return true;
 	}
 
 	@Override
 	public void onUseItem(ServerPlayer p, ItemStack stack) {
+		super.onUseItem(p, stack);
 		CustomData d = stack.get(DataComponents.CUSTOM_DATA);
 		if (d != null && d.copyTag().getBoolean(CARD_TAG)) openCard(p);
 	}
@@ -656,6 +681,7 @@ public final class BingoGame extends WorldGame {
 			String timeStr = limit > 0 ? Msg.mmss((limit - ticks) / 20) + " kaldı" : Msg.mmss(ticks / 20);
 			lines.add("§7Süre: §f" + timeStr);
 			lines.add("§bÇizgi §f" + lines(t) + "/" + needLines + "  §bEşya §f" + score(t));
+			lines.add("§7PvP " + (!st.flag("BINGO", "pvp") ? "§aKAPALI" : ticks >= pvpTick ? "§c§lAÇIK" : "§e" + Msg.mmss((pvpTick - ticks) / 20)));
 			List<GameTeam> rivals = new ArrayList<>(teams);
 			rivals.remove(t);
 			rivals.sort((x, y) -> Integer.compare(rankValue(y), rankValue(x)));

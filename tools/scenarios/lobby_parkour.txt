@@ -19,32 +19,52 @@ expect end platformuna ulasti (bolum KOLAY
 execute as Bot1 at @s run tp @s 12.5 94 21.5
 wait 5
 data get entity Bot1 Pos
-# merdiven kulesi idx 14 (h=5)
-execute as Bot1 at @s if block -11 106 21 minecraft:ladder
+# spiral merdiven idx 14 (h=5)
+execute as Bot1 at @s if block -10 106 21 minecraft:stone_bricks
 expect Test passed
-execute as Bot1 at @s if block -11 110 21 minecraft:ladder
+execute as Bot1 at @s if block -10 110 21 minecraft:stone_bricks
 expect Test passed
+execute as Bot1 at @s if block -10 106 20 minecraft:stone_brick_stairs run say STAIR1_OK
+execute as Bot1 at @s if block -9 106 21 minecraft:stone_brick_stairs run say STAIR1_OK
+execute as Bot1 at @s if block -10 106 22 minecraft:stone_brick_stairs run say STAIR1_OK
+execute as Bot1 at @s if block -11 106 21 minecraft:stone_brick_stairs run say STAIR1_OK
+expect STAIR1_OK
 execute as Bot1 at @s unless block -13 110 21 minecraft:air
 expect Test passed
-# merdiven kulesi idx 35 (h=7)
-execute as Bot1 at @s if block 15 117 -24 minecraft:ladder
+# spiral merdiven idx 35 (h=7)
+execute as Bot1 at @s if block 14 117 -24 minecraft:stone_bricks
 expect Test passed
-execute as Bot1 at @s if block 15 123 -24 minecraft:ladder
+execute as Bot1 at @s if block 14 123 -24 minecraft:stone_bricks
 expect Test passed
+execute as Bot1 at @s if block 14 117 -25 minecraft:stone_brick_stairs run say STAIR1_OK
+execute as Bot1 at @s if block 15 117 -24 minecraft:stone_brick_stairs run say STAIR1_OK
+execute as Bot1 at @s if block 14 117 -23 minecraft:stone_brick_stairs run say STAIR1_OK
+execute as Bot1 at @s if block 13 117 -24 minecraft:stone_brick_stairs run say STAIR1_OK
+expect STAIR1_OK
 execute as Bot1 at @s unless block 17 123 -24 minecraft:air
 expect Test passed
-# merdiven kulesi idx 63 (h=9)
-execute as Bot1 at @s if block -30 137 27 minecraft:ladder
+# spiral merdiven idx 63 (h=9)
+execute as Bot1 at @s if block -30 137 28 minecraft:stone_bricks
 expect Test passed
-execute as Bot1 at @s if block -30 145 27 minecraft:ladder
+execute as Bot1 at @s if block -30 145 28 minecraft:stone_bricks
 expect Test passed
+execute as Bot1 at @s if block -30 137 27 minecraft:stone_brick_stairs run say STAIR1_OK
+execute as Bot1 at @s if block -29 137 28 minecraft:stone_brick_stairs run say STAIR1_OK
+execute as Bot1 at @s if block -30 137 29 minecraft:stone_brick_stairs run say STAIR1_OK
+execute as Bot1 at @s if block -31 137 28 minecraft:stone_brick_stairs run say STAIR1_OK
+expect STAIR1_OK
 execute as Bot1 at @s unless block -30 145 25 minecraft:air
 expect Test passed
-# merdiven kulesi idx 92 (h=12)
-execute as Bot1 at @s if block 28 159 -30 minecraft:ladder
+# spiral merdiven idx 92 (h=12)
+execute as Bot1 at @s if block 27 159 -30 minecraft:stone_bricks
 expect Test passed
-execute as Bot1 at @s if block 28 170 -30 minecraft:ladder
+execute as Bot1 at @s if block 27 170 -30 minecraft:stone_bricks
 expect Test passed
+execute as Bot1 at @s if block 27 159 -31 minecraft:stone_brick_stairs run say STAIR1_OK
+execute as Bot1 at @s if block 28 159 -30 minecraft:stone_brick_stairs run say STAIR1_OK
+execute as Bot1 at @s if block 27 159 -29 minecraft:stone_brick_stairs run say STAIR1_OK
+execute as Bot1 at @s if block 26 159 -30 minecraft:stone_brick_stairs run say STAIR1_OK
+expect STAIR1_OK
 execute as Bot1 at @s unless block 30 170 -30 minecraft:air
 expect Test passed
 # zamanli kizil tas kopru idx 44: 5 sn boyunca 1 sn arayla durum

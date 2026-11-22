@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.glfw.GLFW;
@@ -22,6 +23,8 @@ public final class KapismaHudClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
+		HudConfig.load();
+		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> HudCommands.register(dispatcher));
 		PayloadTypeRegistry.playS2C().register(HudPayload.TYPE, HudPayload.CODEC);
 		ClientPlayNetworking.registerGlobalReceiver(HudPayload.TYPE, (payload, context) ->
 			context.client().execute(() -> state = payload.active ? payload : null));
@@ -42,9 +45,21 @@ public final class KapismaHudClient implements ClientModInitializer {
 			Minecraft mc = Minecraft.getInstance();
 			HudPayload s = state;
 			if (!visible || mc.options.hideGui || mc.player == null) return;
-			if (s != null) HudRenderer.render(graphics, mc, s);
+			if (s != null && HudConfig.card) {
+				float cs = HudConfig.cardScale(mc);
+				graphics.pose().pushPose();
+				graphics.pose().scale(cs, cs, 1f);
+				HudRenderer.render(graphics, mc, s);
+				graphics.pose().popPose();
+			}
 			MapPayload m = map;
-			if (m != null) MiniMap.render(graphics, mc, m);
+			if (m != null && HudConfig.map) {
+				float ms = HudConfig.mapScale(mc);
+				graphics.pose().pushPose();
+				graphics.pose().scale(ms, ms, 1f);
+				MiniMap.render(graphics, mc, m, Math.round(mc.getWindow().getGuiScaledWidth() / ms));
+				graphics.pose().popPose();
+			}
 		});
 	}
 }

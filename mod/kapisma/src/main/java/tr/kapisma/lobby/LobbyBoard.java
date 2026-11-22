@@ -33,7 +33,8 @@ public final class LobbyBoard {
 	private static String summary(Settings st) {
 		return switch (st.game) {
 			case "UHC" -> "§7PvP §f" + (int) st.num("UHC", "pvpGraceMin") + " dk sonra §7· sınır §f±" + (int) st.num("UHC", "borderStart");
-			case "BINGO" -> "§f" + (int) st.num("BINGO", "lines") + " çizgi §7· PvP §f" + (st.flag("BINGO", "pvp") ? "açık" : "kapalı");
+			case "BINGO" -> "§f" + (int) st.num("BINGO", "lines") + " çizgi §7· PvP §f" + (!st.flag("BINGO", "pvp") ? "kapalı"
+				: (int) st.num("BINGO", "pvpGraceMin") > 0 ? (int) st.num("BINGO", "pvpGraceMin") + " dk sonra" : "açık");
 			case "MANHUNT" -> "§7Runner §f" + (st.runnerNames.isEmpty() ? (int) st.num("MANHUNT", "runners") + " (rastgele)" : String.join(",", st.runnerNames));
 			case "KATIL" -> "§f" + (int) st.num("KATIL", "killers") + " gizli katil §7· ses önerilir";
 			default -> "";
@@ -73,7 +74,15 @@ public final class LobbyBoard {
 			if (ours) sb.setDisplayObjective(DisplaySlot.SIDEBAR, null);
 			return;
 		}
-		if (cur != null && !ours) return;                       // baska pano (ornegin kapanmamis oyun panosu) varsa dokunma
+		if (cur != null && !ours) {
+			// oyun yokken kalan kp_* panosu eskidir (sunucu yeniden basladi / oyun cokerek kapandi): kaldir ve yerine lobi panosunu koy.
+			// kp_ ile baslamayan baska bir pano (komutla konmus) varsa dokunma.
+			if (!cur.getName().startsWith("kp")) return;
+			sb.removeObjective(cur);
+			obj = null;
+		}
+		for (var o : new ArrayList<>(sb.getObjectives()))
+			if (o.getName().startsWith("kp") && !o.getName().equals(NAME) && !gameOn) sb.removeObjective(o);   // eski oyun panolari
 		if (obj == null || sb.getObjective(NAME) != obj) {
 			var old = sb.getObjective(NAME);
 			if (old != null) sb.removeObjective(old);

@@ -338,12 +338,23 @@ public final class Cmds {
 				Msg.tell(p, "Takım rengi ve ismi otomatik.");
 				return 1;
 			})));
+		d.register(Commands.literal("pusula")
+			.executes(c -> compass(c, 1))
+			.then(Commands.literal("sonraki").executes(c -> compass(c, 1)))
+			.then(Commands.literal("onceki").executes(c -> compass(c, -1))));
 		d.register(Commands.literal("kart").executes(c -> {
 			ServerPlayer p = c.getSource().getPlayerOrException();
 			if (gm().current instanceof tr.kapisma.game.BingoGame b) b.openCard(p);
 			else say(c, "Şu an Tombala oynanmıyor.");
 			return 1;
 		}));
+	}
+
+	private static int compass(CommandContext<CommandSourceStack> c, int dir) throws CommandSyntaxException {
+		ServerPlayer p = c.getSource().getPlayerOrException();
+		if (gm().current instanceof tr.kapisma.game.WorldGame w && w.cycleCompass(p, dir)) return 1;
+		c.getSource().sendFailure(Component.literal("Pusula sadece oyun sırasında ve pusulası olan modlarda çalışır (UHC, Tombala, Manhunt, Katil Kim)."));
+		return 0;
 	}
 
 	/** Calisan oyun yoksa son biten oyun. */

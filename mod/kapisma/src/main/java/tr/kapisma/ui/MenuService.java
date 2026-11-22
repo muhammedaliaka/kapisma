@@ -129,6 +129,11 @@ public final class MenuService {
 			.addLoreLine(lore(teamPrefSummary(p)))
 			.addLoreLine(lore("Tıkla: rengini ve takım ismini seç"))
 			.setCallback((idx, type, action) -> openTeamPick(p)));
+		gui.setSlot(41, new GuiElementBuilder(Items.WRITABLE_BOOK)
+			.setName(name("Komutlar ve yardım", ChatFormatting.AQUA))
+			.addLoreLine(lore("Tıkla: ne işe yaradığı yazılı komut listesi (sohbette)"))
+			.addLoreLine(lore("Pusula: elindeyken sağ tık = hedef değiştir"))
+			.setCallback((idx, type, action) -> { gui.close(); tr.kapisma.chat.Help.send(p); }));
 		ServerPlayer h = mgr.host();
 		gui.setSlot(45, new GuiElementBuilder(Items.OAK_SIGN)
 			.setName(name("Host: " + (h != null ? h.getGameProfile().getName() : "yok"), ChatFormatting.GOLD))

@@ -1,0 +1,8 @@
+# Lobi panosu: kalan eski oyun panosu (kp_*) lobi panosuyla degismeli
+player Bot1 spawn
+wait 3
+scoreboard objectives add kp_uhc dummy
+scoreboard objectives setdisplay sidebar kp_uhc
+wait 3
+scoreboard objectives list
+expect 1 objective(s): [KAPIŞMA]

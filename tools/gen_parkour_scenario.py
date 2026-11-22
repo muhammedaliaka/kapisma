@@ -21,17 +21,19 @@ out += [tp(cps[0]), "wait 3", "expect cp platformuna ulasti"]
 out += [tp(ends[0]), "wait 3", "expect end platformuna ulasti (bolum KOLAY"]
 out += ["# yuksekten dus: son checkpoint'e donmeli (bot yercekimi uygulamaz, dogrudan asagi isinlaniyor)",
         "execute as Bot1 at @s run tp @s %.1f %d %.1f" % (c(cps[0])[0], BASE + cps[0]["y"] - 8, c(cps[0])[2]), "wait 5", "data get entity Bot1 Pos"]
-# tirmanma kuleleri: merdiven hucreleri var mi, kule tepesi duzgun mu
+# tirmanma kuleleri: direk, merdiven ve sahanliklar; kule tepesi b platformuna bitisik
 for p in P:
     if p["kind"] != "climb": continue
     a = P[p["i"] - 1]
-    dx, dz = p["dx"], p["dz"]
-    lx = (p["x"] - 1 if dx > 0 else p["x"] + p["sx"]) if dx else p["x"] + p["sx"] // 2
-    lz = (p["z"] - 1 if dz > 0 else p["z"] + p["sz"]) if dz else p["z"] + p["sz"] // 2
-    out.append("# merdiven kulesi idx %d (h=%d)" % (p["i"], p["h"]))
+    out.append("# spiral merdiven idx %d (h=%d)" % (p["i"], p["h"]))
+    pole = (a["x"] + 1, a["z"] + 1)
     for y in (BASE + a["y"] + 1, BASE + p["y"]):
-        out.append("execute as Bot1 at @s if block %d %d %d minecraft:ladder" % (lx, y, lz))
+        out.append("execute as Bot1 at @s if block %d %d %d minecraft:stone_bricks" % (pole[0], y, pole[1]))
         out.append("expect Test passed")
+    # ilk basamak: yer seviyesindeki dort kenar ortasindan biri merdiven olmali
+    for (u, v) in ((1, 0), (2, 1), (1, 2), (0, 1)):
+        out.append("execute as Bot1 at @s if block %d %d %d minecraft:stone_brick_stairs run say STAIR1_OK" % (a["x"] + u, BASE + a["y"] + 1, a["z"] + v))
+    out.append("expect STAIR1_OK")
     out.append("execute as Bot1 at @s unless block %d %d %d minecraft:air" % (p["x"] + p["sx"] // 2, BASE + p["y"], p["z"] + p["sz"] // 2))
     out.append("expect Test passed")
 # zamanli kopru: platform zamanla acilip kapaniyor

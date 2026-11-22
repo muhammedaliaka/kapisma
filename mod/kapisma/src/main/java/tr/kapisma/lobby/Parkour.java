@@ -48,7 +48,7 @@ public final class Parkour {
 	private static final Block[] TERR = {Blocks.LIME_TERRACOTTA, Blocks.YELLOW_TERRACOTTA, Blocks.ORANGE_TERRACOTTA, Blocks.RED_TERRACOTTA};
 
 	public record Plat(int i, int x, int y, int z, int sx, int sz, int level, String kind, int h, int dx, int dz, int period, int on, int phase) {
-		boolean isCheck() { return !kind.equals("step") && !kind.equals("corner"); }
+		boolean isCheck() { return kind.equals("start") || kind.equals("cp") || kind.equals("end"); }
 		Vec3 center() { return new Vec3(x + sx / 2.0, Lobby.BASE_Y + y + 1, z + sz / 2.0); }
 	}
 
@@ -137,28 +137,56 @@ public final class Parkour {
 	}
 
 	/**
-	 * Merdiven kulesi: p, oncekine bitisik ve h blok yuksekte. Yaklasan tarafta, onceki platformun son satirinin uzerinde
-	 * merdiven (duvara bagli); p'nin yakin satirinin altinda tas tugla ayak vardir.
+	 * Spiral merdiven: onceki platform (a, 3x3) uzerinde 1 blokluk direk (stone brick) ve etrafinda dolanan merdiven.
+	 * Halka 3x3: koseler duz blok (sahanlik), kenar ortalari merdiven. Her yuzde 1 merdiven + sahanlik = 1 blok yukselis,
+	 * dort yuz = bir tur = 4 blok. Sahanliklar duz oldugu icin donusler sorunsuz yurunur. Son sahanlik b platformuna bitisiktir.
 	 */
 	private static void buildClimb(ServerLevel l, Plat p) {
 		Plat a = PLATS.get(p.i - 1);
 		int dx = p.dx, dz = p.dz;
-		int topY = Lobby.BASE_Y + p.y, baseY = Lobby.BASE_Y + a.y;
+		int yA = Lobby.BASE_Y + a.y, yB = Lobby.BASE_Y + p.y, h = yB - yA;
+		// b platformunun yakin satirinin altina ayak
 		for (int dxx = 0; dxx < p.sx; dxx++) {
 			for (int dzz = 0; dzz < p.sz; dzz++) {
 				boolean near = dx > 0 ? dxx == 0 : dx < 0 ? dxx == p.sx - 1 : dz > 0 ? dzz == 0 : dzz == p.sz - 1;
 				if (!near) continue;
-				for (int y = baseY - 3; y < topY; y++) set(l, p.x + dxx, y, p.z + dzz, Blocks.STONE_BRICKS);
+				for (int y = yA - 3; y < yB; y++) set(l, p.x + dxx, y, p.z + dzz, Blocks.STONE_BRICKS);
 			}
 		}
-		// merdiven hucreleri: platformun yakin satirinin bir oncesi, yanal merkez
-		int lx = dx != 0 ? (dx > 0 ? p.x - 1 : p.x + p.sx) : p.x + p.sx / 2;
-		int lz = dz != 0 ? (dz > 0 ? p.z - 1 : p.z + p.sz) : p.z + p.sz / 2;
-		net.minecraft.core.Direction face = dx > 0 ? net.minecraft.core.Direction.WEST : dx < 0 ? net.minecraft.core.Direction.EAST
-			: dz > 0 ? net.minecraft.core.Direction.NORTH : net.minecraft.core.Direction.SOUTH;
-		var ladder = Blocks.LADDER.defaultBlockState().setValue(net.minecraft.world.level.block.LadderBlock.FACING, face);
-		for (int y = baseY + 1; y <= topY; y++) setState(l, lx, y, lz, ladder);
-		Lobby.sign(l, new BlockPos(lx + (dz != 0 ? 1 : 0), baseY + 1, lz + (dx != 0 ? 1 : 0)), dx != 0 ? 4 : 0, "TIRMAN", p.h + " blok", "ileri basılı tut", "");
+		// saat yonunde: kose 0=KB(0,0) 1=KD(2,0) 2=GD(2,2) 3=GB(0,2); kenar i, kose i -> i+1 arasinda
+		int[][] corner = {{0, 0}, {2, 0}, {2, 2}, {0, 2}};
+		int[][] mid = {{1, 0}, {2, 1}, {1, 2}, {0, 1}};
+		net.minecraft.core.Direction[] travel = {net.minecraft.core.Direction.EAST, net.minecraft.core.Direction.SOUTH,
+			net.minecraft.core.Direction.WEST, net.minecraft.core.Direction.NORTH};
+		boolean[] toward = new boolean[4];       // b'ye bitisik koseler
+		for (int i = 0; i < 4; i++) {
+			int u = corner[i][0], v = corner[i][1];
+			toward[i] = dx > 0 ? u == 2 : dx < 0 ? u == 0 : dz > 0 ? v == 2 : v == 0;
+		}
+		int c0 = -1, s = 1;
+		search:
+		for (int pass = 0; pass < 2; pass++)
+			for (int i = 0; i < 4; i++)
+				for (int dir : new int[] {1, -1})
+					if (toward[Math.floorMod(i + dir * h, 4)] && (pass == 1 || !toward[i])) { c0 = i; s = dir; break search; }
+		if (c0 < 0) { c0 = 0; s = 1; }
+		// direk
+		for (int y = yA + 1; y <= yB; y++) set(l, a.x + 1, y, a.z + 1, Blocks.STONE_BRICKS);
+		set(l, a.x + 1, yB + 1, a.z + 1, Blocks.LANTERN);
+		Block land = CONC[p.level];
+		for (int j = 1; j <= h; j++) {
+			int ci = Math.floorMod(c0 + (j - 1) * s, 4), cn = Math.floorMod(c0 + j * s, 4);
+			int side = s == 1 ? ci : cn;
+			var face = s == 1 ? travel[side] : travel[side].getOpposite();
+			var stair = Blocks.STONE_BRICK_STAIRS.defaultBlockState().setValue(net.minecraft.world.level.block.StairBlock.FACING, face);
+			setState(l, a.x + mid[side][0], yA + j, a.z + mid[side][1], stair);
+			set(l, a.x + corner[cn][0], yA + j, a.z + corner[cn][1], land);
+		}
+		int opp = Math.floorMod(c0 + 2 * s, 4);
+		int sx = a.x + corner[opp][0], sz = a.z + corner[opp][1];
+		double ang = Math.atan2(-(corner[c0][0] - corner[opp][0]), (corner[c0][1] - corner[opp][1]));
+		int rot = Math.floorMod((int) Math.round(Math.toDegrees(ang) / 22.5), 16);
+		Lobby.sign(l, new BlockPos(sx, yA + 1, sz), rot, "MERDİVEN", h + " blok yukarı", "direğin etrafında", "dolanarak çık");
 	}
 
 	// ------------------------------------------------------------------ zamanli kizilTas koprusu
@@ -232,7 +260,7 @@ public final class Parkour {
 			.append(Component.literal("ORTA").withStyle(ChatFormatting.YELLOW)).append(Component.literal(" > ").withStyle(ChatFormatting.GRAY))
 			.append(Component.literal("ZOR").withStyle(ChatFormatting.GOLD)).append(Component.literal(" > ").withStyle(ChatFormatting.GRAY))
 			.append(Component.literal("ÇOK ZOR").withStyle(ChatFormatting.RED)));
-		p.sendSystemMessage(Component.literal("Altın platformlar checkpoint. Düşersen son checkpoint'e dönersin. Çantandaki öğelerle de dönebilir, baştan başlayabilir ya da çıkabilirsin.").withStyle(ChatFormatting.GRAY));
+		p.sendSystemMessage(Component.literal("Altın platformlar checkpoint (kızıl köprüler ve merdivenler değil). Düşersen son checkpoint'e dönersin. Çantandaki öğelerle de dönebilir, baştan başlayabilir ya da çıkabilirsin.").withStyle(ChatFormatting.GRAY));
 		Msg.sound(p, SoundEvents.NOTE_BLOCK_CHIME.value(), 1f, 1.4f);
 	}
 

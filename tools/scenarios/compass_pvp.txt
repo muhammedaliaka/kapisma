@@ -1,0 +1,34 @@
+# Canli pusula (Tombala) + Tombala PvP koruma suresi + lobi panosu
+player Bot1 spawn
+player Bot2 spawn
+wait 3
+kapisma game BINGO
+kapisma origins off
+kapisma rule BINGO tasks 0
+kapisma rule BINGO pvpGraceMin 1
+kapisma start
+wait 22
+execute as Bot1 if data entity @s Inventory[{id:"minecraft:compass"}] run say COMPASS_OK
+expect COMPASS_OK
+wait 2
+execute as Bot1 if data entity @s Inventory[{id:"minecraft:compass"}].components."minecraft:lodestone_tracker".target.pos run say TRACK_OK
+expect TRACK_OK
+execute as Bot1 run pusula
+execute as Bot1 run pusula onceki
+player Bot1 use once
+wait 2
+execute as Bot1 if data entity @s Inventory[{id:"minecraft:compass"}].components."minecraft:lodestone_tracker".target.pos run say TRACK_OK2
+expect TRACK_OK2
+damage Bot2 4 minecraft:player_attack by Bot1
+wait 1
+execute as Bot2 if data entity @s {Health:20.0f} run say HP_PROTECTED
+expect HP_PROTECTED
+wait 44
+expect PvP AÇILDI
+damage Bot2 15 minecraft:player_attack by Bot1
+execute as Bot2 unless data entity @s {Health:20.0f} run say HP_HIT
+expect HP_HIT
+kapisma stop
+wait 4
+scoreboard objectives list
+wait 8

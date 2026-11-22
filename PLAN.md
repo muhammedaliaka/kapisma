@@ -466,3 +466,14 @@ Bilinen sınır: kalın ses ve SVC "konuşuyor" simgesi konumu gösterir; simgey
 - Telefon (Termux, USB adb + SSH) tablet yerine kullanıldı: `tools/stress_phone.py` (7 Carpet botu, MSPT/bellek/pil/`jstack` ile takılma anı), `tools/profile_phone.py` (JFR Termux JVM'ini çökertir → `jstack` örnekleme).
 - **Hata (bizim kod):** UHC/Tombala/Katil doğuşunda arka plan chunk yüklemesi 60 sn'de bitmezse (zayıf tablet) `placePlayers` → `GameWorld.scatter` → `safeSurface` **senkron** `getChunk` ile ana parçacığı 34 sn dondurdu (oyuncular zaman aşımıyla düşerdi). **Düzeltme:** zaman aşımı gerçek saniye (240 sn), hazır olmayan başlangıçlar merkeze (senkron üretim yok), 10 sn'de bir ilerleme mesajı, yükleme bileti uzaklığı 2→1 (merkez + 3x3), merkez chunk önce biletlenir (`GameWorld.centerSpot`, `WorldGame.loadingTick`). Regresyon alt kümesi (uhc_basic/kill/select, katil_basic/scatter, bingo_basic, manhunt_basic, player_guard) yeşil; tam `run_all.sh` bu değişiklikten sonra çalıştırılmadı.
 - Carpet botu üretilmemiş bölgeye koşunca senkron chunk beklemesi (test yapaylığı); gerçek oyuncuda olmaz. Ama 4 yavaş çekirdekte 7 oyuncu geniş keşif yaparken MSPT ~100-130 (TPS ~8): dünya üretimi CPU'yu doyurur.
+
+## 23. Oyun testi sonrası düzeltmeler: parkur, pano, pusula, HUD (2026-11-22)
+2 kişilik 5 dakikalık denemede çıkan sorunlar:
+- **Parkur checkpoint:** `Parkour.isCheck()` kızıl köprü ve merdiven platformlarını da checkpoint sayıyordu; artık yalnız `start`/`cp`/`end`.
+- **Kızıltaş sırası ters:** `parkour_gen.py` faz `k*stagger` idi (sonraki platform önce açılıyordu); artık `(period - k*stagger) % period`: dalga gidiş yönünde.
+- **Spiral merdiven:** tek sıra ladder yerine, önceki 3x3 platform üstünde 1 bloklük direk + etrafında dolanan taş tuğla merdiven/sahanlık; köşeler düz blok olduğundan dönüşte çarpma sorunu yok. Başlangıç köşesi ve yön, tepedeki son sahanlık b platformuna bitişik olacak şekilde seçilir. Üretici `a` platformunun tam 3x3 olmasını doğrular.
+- **Lobi panosu "0 kişi / eski bilgi":** `LobbyBoard.tick` kalıcı (scoreboard.dat) eski `kp_*` oyun panosu varsa hiç güncellemiyordu; oyun yokken kalan `kp*` panolar silinir, lobi panosu kurulur. Test: `lobby_board`.
+- **Tombala PvP:** hiç koruma süresi yoktu (ilk saniyeden açık); yeni kural `pvpGraceMin` (varsayılan 5 dk), duyuru, yan panelde sayaç, lobi özeti. Test: `compass_pvp`.
+- **Canlı pusula (`game/Compass`):** UHC/Tombala/Manhunt hunter/Katil Kim; hedef listesini oyun belirler, sağ tık/Shift+sağ tık/`/pusula` ile seçilir, ibre 5 tikte bir (Manhunt: `compassIntervalSec`) yenilenir, eylem çubuğunda ad + ok + mesafe. Eski Manhunt pusula kodu bununla birleştirildi (`WorldGame.compassOptions`).
+- **HUD:** `MapPayload` sürüm 2 (pusula hedefi alanı, istemci+sunucu birlikte güncellenmeli); kart/harita ekran yüksekliğine göre otomatik küçülür (`HudConfig.auto`), `/hud` komutu ve renk açıklaması, hedef baklavası.
+- **/yardim** gruplandı ve moda özel ipucu eklendi.
