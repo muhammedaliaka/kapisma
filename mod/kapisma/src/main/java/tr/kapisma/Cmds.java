@@ -81,7 +81,7 @@ public final class Cmds {
 		var root = Commands.literal("kapisma")
 			.executes(Cmds::help)
 			.then(Commands.literal("help").executes(Cmds::help))
-			.then(Commands.literal("ping").executes(c -> say(c, "Kapışma çalışıyor")))
+			.then(Commands.literal("ping").executes(c -> say(c, "Kapışma çalışıyor, sürüm " + Kapisma.BUILD)))
 			.then(Commands.literal("menu").executes(Cmds::menu))
 			.then(Commands.literal("debug").requires(src -> src.hasPermission(2))
 				.then(Commands.literal("xray")

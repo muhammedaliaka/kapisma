@@ -260,7 +260,7 @@ public final class Parkour {
 			.append(Component.literal("ORTA").withStyle(ChatFormatting.YELLOW)).append(Component.literal(" > ").withStyle(ChatFormatting.GRAY))
 			.append(Component.literal("ZOR").withStyle(ChatFormatting.GOLD)).append(Component.literal(" > ").withStyle(ChatFormatting.GRAY))
 			.append(Component.literal("ÇOK ZOR").withStyle(ChatFormatting.RED)));
-		p.sendSystemMessage(Component.literal("Altın platformlar checkpoint (kızıl köprüler ve merdivenler değil). Düşersen son checkpoint'e dönersin. Çantandaki öğelerle de dönebilir, baştan başlayabilir ya da çıkabilirsin.").withStyle(ChatFormatting.GRAY));
+		p.sendSystemMessage(Component.literal("[sürüm " + Kapisma.BUILD + "] Altın platformlar checkpoint (kızıl köprüler ve merdivenler değil). Düşersen son checkpoint'e dönersin. Çantandaki öğelerle de dönebilir, baştan başlayabilir ya da çıkabilirsin.").withStyle(ChatFormatting.GRAY));
 		Msg.sound(p, SoundEvents.NOTE_BLOCK_CHIME.value(), 1f, 1.4f);
 	}
 

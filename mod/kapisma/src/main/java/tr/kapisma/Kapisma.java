@@ -19,6 +19,8 @@ import tr.kapisma.lobby.Lobby;
 
 public class Kapisma implements ModInitializer {
 	public static final String ID = "kapisma";
+	/** Yapi damgasi: oyuncular hangi jar'in calistigini gorsun (parkur baslarken ve /kapisma ping). */
+	public static final String BUILD = "2026-11-23";
 	public static final Logger LOG = LoggerFactory.getLogger(ID);
 
 	/** Sunucu acikken tek yonetici. */
