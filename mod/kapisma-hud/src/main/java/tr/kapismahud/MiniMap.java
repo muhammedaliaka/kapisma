@@ -36,9 +36,11 @@ final class MiniMap {
 		int pw = legend ? LEGEND_W : SIZE + 4;
 		int px0 = screenW - pw - 4;
 		int x0 = px0 + (pw - SIZE) / 2, y0 = 6;
+		TargetPayload tg = KapismaHudClient.target;
+		boolean hasTarget = tg != null && tg.has;
 		int rows = 0;
-		if (legend) rows = 2 + (m.endRadius > 0 ? 1 : 0) + (m.mates.isEmpty() ? 0 : 1) + (m.hasTarget ? 1 : 0);
-		int bottom = y0 + SIZE + 12 + (m.hasTarget ? 10 : 0) + (legend ? rows * 9 + 3 : 0);
+		if (legend) rows = 2 + (m.endRadius > 0 ? 1 : 0) + (m.mates.isEmpty() ? 0 : 1) + (hasTarget ? 1 : 0);
+		int bottom = y0 + SIZE + 12 + (hasTarget ? 10 : 0) + (legend ? rows * 9 + 3 : 0);
 		g.fill(px0, y0 - 2, px0 + pw, bottom, 0xA0101010);
 		g.fill(x0, y0, x0 + SIZE, y0 + SIZE, 0xC0202820);
 
@@ -67,9 +69,9 @@ final class MiniMap {
 			g.fill(mx, my, mx + 1, my + 1, 0xFF000000);
 		}
 		// pusula hedefi: altin baklava (harita disinda ise kenara yapisir)
-		if (m.hasTarget) {
-			int tx = clamp(cx + Math.round((float) (m.targetX - m.centerX) * scale), x0 + 2, x0 + SIZE - 3);
-			int ty = clamp(cy + Math.round((float) (m.targetZ - m.centerZ) * scale), y0 + 2, y0 + SIZE - 3);
+		if (hasTarget) {
+			int tx = clamp(cx + Math.round((float) (tg.x - m.centerX) * scale), x0 + 2, x0 + SIZE - 3);
+			int ty = clamp(cy + Math.round((float) (tg.z - m.centerZ) * scale), y0 + 2, y0 + SIZE - 3);
 			g.fill(tx - 2, ty - 2, tx + 3, ty + 3, 0xFF000000);
 			g.fill(tx - 1, ty - 1, tx + 2, ty + 2, GOLD);
 		}
@@ -90,8 +92,8 @@ final class MiniMap {
 		String info = String.format("X %d  Z %d  ±%d", m.selfX, m.selfZ, Math.round(m.curRadius));
 		g.drawString(mc.font, info, px0 + (pw - mc.font.width(info)) / 2, ty, 0xFFE0E0E0, true);
 		ty += 10;
-		if (m.hasTarget) {
-			String t = "◆ " + m.targetLabel;
+		if (hasTarget) {
+			String t = "◆ " + tg.label;
 			if (mc.font.width(t) > pw - 6) t = mc.font.plainSubstrByWidth(t, pw - 6);
 			g.drawString(mc.font, t, px0 + (pw - mc.font.width(t)) / 2, ty, GOLD, true);
 			ty += 10;
@@ -105,7 +107,7 @@ final class MiniMap {
 			legendRow(g, mc, lx, ty, 0xFFFFFFFF, false, "sen (sarı çizgi: yön)");
 			ty += 9;
 			if (!m.mates.isEmpty()) { legendRow(g, mc, lx, ty, m.mates.get(0).rgb | 0xFF000000, false, "takım arkadaşı"); ty += 9; }
-			if (m.hasTarget) legendRow(g, mc, lx, ty, GOLD, false, "pusula hedefi");
+			if (hasTarget) legendRow(g, mc, lx, ty, GOLD, false, "pusula hedefi");
 		}
 	}
 

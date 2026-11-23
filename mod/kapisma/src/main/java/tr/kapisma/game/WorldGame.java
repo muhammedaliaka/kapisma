@@ -117,18 +117,26 @@ public abstract class WorldGame extends Game {
 					m.mates.add(new tr.kapisma.net.MapPayload.Mate(o.getGameProfile().getName(), c != null ? c : 0xFFFFFF, o.getBlockX(), o.getBlockZ()));
 				}
 			}
-			if (Compass.has(p)) {
-				var o = compass.selected(p, compassOptions(p));
-				var sp = o == null ? null : o.finder().find(p);
-				if (sp != null && sp.dim() == p.level().dimension()) {
-					m.hasTarget = true;
-					m.targetX = sp.pos().getX();
-					m.targetZ = sp.pos().getZ();
-					m.targetLabel = o.label();
-				}
-			}
+			sendTarget(p);
 			net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.send(p, m);
 		}
+	}
+
+	/** Pusula hedefini haritaya (yeni HUD modu varsa) gonderir; hedef yoksa temizler. */
+	private void sendTarget(ServerPlayer p) {
+		if (!net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.canSend(p, tr.kapisma.net.TargetPayload.TYPE)) return;
+		var t = new tr.kapisma.net.TargetPayload();
+		if (Compass.has(p)) {
+			var o = compass.selected(p, compassOptions(p));
+			var sp = o == null ? null : o.finder().find(p);
+			if (sp != null && sp.dim() == p.level().dimension()) {
+				t.has = true;
+				t.x = sp.pos().getX();
+				t.z = sp.pos().getZ();
+				t.label = o.label();
+			}
+		}
+		net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.send(p, t);
 	}
 
 	private void clearMinimap() {
@@ -136,6 +144,8 @@ public abstract class WorldGame extends Game {
 			ServerPlayer p = player(id);
 			if (p != null && net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.canSend(p, tr.kapisma.net.MapPayload.TYPE)) {
 				net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.send(p, tr.kapisma.net.MapPayload.off());
+				if (net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.canSend(p, tr.kapisma.net.TargetPayload.TYPE))
+					net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.send(p, new tr.kapisma.net.TargetPayload());
 			}
 		}
 	}

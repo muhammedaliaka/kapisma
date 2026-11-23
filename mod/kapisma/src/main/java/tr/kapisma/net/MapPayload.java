@@ -8,7 +8,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 
 /**
- * Istemci modu (kapisma-hud) icin mini harita verisi: kapisma:minimap. Istemcideki tr.kapismahud.MapPayload ile AYNI bayt duzeni (surum 2).
+ * Istemci modu (kapisma-hud) icin mini harita verisi: kapisma:minimap. Istemcideki tr.kapismahud.MapPayload ile AYNI bayt duzeni (surum 1).
  * Arazi yok: sadece sinir karesi (baslangic / simdiki / son), oyuncunun kendisi ve takim arkadaslari.
  */
 public final class MapPayload implements CustomPacketPayload {
@@ -23,9 +23,6 @@ public final class MapPayload implements CustomPacketPayload {
 	public int selfX, selfZ;
 	public float selfYaw;
 	public final List<Mate> mates = new ArrayList<>();
-	public boolean hasTarget;          // pusula hedefi
-	public int targetX, targetZ;
-	public String targetLabel = "";
 
 	public static MapPayload off() {
 		return new MapPayload();
@@ -37,7 +34,7 @@ public final class MapPayload implements CustomPacketPayload {
 	}
 
 	private void write(RegistryFriendlyByteBuf b) {
-		b.writeByte(2);
+		b.writeByte(1);
 		b.writeBoolean(active);
 		if (!active) return;
 		b.writeDouble(centerX);
@@ -54,12 +51,6 @@ public final class MapPayload implements CustomPacketPayload {
 			b.writeInt(m.rgb());
 			b.writeInt(m.x());
 			b.writeInt(m.z());
-		}
-		b.writeBoolean(hasTarget);
-		if (hasTarget) {
-			b.writeInt(targetX);
-			b.writeInt(targetZ);
-			b.writeUtf(targetLabel);
 		}
 	}
 

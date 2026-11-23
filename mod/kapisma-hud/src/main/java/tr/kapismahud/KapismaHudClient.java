@@ -17,6 +17,7 @@ import org.lwjgl.glfw.GLFW;
 public final class KapismaHudClient implements ClientModInitializer {
 	public static volatile HudPayload state;
 	public static volatile MapPayload map;
+	public static volatile TargetPayload target;
 	public static volatile boolean disguise;
 	private static boolean visible = true;
 	private static KeyMapping toggleKey;
@@ -31,9 +32,12 @@ public final class KapismaHudClient implements ClientModInitializer {
 		PayloadTypeRegistry.playS2C().register(MapPayload.TYPE, MapPayload.CODEC);
 		ClientPlayNetworking.registerGlobalReceiver(MapPayload.TYPE, (payload, context) ->
 			context.client().execute(() -> map = payload.active ? payload : null));
+		PayloadTypeRegistry.playS2C().register(TargetPayload.TYPE, TargetPayload.CODEC);
+		ClientPlayNetworking.registerGlobalReceiver(TargetPayload.TYPE, (payload, context) ->
+			context.client().execute(() -> target = payload.has ? payload : null));
 		PayloadTypeRegistry.playS2C().register(DisguisePayload.TYPE, DisguisePayload.CODEC);
 		ClientPlayNetworking.registerGlobalReceiver(DisguisePayload.TYPE, (payload, context) -> disguise = payload.on);
-		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> { state = null; map = null; disguise = false; });
+		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> { state = null; map = null; target = null; disguise = false; });
 
 		toggleKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
 			"key.kapisma_hud.toggle", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_H, "category.kapisma_hud"));

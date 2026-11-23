@@ -29,6 +29,7 @@ public class Kapisma implements ModInitializer {
 		// Istemci HUD modu icin paket tipi (modu olmayan istemciye gonderilmez)
 		net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry.playS2C().register(tr.kapisma.net.HudPayload.TYPE, tr.kapisma.net.HudPayload.CODEC);
 		net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry.playS2C().register(tr.kapisma.net.MapPayload.TYPE, tr.kapisma.net.MapPayload.CODEC);
+		net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry.playS2C().register(tr.kapisma.net.TargetPayload.TYPE, tr.kapisma.net.TargetPayload.CODEC);
 		net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry.playS2C().register(tr.kapisma.net.DisguisePayload.TYPE, tr.kapisma.net.DisguisePayload.CODEC);
 		CommandRegistrationCallback.EVENT.register((dispatcher, registry, env) -> Cmds.register(dispatcher));
 
