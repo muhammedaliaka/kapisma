@@ -1,2 +1,2 @@
-089c3ef40b8afb5f43e8b674a35e4a22cfed77882486402a9ccab0c8b6bf2561  kapisma-sunucu-v0.1.0.zip
-1c4c22af4d20e48b52f6e9ec1dfef208c9e661f9e855dffaf92517fcac64d6b4  kapisma-oyuncu-v0.1.0.zip
+b71dc7995c07c4adaf8ac4dac6d352b9c0b1f70f65d5fbc9cdcb26a72c2258c6  kapisma-sunucu-v0.1.0.zip
+883cb287a242425fbe12027a334a8f1f695cf36ed234b4445882cbf9542865f6  kapisma-oyuncu-v0.1.0.zip

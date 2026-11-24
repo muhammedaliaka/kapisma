@@ -285,6 +285,57 @@ public final class Xray {
 		}
 	}
 
+	/**
+	 * Bagimsiz kopya. PalettedContainer.copy() paleti kopyalar ama paletin "buyut" islevi ORIJINAL konteyneri gosterir:
+	 * kopyaya palet kapasitesini asan (16., 32. ... farkli blok) bir deger yazinca indeks kopyanin bit genisligine sigmaz
+	 * ("The value 16 is not in the specified inclusive range of 0 to 15") ve gercek bolum de bozulur.
+	 * Pakete yazip yeni konteynere okumak kendi buyutme islevini kurar.
+	 */
+	static PalettedContainer<BlockState> independentCopy(PalettedContainer<BlockState> src) {
+		FriendlyByteBuf tmp = new FriendlyByteBuf(Unpooled.buffer(2048));
+		try {
+			src.write(tmp);
+			PalettedContainer<BlockState> c = new PalettedContainer<>(Block.BLOCK_STATE_REGISTRY, Blocks.AIR.defaultBlockState(), PalettedContainer.Strategy.SECTION_STATES);
+			c.read(tmp);
+			return c;
+		} finally {
+			tmp.release();
+		}
+	}
+
+	/** Test: bagimsiz kopyaya palet kapasitesini asacak kadar farkli blok yazilir; hata yok, orijinal bolum degismemis olmali. */
+	public static String copyTest(ServerPlayer p) {
+		LevelChunk ch = p.level().getChunkAt(p.blockPosition());
+		LevelChunkSection sec = ch.getSection(ch.getSectionIndex(p.getBlockY()));
+		PalettedContainer<BlockState> orig = sec.getStates();
+		BlockState[] before = new BlockState[4096];
+		for (int i = 0; i < 4096; i++) before[i] = orig.get(i & 15, (i >> 8) & 15, (i >> 4) & 15);
+		PalettedContainer<BlockState> c = independentCopy(orig);
+		Block[] pool = {Blocks.STONE, Blocks.DEEPSLATE, Blocks.COAL_ORE, Blocks.IRON_ORE, Blocks.GOLD_ORE, Blocks.DIAMOND_ORE, Blocks.EMERALD_ORE,
+			Blocks.LAPIS_ORE, Blocks.REDSTONE_ORE, Blocks.COPPER_ORE, Blocks.DIRT, Blocks.GRAVEL, Blocks.SAND, Blocks.GRANITE, Blocks.DIORITE, Blocks.ANDESITE,
+			Blocks.TUFF, Blocks.CLAY, Blocks.NETHERRACK, Blocks.OBSIDIAN, Blocks.GLASS, Blocks.OAK_LOG, Blocks.BIRCH_LOG, Blocks.SPRUCE_LOG, Blocks.JUNGLE_LOG,
+			Blocks.ACACIA_LOG, Blocks.DARK_OAK_LOG, Blocks.MOSS_BLOCK, Blocks.CALCITE, Blocks.AMETHYST_BLOCK, Blocks.SNOW_BLOCK, Blocks.ICE, Blocks.PACKED_ICE,
+			Blocks.COBBLESTONE, Blocks.MOSSY_COBBLESTONE, Blocks.BRICKS, Blocks.SANDSTONE, Blocks.RED_SAND, Blocks.TERRACOTTA, Blocks.MUD};
+		try {
+			for (int i = 0; i < pool.length; i++) c.set(i & 15, (i >> 4) & 15, 7, pool[i].defaultBlockState());
+		} catch (RuntimeException e) {
+			return "copytest HATA: " + e;
+		}
+		for (int i = 0; i < 4096; i++) {
+			if (orig.get(i & 15, (i >> 8) & 15, (i >> 4) & 15) != before[i]) return "copytest HATA: orijinal bolum degisti";
+		}
+		// bilgi: eski yontem (copy()) ayni yazimda cokuyor mu? (teshis dogrulamasi; kopya yeni konteyner, orijinal etkilenmez diye ayri bolum kullanilir)
+		String vanilla;
+		try {
+			PalettedContainer<BlockState> v = independentCopy(orig).copy();
+			for (int i = 0; i < pool.length; i++) v.set(i & 15, (i >> 4) & 15, 7, pool[i].defaultBlockState());
+			vanilla = "ok";
+		} catch (RuntimeException e) {
+			vanilla = "COKTU";
+		}
+		return "copytest OK (" + pool.length + " blok, orijinal degismedi; eski copy() yontemi: " + vanilla + ")";
+	}
+
 	/** Chunk paket verisini yeniden üretir; koruma kapalıysa null. */
 	public static Built build(LevelChunk chunk) {
 		return build(chunk, true);
@@ -350,7 +401,7 @@ public final class Xray {
 						}
 						if (!hide) continue;
 						int idx = (ly << 8) | (lz << 4) | lx;
-						if (disp == null) { disp = states.copy(); bits = new BitSet(4096); }
+						if (disp == null) { disp = independentCopy(states); bits = new BitSet(4096); }
 						long h = hash(ox + lx, y, oz + lz);
 						disp.set(lx, ly, lz, host(mode, nether, y, h));
 						bits.set(idx);

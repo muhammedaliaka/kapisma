@@ -86,6 +86,7 @@ public final class Cmds {
 			.then(Commands.literal("debug").requires(src -> src.hasPermission(2))
 				.then(Commands.literal("xray")
 					.then(Commands.literal("audit").executes(c -> { String r = tr.kapisma.xray.Xray.audit(c.getSource().getPlayerOrException()); Kapisma.LOG.info("xray audit: {}", r); return say(c, r); }))
+					.then(Commands.literal("copytest").executes(c -> { String r = tr.kapisma.xray.Xray.copyTest(c.getSource().getPlayerOrException()); Kapisma.LOG.info("xray {}", r); return say(c, r); }))
 					.then(Commands.literal("simulate").executes(c -> {
 						String r = tr.kapisma.xray.Xray.simulate(c.getSource().getPlayerOrException());
 						Kapisma.LOG.info("xray simulate: {}", r);

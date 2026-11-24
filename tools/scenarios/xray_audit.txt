@@ -9,6 +9,8 @@ wait 14
 gamemode spectator Bot1
 attribute Bot1 minecraft:generic.gravity base set 0
 execute as Bot1 run kapisma debug xray audit
+execute as Bot1 run kapisma debug xray copytest
+expect copytest OK
 execute as Bot1 at @s run tp @s ~ 30 ~
 wait 2
 execute as Bot1 run kapisma debug xray audit
