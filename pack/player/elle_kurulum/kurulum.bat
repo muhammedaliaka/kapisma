@@ -5,14 +5,15 @@ title Kapisma Istemci Kurulumu
 chcp 65001 >nul
 
 rem ==================================================================
-rem  Kapisma istemci kurulumu (Windows / TLauncher / resmi launcher)
-rem  Kullanim: cift tikla. Farkli bir .minecraft klasoru icin:  kurulum.bat "D:\oyun\.minecraft"
+rem  Kapisma istemci kurulumu (Windows / Legacy Launcher / resmi launcher)
+rem  Kullanim: cift tikla veya kurulum.bat "D:\oyun\game"
 rem ==================================================================
 set "MC=%~1"
 if "%MC%"=="" set "MC=%APPDATA%\.minecraft"
-if not exist "%MC%" (
+if "%~1"=="" if not exist "%MC%\." set "MC=%APPDATA%\.tlauncher\legacy\Minecraft\game"
+if not exist "%MC%\." (
   echo HATA: Minecraft klasoru bulunamadi: %MC%
-  echo Once TLauncher'i ac, Fabric 1.21.1 surumunu bir kere baslat; sonra bu dosyayi tekrar calistir.
+  echo Baslaticida oyun dizinini kontrol et; gerekirse bu dosyaya klasor yolunu ver.
   pause
   exit /b 1
 )

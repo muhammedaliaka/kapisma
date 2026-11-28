@@ -6,18 +6,23 @@ Arkadasinin sunucusuna girmek icin tek yapman gereken:
   2) Kapisma-Oyuncu-Kur.bat dosyasina cift tikla.
      (Windows "bilgisayarinizi korudu" derse: Daha fazla bilgi > Yine de calistir.)
   3) Acilan pencerede KUR dugmesine bas. Bitince dugme "KURULDU" olur; bir sey daha yapman gerekmez.
-  4) TLauncher'i ac > surum: Fabric 1.21.1 > Oyna > Coklu Oyuncu > Sunucu Ekle > hostun verdigi adres.
+  4) Baslaticiyi ac > surum: Fabric 1.21.1 > Oyna > Coklu Oyuncu > Sunucu Ekle > hostun verdigi adres.
      (Host sana Tailscale adresi (100.x.x.x) verir; once tailscale.com'dan Tailscale'i kurup giris yap,
       hostun davetini kabul et.)
   5) Oyunda V tusu: mikrofon / sesli sohbet ayari.
 
-Ne yapar? Modlari .minecraft\mods klasorune koyar, Fabric 1.21.1 surumu yoksa ekler, sesli sohbet modunu
+Ne yapar? Modlari secili oyun klasorunun mods dizinine koyar, Fabric 1.21.1 surumu yoksa ekler, sesli sohbet modunu
 dogrulamali indirir. Zaten kuruluysa hicbir sey yapmaz. Eski mod surumlerin silinmez: mods\_kapisma_eski.
 Hicbir hesap/sifre sormaz. Internetten sadece Simple Voice Chat indirilir (SHA-512 ile dogrulanir).
-Minecraft klasorun baska yerdeyse pencerenin altindaki "degistir"e bas.
+Legacy Launcher'da Ayarlar > Minecraft > Oyun klasoru yoluna bak. Windows'ta standart .minecraft yoksa
+kurucu %APPDATA%\.tlauncher\legacy\Minecraft\game dizinini arar. Var olan oyun klasorunu kullanabilirsin.
+Farkli bir yol goruyorsan veya iki baslatici varsa kurucuda "degistir" ile dogru klasoru sec.
+Legacy Launcher'da ayri surum klasorleri aciksa Fabric 1.21.1'i sec. Ana ekrandaki klasor simgesinden
+secili surumun oyun veya mods klasorunu ac ve kurucuda o yolu sec.
+https://docs.llaun.ch/en/launcher/subfolders
 
-Pencere acilmazsa (PowerShell kapali): elle_kurulum\kurulum.bat (Windows) veya bash elle_kurulum/kurulum.sh
-(Linux/Mac). O da olmazsa mods klasorundeki .jar dosyalarini .minecraft\mods icine kopyala.
+Pencere acilmazsa elle_kurulum\kurulum.bat "oyun klasoru" (Windows) veya
+bash elle_kurulum/kurulum.sh "oyun klasoru" (Linux/Mac) kullan. Modlari elle de secili surumun mods dizinine koyabilirsin.
 
 SORUN GIDERME
  - "Incompatible mod set": host ile ayni paket surumunu kullandiginizdan emin ol; yeniden kur.

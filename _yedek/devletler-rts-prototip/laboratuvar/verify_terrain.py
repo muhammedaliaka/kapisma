@@ -253,13 +253,16 @@ def verify_capitals(test, process, sites, server_log, client_log, *, diplomacy, 
     for slot, (player, site_index) in enumerate((("RtsQA1", 1), ("rtsdummy", 0), ("rtsthird", 2)), 1):
         x, y, z = sites[site_index][0]
         marker = f"RTS_NATURAL_ARRIVES_{player.upper()}"
-        test(f"if entity @a[name={player},gamemode=adventure] if score {player} krts_slot matches {slot}", marker)
-        send(f"data get entity {player} Pos", f"say {marker}_POSITION")
-        snapshot = wait_for(server_log, f"{marker}_POSITION", process)
-        position = re.findall(rf"{player} has the following entity data: \[([\d.-]+)d, ([\d.-]+)d, ([\d.-]+)d\]",
-                              snapshot, re.IGNORECASE)
+        send(f"data get entity {player} Pos", f"data get entity {player} playerGameType",
+             f"scoreboard players get {player} krts_slot", f"say {marker}_READ")
+        snapshot = wait_for(server_log, f"{marker}_READ", process)
+        data = re.findall(rf"{player} has the following entity data: (.+)", snapshot, re.IGNORECASE)
+        position = re.fullmatch(r"\[([\d.-]+)d, ([\d.-]+)d, ([\d.-]+)d\]", data[-2]) if len(data) >= 2 else None
+        registered = re.findall(rf"{player} has (\d+) \[krts_slot\]", snapshot, re.IGNORECASE)
         expected = (x + 0.5, y, z - 1.5)
-        assert position and math.dist(tuple(map(float, position[-1])), expected) <= 5, (player, expected, position)
+        assert position and math.dist(tuple(map(float, position.groups())), expected) <= 5, (player, expected, data)
+        assert data[-1] == "2" and registered and 1 <= int(registered[-1]) <= 3, (player, data, registered)
+        print(f"PASS {marker}", flush=True)
         test(f"if entity @e[tag=krts.capital,x={x+0.5},y={y},z={z-0.5},distance=..0.3] "
              f"if entity @e[type=minecraft:block_display,tag=krts.hall_foundation,tag=krts.s{slot}]",
              f"RTS_NATURAL_BUILDING_{player.upper()}")

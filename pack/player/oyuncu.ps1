@@ -1,7 +1,7 @@
 # Kapisma - OYUNCU KURULUMU  (Windows PowerShell 5.1+; Windows 10/11'de hazir gelir)
 # Cift tikla: Kapisma-Oyuncu-Kur.bat   (bu dosyayi dogrudan acmana gerek yok)
 #
-# Tek dugme: modlari .minecraft\mods klasorune kurar, Fabric 1.21.1 surumunu (yoksa) ekler, sesli sohbet modunu
+# Tek dugme: modlari secili oyun klasorune kurar, Fabric 1.21.1 surumunu (yoksa) ekler, sesli sohbet modunu
 # dogrulamali indirir. Zaten kuruluysa hicbir sey yapmaz. Eski modlar SILINMEZ: mods\_kapisma_eski klasorune tasinir.
 # Otomatik test icin: -Headless -McDir <klasor>   |   -SelfTest -McDir <gecici klasor>   (bkz. tools/test_wizard.py)
 param(
@@ -40,17 +40,35 @@ function Get-PackJars {
   return @(Get-ChildItem $d -Filter *.jar -File)
 }
 
+function Get-GameFolder([string]$path) {
+  if (-not (Test-Path -LiteralPath $path -PathType Container)) { return '' }
+  $folder = Get-Item -LiteralPath $path -Force
+  if ($folder.Name -eq 'mods' -and $folder.Parent) { return $folder.Parent.FullName }
+  return $folder.FullName
+}
+
 function Find-McDir {
-  if ($McDir) { return $McDir }
-  $d = Join-Path $env:APPDATA '.minecraft'
-  if (Test-Path $d) { return $d }
+  if ($McDir) { return Get-GameFolder $McDir }
+  foreach ($relative in '.minecraft', '.tlauncher\legacy\Minecraft\game') {
+    $folder = Get-GameFolder (Join-Path $env:APPDATA $relative)
+    if ($folder) { return $folder }
+  }
   return ''
 }
 
+function Get-VersionRoot([string]$mc) {
+  $folder = Get-Item -LiteralPath $mc -Force
+  if ($folder.Parent -and $folder.Parent.Name -eq 'home' -and $folder.Parent.Parent) {
+    $root = $folder.Parent.Parent.FullName
+    if (Test-Path -LiteralPath (Join-Path $root 'versions') -PathType Container) { return $root }
+  }
+  return $folder.FullName
+}
+
 function Get-FabricVersion([string]$mc) {
-  $vdir = Join-Path $mc 'versions'
+  $vdir = Join-Path (Get-VersionRoot $mc) 'versions'
   if (Test-Path $vdir) {
-    $x = Get-ChildItem $vdir -Directory | Where-Object { $_.Name -match 'fabric' -and $_.Name -match '1\.21\.1' } | Select-Object -First 1
+    $x = Get-ChildItem -LiteralPath $vdir -Directory | Where-Object { $_.Name -match 'fabric' -and $_.Name -match '(?<![\d.])1\.21\.1(?![\d.])' } | Select-Object -First 1
     if ($x) { return $x.Name }
   }
   return $null
@@ -93,7 +111,7 @@ function Get-VoiceChat([string]$modsDir) {
 function Install-Player([string]$mc, [string]$address) {
   $jars = @(Get-PackJars)
   if ($jars.Count -eq 0) { throw "Paketin 'mods' klasörü bulunamadı. Zip'i önce bir klasöre ÇIKAR, sonra çalıştır." }
-  if (-not (Test-Path $mc)) { New-Item -ItemType Directory -Force $mc | Out-Null }
+  if (-not (Test-Path -LiteralPath $mc -PathType Container)) { throw 'Mevcut bir oyun klasörü seç.' }
   $mods = Join-Path $mc 'mods'
   New-Item -ItemType Directory -Force $mods | Out-Null
   $old = Join-Path $mods '_kapisma_eski'
@@ -139,7 +157,7 @@ function Install-Player([string]$mc, [string]$address) {
     $json = Join-Path $Root ($FabricName + '.json')
     if (-not (Test-Path $json)) { throw 'Paketteki Fabric sürüm dosyası eksik.' }
     $fabName = $FabricName
-    $d = Join-Path (Join-Path $mc 'versions') $fabName
+    $d = Join-Path (Join-Path (Get-VersionRoot $mc) 'versions') $fabName
     New-Item -ItemType Directory -Force $d | Out-Null
     Copy-Item $json (Join-Path $d ($fabName + '.json')) -Force
     Log "Fabric 1.21.1 sürümü eklendi: $fabName"
@@ -191,9 +209,9 @@ function Set-Ui {
 
 function Select-McFolder {
   $d = New-Object System.Windows.Forms.FolderBrowserDialog
-  $d.Description = 'Minecraft klasörünü seç (içinde "versions" ve "mods" bulunan .minecraft klasörü)'
+  $d.Description = 'Başlatıcıdaki oyun klasörünü seç. Legacy Launcher ayrı klasör kullanıyorsa Fabric 1.21.1 sürümünün oyun veya mods klasörünü seç.'
   if ($script:McCur) { $d.SelectedPath = $script:McCur }
-  if ($d.ShowDialog() -eq 'OK') { $script:McCur = $d.SelectedPath; Set-Ui }
+  if ($d.ShowDialog() -eq 'OK') { $script:McCur = Get-GameFolder $d.SelectedPath; Set-Ui }
 }
 
 function Start-Install {
@@ -203,7 +221,7 @@ function Start-Install {
   $script:btnMain.Text = 'KURULUYOR...'
   try {
     Install-Player $script:McCur $script:Addr
-    Log "SIRADAKİ: TLauncher'ı aç > sürüm: $($script:LastFab) > Oyna > Çoklu Oyuncu > hostun adresi."
+    Log "SIRADAKİ: Başlatıcıyı aç > sürüm: $($script:LastFab) > Oyna > Çoklu Oyuncu > hostun adresi."
   } catch {
     Log ('HATA: ' + $_.Exception.Message)
     Log "(Ayrıntı günlüğü: $LogFile)"
@@ -276,5 +294,5 @@ if ($SelfTest) {
   exit 0
 }
 $form = New-PlayerForm
-if ($script:StateNow -eq 'ok') { Log 'Her şey zaten kurulu. Yapacak bir şey yok.'; Log "TLauncher'ı aç > sürüm: $(Get-FabricVersion $script:McCur) > Oyna." }
+if ($script:StateNow -eq 'ok') { Log 'Her şey zaten kurulu. Yapacak bir şey yok.'; Log "Başlatıcıyı aç > sürüm: $(Get-FabricVersion $script:McCur) > Oyna." }
 [void]$form.ShowDialog()

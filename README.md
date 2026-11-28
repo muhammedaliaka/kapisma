@@ -5,7 +5,8 @@ UHC, Tombala (Bingo), Eşya Yarışı, Manhunt ve Katil Kim. En fazla 8 oyuncu. 
 ## 0. En kolay yol (Windows): tek düğmeli pencereler
 İki paket var ([`dist/`](dist) klasörü):
 
-- **Oyuncu** (arkadaşının sunucusuna girecek herkes): `kapisma-oyuncu-vX.zip` → klasöre çıkar → **`Kapisma-Oyuncu-Kur.bat`**'a çift tıkla → tek düğme **KUR**. Modlar `.minecraft\mods` klasörüne konur (başka modlara dokunulmaz; farklı sürümdeki eski kapışma modları `_kapisma_eski`'ye taşınır, silinmez), Fabric 1.21.1 sürümü yoksa eklenir, sesli sohbet modu SHA-512 doğrulamalı indirilir. Bitince düğme **KURULDU** olur ve bir daha basılamaz; pencere tekrar açılırsa zaten kuruluysa hiçbir şey yapmaz. Sonra TLauncher → Fabric 1.21.1 → Oyna → Çoklu Oyuncu → hostun adresi.
+- **Oyuncu** — `kapisma-oyuncu-vX.zip` dosyasını çıkar, **`Kapisma-Oyuncu-Kur.bat`** dosyasını aç ve **KUR**'a bas. Kurucu modları oyun dizininin `mods` klasörüne koyar, gerekirse Fabric 1.21.1 ekler ve sesli sohbet modunu SHA-512 doğrulamasıyla indirir. Başlatıcıda Fabric 1.21.1'i seç, Çoklu Oyuncu menüsüne gir ve hostun adresini ekle.
+- **Legacy Launcher** — Windows'ta standart `.minecraft` yoksa kurucu `%APPDATA%\.tlauncher\legacy\Minecraft\game` dizinini arar. Özel bir dizin kullanıyorsan kurucuda **değiştir** ile başlatıcıda görünen oyun dizinini seç. Ayrı sürüm klasörleri açıksa Fabric 1.21.1'in oyun veya mod klasörünü başlatıcının klasör simgesinden açıp seç. [Legacy Launcher klasör ayarları](https://docs.llaun.ch/en/launcher/subfolders)
 - **Host** (sunucuyu açan): `kapisma-sunucu-vX.zip` → çıkar (çıkan klasör sunucunun kendisi) → **`Sunucu-Ayarla.bat`** → oyuncu adlarını yaz (sen dahil), RAM, EULA kutusu → tek düğme **KUR VE BAŞLAT** (güvenlik duvarı izni, sunucu başlatma, arkadaşlara verilecek adres). Bir kere yeter; sonra hep `start.bat`. Host, oyunculara göndereceği oyuncu zip'inin yanına `sunucu_adresi.txt` (tek satır adres) koyarsa oyuncu penceresi adresi panoya kopyalar.
 
 Pencere açılmazsa (PowerShell kapalı/engelli): oyuncu paketinde `elle_kurulum\kurulum.bat`, host paketinde doğrudan `start.bat`. Linux/Mac/Android: `start.sh` (aşağıda).
@@ -38,8 +39,8 @@ Sunucu internete açılmaz; sadece [Tailscale](https://tailscale.com) ağındaki
 
 **Arkadaş (oyuncu kurulumu):**
 1. Tailscale'i kurup (ücretsiz) giriş yapar, paylaşım davetini kabul eder.
-2. `dist/` içindeki **`kapisma-oyuncu-vX.zip`** dosyasını indirir, çıkarır, `Kapisma-Oyuncu-Kur.bat`'a çift tıklar, **KUR**'a basar (Fabric API + Origins + `kapisma-hud` + Simple Voice Chat'i `.minecraft\mods`'a kurar).
-3. TLauncher → sürüm **Fabric 1.21.1** → Çoklu oyuncu → Sunucu ekle → hostun Tailscale adresi.
+2. `dist/` içindeki **`kapisma-oyuncu-vX.zip`** dosyasını çıkarır, `Kapisma-Oyuncu-Kur.bat`'ı açar ve **KUR**'a basar. Kurulumdan önce doğru oyun dizini seçilebilir.
+3. Başlatıcı → **Fabric 1.21.1** → Çoklu oyuncu → Sunucu ekle → hostun Tailscale adresi.
 4. Oyunda **V** tuşu: mikrofon/ses ayarları.
 
 Windows Güvenlik Duvarı bağlantıyı engellerse (zaman aşımı): `guvenlik_duvari_ac.bat` (oyun TCP 25565 + ses UDP 24454). Elle:
