@@ -16,6 +16,7 @@ import tr.kapisma.config.RuleDef;
 import tr.kapisma.config.Rules;
 import tr.kapisma.config.Settings;
 import tr.kapisma.game.GameManager;
+import tr.kapisma.game.WorldGame;
 import tr.kapisma.origin.OriginService;
 
 /** Sunucu tarafli sandik menuleri (istemciye mod gerekmez). */
@@ -38,6 +39,7 @@ public final class MenuService {
 		return switch (g) {
 			case "UHC" -> "UHC";
 			case "BINGO" -> "Tombala (Bingo)";
+			case "ESYA" -> "Eşya Yarışı";
 			case "KATIL" -> "Katil Kim";
 			default -> "Manhunt";
 		};
@@ -65,15 +67,57 @@ public final class MenuService {
 		gui.open();
 	}
 
+	public void openSpectators(ServerPlayer p, WorldGame game) {
+		openSpectators(p, game, 0);
+	}
+
+	private void openSpectators(ServerPlayer p, WorldGame game, int requestedPage) {
+		if (mgr.current != game || game.isClosed() || !p.isSpectator() || !game.contains(p.getUUID())) return;
+		var live = game.players.stream().filter(id -> !game.eliminated.contains(id)).toList();
+		var dead = game.players.stream().filter(game.eliminated::contains).toList();
+		int pages = Math.max(1, (Math.max(live.size(), dead.size()) + 16) / 17);
+		int page = Math.max(0, Math.min(requestedPage, pages - 1));
+		SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, p, false);
+		gui.setTitle(Component.literal("İzleyici Pusulası · " + (page + 1) + "/" + pages));
+		gui.setSlot(0, new GuiElementBuilder(Items.LIME_DYE).setName(name("Hayatta (" + live.size() + ")", ChatFormatting.GREEN)));
+		gui.setSlot(18, new GuiElementBuilder(Items.GRAY_DYE).setName(name("Elenenler (" + dead.size() + ")", ChatFormatting.GRAY)));
+		for (int i = 0; i < 17; i++) {
+			int index = page * 17 + i;
+			if (index < live.size()) spectatorEntry(gui, p, game, live.get(index), false, i + 1);
+			if (index < dead.size()) spectatorEntry(gui, p, game, dead.get(index), true, i + 19);
+		}
+		if (page > 0) gui.setSlot(45, new GuiElementBuilder(Items.ARROW).setName(name("Önceki sayfa", ChatFormatting.YELLOW))
+			.setCallback((idx, type, action) -> { gui.close(); openSpectators(p, game, page - 1); }));
+		gui.setSlot(49, new GuiElementBuilder(Items.COMPASS).setName(name("Yenile", ChatFormatting.AQUA))
+			.setCallback((idx, type, action) -> { gui.close(); openSpectators(p, game, page); }));
+		if (page + 1 < pages) gui.setSlot(53, new GuiElementBuilder(Items.ARROW).setName(name("Sonraki sayfa", ChatFormatting.YELLOW))
+			.setCallback((idx, type, action) -> { gui.close(); openSpectators(p, game, page + 1); }));
+		gui.open();
+	}
+
+	private void spectatorEntry(SimpleGui gui, ServerPlayer p, WorldGame game, java.util.UUID id, boolean eliminated, int slot) {
+		boolean visit = game.spectatorCanVisit(id);
+		var entry = new GuiElementBuilder(eliminated ? Items.SKELETON_SKULL : Items.PLAYER_HEAD)
+			.setName(name(game.names.getOrDefault(id, "Oyuncu"), eliminated ? ChatFormatting.GRAY : ChatFormatting.GREEN))
+			.addLoreLine(lore(visit ? eliminated ? "Tıkla: elendiği yere git" : "Tıkla: oyuncunun yanına git"
+				: eliminated ? "Elenme konumu yok" : "İzlemeye uygun değil"));
+		if (visit) entry.setCallback((idx, type, action) -> {
+			gui.close();
+			if (!game.visitSpectatorTarget(p, id)) Msg.tell(p, "Bu oyuncunun izlenebilecek konumu artık yok.");
+		});
+		gui.setSlot(slot, entry);
+	}
+
 	private void buildMain(SimpleGui gui, ServerPlayer p) {
 		Settings st = mgr.settings;
 		for (int i = 0; i < 54; i++) gui.clearSlot(i);
-		String[] games = {"UHC", "BINGO", "MANHUNT", "KATIL"};
-		Item[] icons = {Items.GOLDEN_APPLE, Items.FILLED_MAP, Items.COMPASS, Items.IRON_SWORD};
-		String[] descs = {"Doğal can yok, daralan sınır, son takım kazanır.", "5x5 eşya kartı, çizgileri ilk tamamlayan kazanır.", "Runner Ejderha'yı öldürmeye, hunter'lar runner'ı avlamaya çalışır.",
+		String[] games = {"UHC", "BINGO", "ESYA", "MANHUNT", "KATIL"};
+		Item[] icons = {Items.GOLDEN_APPLE, Items.FILLED_MAP, Items.CHEST, Items.COMPASS, Items.IRON_SWORD};
+		String[] descs = {"Doğal can yok, daralan sınır, son takım kazanır.", "5x5 eşya kartı, çizgileri ilk tamamlayan kazanır.",
+			"Her tur sana özel gizli eşya, 5 can ve seriyle kazanılan atlama hakları.", "Runner Ejderha'yı öldürmeye, hunter'lar runner'ı avlamaya çalışır.",
 			"Herkes aynı skin'de, 200x200 alanda rastgele doğar. Masumlar katil hepsini öldürmeden Ejderha'yı öldürür; gizli katil masumları avlar. Sesli sohbet."};
-		int[] slots = {10, 12, 14, 16};
-		for (int i = 0; i < 4; i++) {
+		int[] slots = {9, 11, 13, 15, 17};
+		for (int i = 0; i < games.length; i++) {
 			final String g = games[i];
 			boolean sel = st.game.equals(g);
 			gui.setSlot(slots[i], new GuiElementBuilder(icons[i])
@@ -87,7 +131,7 @@ public final class MenuService {
 					buildMain(gui, p);
 				}));
 		}
-		gui.setSlot(28, new GuiElementBuilder(Items.PLAYER_HEAD)
+		if ("UHC".equals(st.game) || "BINGO".equals(st.game)) gui.setSlot(28, new GuiElementBuilder(Items.PLAYER_HEAD)
 			.setName(name("Takım modu: " + ("DUO".equals(st.teamMode) ? "Duo (2'li)" : "Solo"), ChatFormatting.AQUA))
 			.addLoreLine(lore("Tıkla: Solo / Duo değiştir"))
 			.addLoreLine(lore("Manhunt'ta roller ayrı belirlenir."))
@@ -101,6 +145,12 @@ public final class MenuService {
 			.setName(name("Ayarlar", ChatFormatting.YELLOW, ChatFormatting.BOLD))
 			.addLoreLine(lore("Kurallar, ırk modu, yasaklı ırklar, seed sınıfı, host devri"))
 			.setCallback((idx, type, action) -> openSettings(p)));
+		gui.setSlot(32, new GuiElementBuilder(Items.KNOWLEDGE_BOOK)
+			.setName(name("Irklar ve özellikleri", ChatFormatting.LIGHT_PURPLE))
+			.setCallback((idx, type, action) -> openOriginInfo(p)));
+		gui.setSlot(37, new GuiElementBuilder(Items.OAK_SIGN)
+			.setName(name("Oyuncular ve takımlar", ChatFormatting.AQUA))
+			.setCallback((idx, type, action) -> openTeams(p)));
 		boolean running = mgr.current != null && !mgr.current.isClosed();
 		gui.setSlot(49, running
 			? new GuiElementBuilder(Items.RED_CONCRETE).setName(name("OYUNU DURDUR", ChatFormatting.RED, ChatFormatting.BOLD))
@@ -138,6 +188,43 @@ public final class MenuService {
 		gui.setSlot(45, new GuiElementBuilder(Items.OAK_SIGN)
 			.setName(name("Host: " + (h != null ? h.getGameProfile().getName() : "yok"), ChatFormatting.GOLD))
 			.addLoreLine(lore("Ayarları host değiştirir.")));
+	}
+
+	private void openTeams(ServerPlayer p) {
+		SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x3, p, false);
+		gui.setTitle(Component.literal("Oyuncular ve takımlar"));
+		var game = mgr.current;
+		int slot = 0;
+		if (game != null && !"KATIL".equals(game.id())) {
+			for (var team : game.teams) {
+				if (team.members.isEmpty()) continue;
+				var entry = new GuiElementBuilder(Items.WHITE_BANNER).setName(team.display());
+				for (var id : team.members) entry.addLoreLine(lore(game.names.get(id)));
+				gui.setSlot(slot++, entry);
+			}
+		} else {
+			for (ServerPlayer player : mgr.server.getPlayerList().getPlayers()) {
+				var entry = new GuiElementBuilder(Items.PLAYER_HEAD).setName(name(player.getGameProfile().getName(), ChatFormatting.WHITE));
+				entry.addLoreLine(lore(game == null ? teamPrefSummary(player) : "Rol gizli"));
+				gui.setSlot(slot++, entry);
+			}
+		}
+		gui.setSlot(26, new GuiElementBuilder(Items.ARROW).setName(name("Geri", ChatFormatting.WHITE)).setCallback((i, t, a) -> openMain(p)));
+		gui.open();
+	}
+
+	private void openOriginInfo(ServerPlayer p) {
+		SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x3, p, false);
+		gui.setTitle(Component.literal("Irklar ve özellikleri"));
+		for (int i = 0; i < OriginService.ALL.size(); i++) {
+			String id = OriginService.ALL.get(i);
+			var entry = new GuiElementBuilder(OriginService.ICONS.get(id)).setName(name(OriginService.label(id), ChatFormatting.GOLD));
+			OriginService.FEATURES.get(id).forEach(line -> entry.addLoreLine(lore(line)));
+			if (mgr.settings.bannedOrigins.contains(id)) entry.addLoreLine(name("Bu sunucuda yasaklı", ChatFormatting.RED));
+			gui.setSlot(i, entry);
+		}
+		gui.setSlot(26, new GuiElementBuilder(Items.ARROW).setName(name("Geri", ChatFormatting.WHITE)).setCallback((i, t, a) -> openMain(p)));
+		gui.open();
 	}
 
 	// ================= AYARLAR =================

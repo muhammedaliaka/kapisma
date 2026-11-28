@@ -32,14 +32,18 @@ public class Settings {
 	public Settings() {
 		originMode.put("UHC", "RANDOM");
 		originMode.put("BINGO", "RANDOM");
+		originMode.put("ESYA", "OFF");
 		originMode.put("MANHUNT", "SELECT");
 		originMode.put("KATIL", "OFF");
 	}
 
 	public double num(String game, String key) {
 		Map<String, Double> m = rules.get(game);
-		if (m != null && m.containsKey(key)) return m.get(key);
-		for (RuleDef d : Rules.of(game)) if (d.key().equals(key)) return d.def();
+		Double saved = m == null ? null : m.get(key);
+		for (RuleDef d : Rules.of(game)) {
+			if (!d.key().equals(key)) continue;
+			return saved == null || !Double.isFinite(saved) ? d.def() : Math.clamp(saved, d.min(), d.max());
+		}
 		throw new IllegalArgumentException("bilinmeyen kural: " + game + "." + key);
 	}
 
@@ -66,8 +70,13 @@ public class Settings {
 			if (Files.exists(f)) {
 				Settings s = GSON.fromJson(Files.readString(f, StandardCharsets.UTF_8), Settings.class);
 				if (s != null) {
+					if (s.rules == null) s.rules = new LinkedHashMap<>();
+					if (s.originMode == null) s.originMode = new LinkedHashMap<>();
+					if (s.runnerNames == null) s.runnerNames = new ArrayList<>();
+					if (s.bannedOrigins == null) s.bannedOrigins = new ArrayList<>();
 					for (String g : new String[] {"UHC", "BINGO", "MANHUNT"}) s.originMode.putIfAbsent(g, "RANDOM");
 					s.originMode.putIfAbsent("KATIL", "OFF");
+					s.originMode.putIfAbsent("ESYA", "OFF");
 					return s;
 				}
 			}

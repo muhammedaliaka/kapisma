@@ -1,0 +1,18 @@
+player Bot1 spawn
+player Bot2 spawn
+wait 2
+kapisma game BINGO
+kapisma origins off
+kapisma team solo
+kapisma seedclass qa_advancement
+kapisma rule BINGO borderStart 1000
+kapisma rule BINGO verifySec 45
+kapisma rule BINGO tasks 8
+kapisma rule BINGO sharedItems 1
+kapisma rule BINGO endTasks 0
+kapisma rule BINGO netherTasks 0
+kapisma rule BINGO minimap 0
+kapisma start
+await Tombala başladı!
+kapisma stop
+await Arena depolama kapandı:

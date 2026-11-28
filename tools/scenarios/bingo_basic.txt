@@ -7,7 +7,7 @@ kapisma origins off
 kapisma rule BINGO tasks 0
 kapisma rule BINGO lines 1
 kapisma start
-wait 20
+await Tombala başladı!
 kapisma status
 execute as Bot1 run kart
 kapisma debug givecard Bot1 3

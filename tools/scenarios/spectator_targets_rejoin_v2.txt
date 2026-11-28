@@ -1,0 +1,81 @@
+# Same server: actual elimination, spectator command, disconnect timeout, reconnect, next match.
+player Bot1 spawn
+player Bot2 spawn
+player Bot3 spawn
+player Bot4 spawn
+wait 2
+kapisma game UHC
+kapisma origins off
+kapisma team solo
+kapisma seedclass qa_spectator
+kapisma rule UHC borderStart 200
+kapisma rule UHC treasureChests 0
+kapisma rule UHC earlyBuffSec 0
+kapisma rule UHC pvp 0
+kapisma rule UHC minimap 0
+kapisma start
+await UHC başladı! PvP kapalı.
+execute at Bot1 run difficulty peaceful
+execute at Bot1 run gamerule doMobSpawning false
+attribute Bot1 minecraft:generic.gravity base set 0
+attribute Bot3 minecraft:generic.gravity base set 0
+attribute Bot4 minecraft:generic.gravity base set 0
+execute at Bot1 run tp Bot1 12.5 310 12.5
+execute at Bot3 run tp Bot3 24.5 310 24.5
+execute at Bot4 run tp Bot4 -24.5 310 -24.5
+wait 2
+damage Bot3 1000 minecraft:out_of_world
+execute if entity @a[name=Bot3,gamemode=spectator] run say QA_SPECTATOR
+capture spec (QA_SPECTATOR)
+scoreboard objectives add qa_spec_v2 dummy
+execute store result score denied qa_spec_v2 run execute as Bot2 run izle Bot1
+scoreboard players get denied qa_spec_v2
+capture denied denied has (0) \[qa_spec_v2\]
+execute as Bot3 run izle
+execute store result score live qa_spec_v2 run execute as Bot3 run izle Bot1
+scoreboard players get live qa_spec_v2
+capture live live has (1) \[qa_spec_v2\]
+data get entity Bot3 Pos
+capture live_pos (\[12\.5d, 310\.0d, 12\.5d\])
+execute store result score dead qa_spec_v2 run execute as Bot3 run izle Bot3
+scoreboard players get dead qa_spec_v2
+capture dead dead has (1) \[qa_spec_v2\]
+data get entity Bot3 Pos
+capture death_pos (\[24\.5d, 311\.0d, 24\.5d\])
+player Bot4 kill
+await bot4 left the game
+execute store result score offline qa_spec_v2 run execute as Bot3 run izle Bot4
+scoreboard players get offline qa_spec_v2
+capture offline offline has (0) \[qa_spec_v2\]
+tick sprint 3650
+await Bağlantısı kopan oyuncu elendi.
+execute store result score timeout qa_spec_v2 run execute as Bot3 run izle Bot4
+scoreboard players get timeout qa_spec_v2
+capture timeout timeout has (1) \[qa_spec_v2\]
+data get entity Bot3 Pos
+capture timeout_pos (\[-24\.5d, 311\.0d, -24\.5d\])
+player Bot4 spawn
+await bot4 joined the game
+wait 2
+execute if entity @a[name=bot4,gamemode=spectator] run say QA_REJOIN_SPECTATOR
+capture rejoin (QA_REJOIN_SPECTATOR)
+execute as Bot3 run izle Bot4
+data get entity Bot3 Pos
+capture preserved (\[-24\.5d, 311\.0d, -24\.5d\])
+attribute Bot1 minecraft:generic.gravity base set 0.08
+attribute Bot3 minecraft:generic.gravity base set 0.08
+attribute Bot4 minecraft:generic.gravity base set 0.08
+kapisma stop
+await Arena depolama kapandı:
+execute if entity @a[name=Bot3,gamemode=adventure] if entity @a[name=bot4,gamemode=adventure] run say QA_LOBBY_RESET
+capture lobby (QA_LOBBY_RESET)
+execute store result score stale qa_spec_v2 run execute as Bot3 run izle Bot4
+scoreboard players get stale qa_spec_v2
+capture stale stale has (0) \[qa_spec_v2\]
+scoreboard objectives remove qa_spec_v2
+kapisma start
+await UHC başladı! PvP kapalı.
+execute if entity @a[name=Bot3,gamemode=survival] if entity @a[name=bot4,gamemode=survival] run say QA_NEXT_MATCH
+capture next (QA_NEXT_MATCH)
+kapisma stop
+await Arena depolama kapandı:

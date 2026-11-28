@@ -1,0 +1,30 @@
+function krts:reset
+player Bot1 spawn
+player Bot2 spawn
+player Bot3 spawn
+function krts:start
+await Hazırlık başladı.
+execute store result score #count_test krts_ctrl if entity @e[tag=krts.capital,nbt={Invulnerable:1b,NoAI:1b,Health:60.0d}]
+execute if score #count_test krts_ctrl matches 3 run say CAPITAL_SAFE_PREP
+await CAPITAL_SAFE_PREP
+scoreboard players set #left krts_ctrl 1
+await Üç bölge açık.
+execute store result score #count_test krts_ctrl if entity @e[tag=krts.capital,nbt=!{Invulnerable:1b}]
+execute if score #count_test krts_ctrl matches 3 run say CAPITAL_LIVE
+await CAPITAL_LIVE
+scoreboard players set #p1 krts_ctrl 500
+damage @e[tag=krts.capital,tag=krts.s1,limit=1] 500 minecraft:mob_attack by @e[tag=krts.unit,tag=krts.s2,limit=1]
+await Devlet 1 elendi. Başkenti yıkıldı.
+execute if score #phase krts_ctrl matches 2 if entity @a[scores={krts_slot=1},gamemode=spectator] unless entity @e[tag=krts.unit,tag=krts.s1,nbt=!{Health:0.0d}] run say CAPITAL_THREE_TO_TWO
+await CAPITAL_THREE_TO_TWO
+damage @e[tag=krts.capital,tag=krts.s2,limit=1] 500 minecraft:mob_attack by @e[tag=krts.unit,tag=krts.s3,limit=1]
+await Devlet 3 kazandı. Son başkent ayakta.
+function krts:reset
+function krts:start
+await Hazırlık başladı.
+scoreboard players set #left krts_ctrl 1
+await Üç bölge açık.
+kill @e[tag=krts.capital]
+await Başkent kalmadı. Maç berabere.
+function krts:reset
+await Prototip maçı sıfırlandı.

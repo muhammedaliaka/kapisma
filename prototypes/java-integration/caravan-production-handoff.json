@@ -1,0 +1,140 @@
+{
+  "status": "D37 material accents native36 PASS Exit0; ready-made content startup blocked in named QA; production merge pending",
+  "base": {
+    "r38": "9708483619C3DAB78FF3A536D170A8C5C28C42564BA99045EF634DC4FF880463",
+    "live": "BB92690DE52DCA8BD5369BD53E8D18E4A5F58417534187895028016EB49B532E"
+  },
+  "add": [
+    {
+      "source": "../kervan-baskini/independent-cargo-candidate/CaravanCargoRules.java",
+      "target": "src/main/java/tr/kapisma/arena/CaravanCargoRules.java",
+      "sha256": "C6BEF955BB63C8D6388973445000ED78DDF358F89833C4C7B96F70DDE5C91E52"
+    },
+    {
+      "source": "../kervan-baskini/independent-cargo-candidate/CaravanForkInput.java",
+      "target": "src/main/java/tr/kapisma/arena/CaravanForkInput.java",
+      "sha256": "71A630CE3E868513356B1EEDE1F637DC023DB9290DA8264F1944DCE20EDCC18D"
+    },
+    {
+      "source": "../kervan-baskini/independent-cargo-candidate/CaravanGrappleRules.java",
+      "target": "src/main/java/tr/kapisma/arena/CaravanGrappleRules.java",
+      "sha256": "D711CAB2923C4846C37D0F0CA3BAE0CF9BE12AD8CA6504E16578795F6F7AC549"
+    },
+    {
+      "source": "../kervan-baskini/independent-cargo-candidate/CaravanHookAdapter.java",
+      "target": "src/main/java/tr/kapisma/game/CaravanHookAdapter.java",
+      "sha256": "2785A9E720232A02F3A5E9CB6A50919D9F23AD1D813173F13A1B562531992496"
+    },
+    {
+      "source": "../kervan-baskini/independent-cargo-candidate/CaravanHostAdapter.java",
+      "target": "src/main/java/tr/kapisma/game/CaravanHostAdapter.java",
+      "sha256": "8380E2C0CBC86AD02098B55330716E94BC17826C9FF126C8615CC6E03AE1E024"
+    },
+    {
+      "source": "../kervan-baskini/independent-cargo-candidate/CaravanMapAdapter.java",
+      "target": "src/main/java/tr/kapisma/game/CaravanMapAdapter.java",
+      "sha256": "D9BF20E96FA2F184DE439AA733388B70DCC2259D34408A8F52554EBEF218CD61"
+    },
+    {
+      "source": "../kervan-baskini/independent-cargo-candidate/CaravanMapRaster.java",
+      "target": "src/main/java/tr/kapisma/arena/CaravanMapRaster.java",
+      "sha256": "9C11ADBBD2C64E60B651D3BAD4E6DCE62DF946531FDC6CAE30C5B25D25380C7D"
+    },
+    {
+      "source": "../kervan-baskini/independent-cargo-candidate/CaravanMatchRules.java",
+      "target": "src/main/java/tr/kapisma/arena/CaravanMatchRules.java",
+      "sha256": "87152AE2DBB5E918B8E202174F86EB2DD939DB2E0C92195F96EB0F29BEE5C249"
+    },
+    {
+      "source": "../kervan-baskini/independent-cargo-candidate/CaravanMountAdapter.java",
+      "target": "src/main/java/tr/kapisma/game/CaravanMountAdapter.java",
+      "sha256": "0EFCCEE1BB2AA55B99A2112A931C047B93D408AA5AABE482AB24A3392E3BB854"
+    },
+    {
+      "source": "../kervan-baskini/independent-cargo-candidate/CaravanRespawnRules.java",
+      "target": "src/main/java/tr/kapisma/arena/CaravanRespawnRules.java",
+      "sha256": "8504F713E50E26AE512D61A9FF70BB95ADF2BC82155A91D945C68025A1990BE5"
+    },
+    {
+      "source": "../kervan-baskini/independent-cargo-candidate/CaravanRouteRules.java",
+      "target": "src/main/java/tr/kapisma/arena/CaravanRouteRules.java",
+      "sha256": "CD0B53FBE76104AC46AC20F7C3651D71E63BE1BF2579B552236BF432D919CD6B"
+    },
+    {
+      "source": "../kervan-baskini/independent-cargo-candidate/CaravanSceneAdapter.java",
+      "target": "src/main/java/tr/kapisma/game/CaravanSceneAdapter.java",
+      "sha256": "EC3307B94AB4EB5731F4B14CD9CFAFC60C0D3F87274F873E8056A8D07C48872E"
+    },
+    {
+      "source": "../kervan-baskini/independent-cargo-candidate/CaravanScenePlan.java",
+      "target": "src/main/java/tr/kapisma/arena/CaravanScenePlan.java",
+      "sha256": "5C35FF53D88B8445C4AC678F0EF75F030BE28DDAA1F262AE838E9170034F2080"
+    },
+    {
+      "source": "../kervan-baskini/independent-cargo-candidate/CaravanSpeedAdapter.java",
+      "target": "src/main/java/tr/kapisma/game/CaravanSpeedAdapter.java",
+      "sha256": "00D90483F3767C2DAE09A82A39254690E528FFC528E2043D4D318E49689CF9F6"
+    },
+    {
+      "source": "../kervan-baskini/independent-cargo-candidate/CaravanTerrainLayout.java",
+      "target": "src/main/java/tr/kapisma/arena/CaravanTerrainLayout.java",
+      "sha256": "8BE38AEF50C8E9699716C44BAD64FD3094171C8CEF2862CC4428C331254FA842"
+    },
+    {
+      "source": "../kervan-baskini/independent-cargo-candidate/CaravanTerrainSampler.java",
+      "target": "src/main/java/tr/kapisma/game/CaravanTerrainSampler.java",
+      "sha256": "4592DF3F8AD116C32BA99EFB887519B224E8C1EF20C4E1BF328ECFBCA192BBC0"
+    },
+    {
+      "source": "../kervan-baskini/independent-cargo-candidate/CaravanWorldSafety.java",
+      "target": "src/main/java/tr/kapisma/game/CaravanWorldSafety.java",
+      "sha256": "34710FC41F1DD505C5E4029AABDC548E3E2E57CA5B3C5C1A4BB7F034CAACA1D8"
+    },
+    {
+      "source": "../kervan-baskini/independent-cargo-candidate/CaravanHorseRules.java",
+      "target": "src/main/java/tr/kapisma/arena/CaravanHorseRules.java",
+      "sha256": "5F4C564B1DE8CC485C8BE78D0680DB078705FF5B275C3D51E2A8B45BEFEA9921"
+    },
+    {
+      "source": "../kervan-baskini/independent-cargo-candidate/CaravanWagonGeometry.java",
+      "target": "src/main/java/tr/kapisma/arena/CaravanWagonGeometry.java",
+      "sha256": "2D01A60339791EB67C51F81EEB1E7D7B92834AAAA1E59AE2568A9B2BCF6D6601"
+    },
+    {
+      "source": "../kervan-baskini/independent-cargo-candidate/CaravanTransientMaps.java",
+      "target": "src/main/java/tr/kapisma/game/CaravanTransientMaps.java",
+      "sha256": "B71FF733B962FDBB8E53A01810745BE1FC7B002136C692D5941D8CF3E2543930"
+    },
+    {
+      "source": "src/main/java/tr/kapisma/mixin/ArenaTransientMapMixin.java",
+      "target": "src/main/java/tr/kapisma/mixin/ArenaTransientMapMixin.java",
+      "sha256": "8BAE7CF091AB1809391060EC746D245BAC93674AAA9E866304940C024A9CA695"
+    }
+  ],
+  "reviewMerge": [
+    {
+      "path": "src/main/java/tr/kapisma/game/NativeArenaGame.java",
+      "sha256": "330FA1DE6618FC5BE85199778AA2F16A927921FC80A5D5AC27C6887F45F47BE3"
+    },
+    {
+      "path": "src/main/java/tr/kapisma/game/ArenaCommands.java",
+      "sha256": "5B74F9CA2300F94EB3033B81A02507323630323F75B365D7FDD43CBFF48A9F2E"
+    },
+    {
+      "path": "src/main/java/tr/kapisma/mixin/ArenaTeleportMixin.java",
+      "sha256": "D5A95CDA678040B22D14225BCE3E392A8EE2C0AB6126742DED71C41F1D909D18"
+    }
+  ],
+  "resourceReview": "Merge overlay-resources/kapisma.arena.mixins.json (sha256 2FFB3C3DFA616A6040BA5FAB00E9DC146AF6C6A9115626F3F375E44397E5C041): new ArenaTransientMapMixin mandatory; also review overlay-manifest.json; do not blind-replace existing config.",
+  "exclude": [
+    "*Test.java",
+    "src/test",
+    "caravanqa",
+    "build/caravan-client-proof",
+    "CaravanRuntimeProof",
+    "kapisma.arenaProof flag from production",
+    "all test fixtures/entrypoints"
+  ],
+  "acceptance": "verify.py Exit0 76 Java sources 227 Kervan checks; D5 runtime Exit0 8 synthetic players, 371 skipped/0 render/0 pixel writes; prior D4 native W two-leg, D3/4 security. D6 actual W+D and W+A, two natural legs, 16 PASS Exit0. Evidence acceptance_runtime_caravan-dc2585409124.log SHA256 D58BA9FAB67A6BE271550ED646062E3497BDC0F7DF607B703EDC70F33A31A99A. D8 11 PASS Exit0, 239/239. Horse lifecycle evidence acceptance_runtime_caravan-851d9fc84793.log SHA256 5D74C5B2FE8E37100B5DF279C6210F5ADCA79C732125DB14CD2CF8A18C6561B2. D9 actual native oriented geometry, 21 PASS Exit0. acceptance_runtime_caravan-82fc6f54de68.log SHA256 04303CFC3095FB7FDB443C8F32D4A2C9CDFC89FB632F11E5EF9669773440D20A. D10 native horse 10 PASS Exit0, D11 UX 13 PASS Exit0 actual framebuffer and guide. D11 evidence acceptance_runtime_caravan-1930bf907756.log SHA256 96872E13C5C52147F60C521D175DE587E0651B427ABFF7C09A97806782D385A4. D12 268/268 pure, visual14 PASS Exit0, load12 PASS Exit0. D12 visual evidence AC17ED803E0308240144E3E920DDEDD20C6985C45C945FF385004221F4E0E0B1, load 8FBDACD2859C1642782BE526947CE59568EDF52AD355498A05EC5D526DF9F99B. D13 274/274 pure; actual visual15 PASS Exit0, public base symbols/lore. Evidence acceptance_runtime_caravan-eccbe486fa03.log SHA256 1DAA6FFEC134556C70A2E44D867FC19DB2FB62C92684AE8234DA248570185E87. D14 283/283; native score23 PASS Exit0, actual W extraction and 19 vs20 full natural legs, both clients exact score and winner criterion. Evidence acceptance_runtime_caravan-bb319c698e81.log SHA256 419CDFFD8EF5FD36E4BFDA7E6906BEC1EAF5E4856EB708457BE3BD01C07CF233. D15 three matches same JVM, eight Carpet actors, same-target 1/4 each cycle, distinct 4 carriers, 90 captured entities removed/unregistered, 24 maps blanked, empty journal, 18 PASS Exit0. Evidence acceptance_runtime_caravan-4183fa07b243.log SHA256 4912C9BA4A243244191F5327B5242AD4A84D5050B9D72F3F6A75A6FFC6D5D7EC. Persistent map IDs remain; not heap soak or human proof. D16 repeated 3x8 active/lobby save-all: all 24 transient map buffers released, zero active registry, no 24 map files, vanilla normal map persisted; 19 PASS Exit0. Evidence acceptance_runtime_caravan-16a3dec7b8aa.log SHA256 C7A2C8FB97477ABE76DB0537FCEE85DDADDFBEF138D947DCC4F663A8D64E21E9. Native regression23 PASS Exit0, actual personal/mounted map hashes, W/A/D and two natural legs 19 vs20. Evidence acceptance_runtime_caravan-c1d955ef1008.log SHA256 C1526211D430FAB7884177F20DB08BCFD499BB9872263EFB896C2691410E52DA. D17 136.2s active in 3 matches, 30 samples, 8 Carpet actors, 4 carriers, mean sampled MSPT1.065, max1.687, max sample P95 3.211, heap289–465MiB, 24 map release/no files, 90 entities removed; 23 PASS Exit0. Evidence acceptance_runtime_caravan-1e327f7df49f.log SHA256 933365D4D1B8C4BCF1C1286A14D95F50745E7F9BE535CDA2E5EA267BDF10A0BC. QA-only change; not 30-min/Android/human acceptance. D18 physical role base perimeter/extraction/finish and route floor guidance, all 5 actual colors and clearance, two client framebuffer proofs inspected, 19vs20 natural legs; 288/288 pure, 26 PASS Exit0. Evidence acceptance_runtime_caravan-ea424e2332b0.log SHA256 53397F68304905843B34A6F7B179B2C4F9DE2AC9CC94A089AEF4B6818152DE2F. Visual landmarks still plain, human/Android pending. D19 two 48-block role shelters with distinct materials and open interiors, 294/294 pure terrain22/22; actual native28 PASS Exit0 and both screenshots inspected, 19vs20 natural legs. Evidence acceptance_runtime_caravan-11be5d932850.log SHA256 9291F6E0D081E937E5B3BE69478B7BE2872E7F096EFF82D04233FB1ABFB292A7. Plain architecture/border, human and Android pending. D20 geometry analysis baseline/after in D20_TASARIM_ANALIZI.md; both native rounds 19vs20 and portal block verification, screenshot inspected, Exit0 acceptance_runtime_caravan-92f5f91091d9.log. Android/human deferred by user. D20 runtime SHA256 978056267AB26752CD3D6DC77D462C2EAF6F04DD209F5EA01FCAC6AD68AC99FE. D21 eight Carpet actual damage and spectator before/after, teleport sequence delta24→0, respawn/camera/damage restored, both 11 PASS Exit0. Baseline SHA256 4BE089BEE141999597AFE39153DBD0D38491CF1F0520D7F54D8039674172173C, fixed SHA256 B7F080A8F19883BE35450CD1D8FD94A1BA80AA38E3945BDF369307EE42C29FD4. No added spawn grace; human and Android deferred. D22 selected V1 after comparing three candidate layouts, cover8/8, 311/311 pure; actual 8 Carpet server actors, real block/vanilla collision rays, prior combat and respawn regression, 15 PASS Exit0. Evidence acceptance_runtime_caravan-36643796edcc.log SHA256 24D92CFB51AA25A7028CB68FAA9ECB86EAEE09F96524EF30758ED9FE00E3D5AB. Initial lobby-kit readiness failure retained; retry waits for kits and verifies. Full native D22 match/framebuffer pending; no human/Android per user. D23 stepped surface analysis 3648 reachable, 954 elevated, 10944 drop samples, old5 direct rejected but all found nearby landing; terrain-derived ceiling permits direct5. Actual named Fabric 8 Carpet actors, direct old/new collider query 5 denied/relocated vs5 direct and5 airborne landings; 16 PASS Exit0 SHA256 3EB07BF4B76FBE625DF557DDF695095A08C08C0E63B4EA0B30BAC0ABF6993D7A. Not actual carried-crate death on summit, no proof of all arbitrary drop failures; D22 full native visual pending. Android/human deferred. D24 same-ID emergency restore with verified anchor, bounded normal relocation retained, no score; pending invalid drop hidden with 20 tick retry. Actual 8 Carpet actors, summit death and forced air death restored same crate, separate real-world QA scene invalid floor restored with single hit, 21 PASS Exit0 SHA256 FAA2884185A02F89E4721E4E6987E3373E9E7ACDE385555FC9D7961D382D27EB. Two initial fixture failures retained; pending map marker and overlapping crates remain review items. Native full match/visual D22+ and production merge pending; Android/human deferred. D25 overlapping dropped crates grouped by deterministic lowest visible ID, pending excluded before projection, same coordinates/IDs retained; actual eight Carpet actors sequentially retrieve both distinct crates. 25 PASS Exit0 SHA256 BE3571097DC4594985F707688835A0F60539AB4F8099B8B8FF79F99E5BE26DDE. Map has no dropped markers; no change. D22+ full native/visual pending. D25 native full30 PASS Exit0, actual W/A/D, walking extraction, two natural legs19vs20, maps and exact score messages, framebuffer inspected; acceptance_runtime_caravan-76701c7ddf43.log SHA256 EF3794CD04B2B4AE83E60CDEA9A807CB9B1540070E0634DA638716A77C1537E7. D26 all eight actual arena horses identical speed .22499999403953552, jump .7, health53, no product change; QA-only 13 PASS Exit0 SHA256 9A25AA4E8B3605DF91646591B59C3B2A98C67D5E410F260511822A31F9D3F3BD. First stale fixture failure retained. External PolyDecorations/Polymer candidates downloaded and hash verified, NOT installed nor accepted; see D26_MOD_ARASTIRMA.md. Native D25 full30 PASS supersedes older pending notes. Hook dynamic LOS remains open. D27 external QA profiles none/Lithium/FerriteCore/PolyDecorations+Polymer, 20 PASS each, actual loaded mods confirmed, 12 matches total, cleanup 90 entities and24 maps per profile. Active sampled mean MSPT1.245/1.280/1.652/1.814, committed heap640/527/460/747MiB; short screening only, not performance superiority. Evidence D27_TEST_RAPORU.md. Candidate jars hash pinned; no live installation, no product changes, no furniture/pack acceptance yet. D28 combined optimizer24 PASS Exit0, 136.2s active, 1.103 mean MSPT/647MiB committed vs provisional baseline1.339/507; baseline final protected guard failed. Decor camera13 PASS Exit0, local pack570623 bytes, four actual furniture, two native clients, visual HUD obscures models, interaction not accepted. D29 actual bench normal gameMode FAIL/NONE, direct QA positive control creates polydecorations:seat, baseline persisted, guard dismounts, own horse and wagon seat preserved. Baseline14 and fixed16 PASS Exit0, fixed runtime SHA256 42216116C936F5A6E24476631754DE78EAA272F640A019BB312B3F77BD9CEF5D. Native virtual packet and carrier-specific proof pending; no production furniture. D28_TEST_RAPORU.md and D29_TEST_RAPORU.md. D30 dynamic actual tunnel obstruction baseline persists, fixed rope cancels, cooldown retained, unobstructed control attaches; per-actor ray validation even manual idle. 345 pure incl grapple28, actual 8 Carpet both runs Exit0. See D30_TEST_RAPORU.md. Native traversal/automatic live test and worst-case overhead pending. D31 scenic render-only perimeter 1730 columns/11408 solid blocks, same24 pinned, unchanged gameplay geometry, actual border192 and forced boundary return. Initial worldborder command queried overworld and failed; corrected direct arena getter, native full 19vs20 Exit0, inspected actual screenshots, guard clean. See D31_TEST_RAPORU.md. Art still terraced; horse/hook bounds not separately re-tested. D32 natural interpolated ridge, 12391 ground+96 foliage blocks, 8 trees, persistent leaves verified, both horses recall same UUID, exterior hook denied without cooldown, unchanged geometry/pinned24. Actual native full19vs20 Exit0, inspected screenshots, high plateau and sparse foliage remain. See D32_TEST_RAPORU.md. D33 ModernFix/Noisium separate three-cycle QA passed, downloaded official pinned ServerCore not executed. Eight simultaneous automatic hooks and upward velocity sampled, speed bounded in sample, all detach on teleport; no native mouse/ascent/overhead benchmark. See D33_TEST_RAPORU.md. No product source changes. D34 four-mod three cycles20 PASS Exit0, conservative ServerCore13 PASS Exit0 effective14 flags OFF. Five-mod combat15 functional PASS but Exit1 protected guard, NOT accepted. Before/after hash logging strengthened. No product source changes; D34_TEST_RAPORU.md. D35 five-mod retry16 PASS Exit0 and matched before/after hashes. Both four/five optimizer profiles 24 PASS each, 136.2s active each, 30 samples each; mean1.086/1.192 MSPT, heap committed540/510–514MiB. Four preferred provisional, no causal superiority. D35_TEST_RAPORU.md and natural worldgen experiment design; no production install. D36 fresh natural world seed42, 24 remote FULL chunks both profiles, baseline/Noisium3.406/3.000s, CPU12516/10469ms, single A/B only, both8 PASS Exit0. Four-optimizer native full35 PASS Exit0, 19vs20, protected hashes match. D36_TEST_RAPORU.md; QA only, no production install. D37 architecture material-only accents, unchanged shelter occupancy, four optimizer native36 PASS Exit0 SHA AD73F5B32085BDAF43EDB808E8A571D3B0C9688EB180125682D6646DEFDED01C; natural19vs20. Decorative Boxes/TSA/Filament official candidates hash verified, content37 startup Exit1 NoSuchMethodError on named Fabric resource reload; no production compatibility verdict. D37_TEST_RAPORU.md.",
+  "gate": "keep experimentalCaravan2 opt-in default OFF; rebase source against current authorized KOD snapshot, validate real Gradle remap, linkage/mixins, release exclusion, actual prod boot and rollback; no live replacement. Android/human tests required."
+}

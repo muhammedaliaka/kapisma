@@ -1,0 +1,19 @@
+# New resource-proof JAR in a normal, minimum-radius arena with two teams.
+player Bot1 spawn
+player Bot2 spawn
+wait 2
+kapisma game BINGO
+kapisma team solo
+kapisma origins off
+kapisma seedclass orman
+kapisma rule BINGO borderStart 200
+kapisma rule BINGO tasks 3
+kapisma rule BINGO sharedItems 1
+kapisma rule BINGO verifySec 45
+kapisma rule BINGO minimap 0
+say MATRIS orman 200 2 3 1
+kapisma start
+await Tombala doğrulama:
+capture card Tombala karti: (?:25 eşya \+ 0|24 eşya \+ 1|23 eşya \+ 2|22 eşya \+ 3) görev, ortalama zorluk ([\d,.]+)
+await Tombala başladı!
+kapisma stop

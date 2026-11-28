@@ -1,6 +1,9 @@
 # --- calisma kopyalari ve buyuk/uretilmis veri ---
 /server/
 /server_test/
+/server_test_proof/
+/server_test_order/
+/server_test_restart/
 /pack_test/
 /wizard_test/
 /release/
@@ -41,3 +44,36 @@ Thumbs.db
 /tools/vendor/
 /dist/*/
 /_yedek/
+/BUILD_SILME_ADAYLARI/
+/DEVLETLER_RTS_DEVIR_PROMPTU.txt
+
+# Yerel araç ve test çıktıları
+__pycache__/
+*.py[cod]
+*.log
+*.log.gz
+/tools/last_*_results.jsonl
+/prototypes/android-mods/runtime-proof/
+/prototypes/android-mods/candidates/
+/prototypes/android-mods/terrain_parity*.json
+/prototypes/java-integration/crash-proof*.json
+/prototypes/kirik-telsiz/profile-recovery/
+/prototypes/kirik-telsiz/voiceqa/request.txt
+/prototypes/kirik-telsiz/interrupted-client-*.properties
+/prototypes/kirik-telsiz/reconstructed-smoke-*.properties
+/prototypes/kirik-telsiz/restored-smoke-*.properties
+/optimize/native-kapisma-ultra-test-*/
+/optimize/ultimate/lab-*/
+/optimize/ultimate/evidence/
+/optimize/ultimate/generated/
+/optimize/**/build-v*/
+/optimize/**/*.apk
+/optimize/jna-android-5.14.0/*.aar
+/optimize/jna-android-5.14.0/*.so
+/optimize/*.csv
+/optimize/*.png
+/optimize/*.tsv
+/optimize/android-*.txt
+/optimize/phone-*.txt
+/optimize/ultimate-current-*.txt
+/prototypes/**/*.jar

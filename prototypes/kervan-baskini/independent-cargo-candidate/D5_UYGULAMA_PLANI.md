@@ -1,0 +1,5 @@
+# D5 — performans ve kullanım (27.11.2026)
+1. Önce D4 güvenlik kapanış kanıtı: 15 PASS, temiz stop. Mevcut kaynak/QA çıktısı korunur.
+2. Harita: terrain değişiminde tek ortak statik SAFE/RISKY zemin cache, kişi başına yalnız dinamik işaretler. Değişmeyen raster anahtarında 16.384 piksel yazma taraması atlanır. Renk lookup ve 5 tick görünüm korunur. Eski raster birebir eşitlik (rastgele yükseklik, unknown, konum, overlap, iki rota) + cache invalidation testleri. 8 oyuncu gerçek sunucu çalışma sayacı ve yük testi. Android hızlanması varsayılmaz.
+3. Rota: vanilla sürücü sol/sağ hareket girdisiyle yalnız mevcut gerçek fork'ta seçim; açık yön eşleştirmesi HUD, tek karar, stale/NaN/foreign/shift reddi. Komutlar fallback. Kullanıcıya açık tasarım: A güvenli, D riskli, W ilerle; önceden basılı A/D ile otomatik seçim olmaması için fork'ta nötr girişten sonra yeni seçim. Test server ve mümkün olan native girdi.
+4. Ölçümler, gerçek runtime ve KOD handoff. Üretim JAR oluşturma/canlı/RTS müdahalesi yok; fiziksel Android yalnız uygun koordinasyon ve cihazla. İndirme yok; mevcut test çıktısı yeniden kullanılır.

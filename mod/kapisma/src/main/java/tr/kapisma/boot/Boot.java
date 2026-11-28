@@ -6,11 +6,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.LinkOption;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -22,7 +22,7 @@ import net.fabricmc.loader.api.entrypoint.PreLaunchEntrypoint;
 /**
  * Sunucu Minecraft'i açmadan ÖNCE çalışır (Fabric "preLaunch"). İşletim sisteminden bağımsızdır
  * (Windows, Linux, macOS, Android/Termux), PowerShell/bash gerekmez:
- *  1) kapisma_next.json varsa (Manhunt yeni dünya isteği): eski dünya klasörünü siler, yeni seed'i server.properties'e yazar.
+ *  1) kapisma_next.json varsa (Manhunt yeni dünya isteği): eski dünyayı arşivler, yeni seed'i server.properties'e yazar.
  *  2) Dünya yoksa (ilk açılış): seed havuzundan kullanılmamış bir seed seçer.
  *  3) Donanım profili: az RAM'li / yavaş cihazda (tablet, eski dizüstü) görüş mesafesini ve hile koruması
  *     maliyetini düşürür. Not: bu sınıf Minecraft sınıflarına dokunmaz (henüz yüklenmedi).
@@ -35,9 +35,12 @@ public final class Boot implements PreLaunchEntrypoint {
 
 	@Override
 	public void onPreLaunch() {
+		Path root = FabricLoader.getInstance().getGameDir().toAbsolutePath().normalize();
+		boolean restartRequested = Files.exists(root.resolve("kapisma_next.json"), LinkOption.NOFOLLOW_LINKS);
 		try {
-			prepare(FabricLoader.getInstance().getGameDir().toAbsolutePath().normalize());
-		} catch (Throwable t) {
+			prepare(root);
+		} catch (Exception t) {
+			if (restartRequested) throw new IllegalStateException("Kapışma: yeni dünya işlemi güvenli biçimde tamamlanamadı.", t);
 			System.err.println("[Kapisma] onyukleme hatasi (devam ediliyor): " + t);
 		}
 	}
@@ -61,22 +64,42 @@ public final class Boot implements PreLaunchEntrypoint {
 		Path world = root.resolve(levelName).normalize();
 		if (!world.startsWith(root) || world.equals(root)) world = root.resolve("world");   // yol disina tasmasin
 		Path next = root.resolve("kapisma_next.json");
-		if (Files.exists(next)) {
-			String seed = "";
-			String cls = "?";
+		if (Files.exists(next, LinkOption.NOFOLLOW_LINKS)) {
+			if (!Files.isRegularFile(next, LinkOption.NOFOLLOW_LINKS))
+				throw new IOException("Restart request is not a regular file");
+			String request = Files.readString(next, StandardCharsets.UTF_8);
+			String seed = null, cls = null;
 			try {
-				JsonObject j = new Gson().fromJson(Files.readString(next, StandardCharsets.UTF_8), JsonObject.class);
-				if (j != null && j.has("seed")) seed = j.get("seed").getAsString();
-				if (j != null && j.has("class")) cls = j.get("class").getAsString();
-			} catch (Exception e) {
-				System.err.println("[Kapisma] kapisma_next.json okunamadi: " + e);
+				JsonObject j = new Gson().fromJson(request, JsonObject.class);
+				if (j == null || !j.has("seed") || !j.has("class")) throw new IllegalArgumentException("missing seed or class");
+				seed = j.get("seed").getAsString();
+				cls = j.get("class").getAsString();
+				if (!cls.matches("[a-zA-Z0-9_\\-]+")) throw new IllegalArgumentException("invalid class");
+				if (!seed.isEmpty()) Long.parseLong(seed);
+				else if (!"random".equals(cls)) throw new IllegalArgumentException("empty seed for fixed class");
+			} catch (RuntimeException ex) {
+				Files.move(next, root.resolve("kapisma-next-rejected-" + UUID.randomUUID() + ".json"), StandardCopyOption.ATOMIC_MOVE);
+				System.err.println("[Kapisma] Yeni dunya istegi reddedildi; mevcut dunya korundu: " + ex);
+				seed = null;
 			}
-			if (Files.exists(world)) deleteTree(world);
-			set(props, "level-seed", seed);
-			changed = true;
-			Files.deleteIfExists(next);
-			System.out.println("[Kapisma] Yeni dunya: seed=" + seed + " sinif=" + cls);
-		} else if (!Files.exists(world)) {
+			if (seed != null) {
+				// Never resolve an unsafe level-name to an unrelated default world.
+				Path requested = root.resolve(levelName).normalize();
+				if (!requested.equals(world) || !root.equals(world.getParent())
+						|| Path.of(levelName).isAbsolute() || Files.isSymbolicLink(world)
+						|| world.getFileName().toString().startsWith("kapisma-world-backup-"))
+					throw new IOException("Unsafe world directory: " + levelName);
+				if (Files.exists(world, LinkOption.NOFOLLOW_LINKS)
+						&& (!Files.isDirectory(world, LinkOption.NOFOLLOW_LINKS)
+							|| !world.toRealPath().getParent().equals(root.toRealPath())
+							|| !Files.isRegularFile(world.resolve("level.dat"), LinkOption.NOFOLLOW_LINKS)))
+					throw new IOException("World directory is not a verified Minecraft save: " + world);
+				set(props, "level-seed", seed);
+				commitRestart(root, world, next, propsFile, props);
+				changed = false;
+				System.out.println("[Kapisma] Yeni dunya: seed=" + seed + " sinif=" + cls);
+			}
+		} else if (!Files.exists(world) && get(props, "level-seed", "").isBlank()) {
 			String seed = pickFromPool(root);
 			if (seed != null) {
 				set(props, "level-seed", seed);
@@ -186,16 +209,31 @@ public final class Boot implements PreLaunchEntrypoint {
 		return false;
 	}
 
-	private static void deleteTree(Path dir) throws IOException {
-		Files.walkFileTree(dir, new SimpleFileVisitor<>() {
-			@Override public FileVisitResult visitFile(Path f, BasicFileAttributes a) throws IOException {
-				try { Files.delete(f); } catch (IOException e) { f.toFile().setWritable(true); Files.delete(f); }
-				return FileVisitResult.CONTINUE;
+	/** A pending request survives an interrupted commit; the old world is never recursively deleted. */
+	private static void commitRestart(Path root, Path world, Path next, Path propsFile, List<String> props) throws IOException {
+		Path stage = Files.createTempFile(root, ".kapisma-properties-", ".tmp");
+		Path backup = root.resolve("kapisma-world-backup-" + UUID.randomUUID());
+		boolean archived = false;
+		try {
+			Files.write(stage, props, StandardCharsets.ISO_8859_1);
+			if (Files.exists(world, LinkOption.NOFOLLOW_LINKS)) {
+				Files.move(world, backup, StandardCopyOption.ATOMIC_MOVE);
+				archived = true;
 			}
-			@Override public FileVisitResult postVisitDirectory(Path d, IOException e) throws IOException {
-				Files.delete(d);
-				return FileVisitResult.CONTINUE;
+			try {
+				Files.move(stage, propsFile, StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING);
+			} catch (IOException ex) {
+				if (archived) {
+					try { Files.move(backup, world, StandardCopyOption.ATOMIC_MOVE); }
+					catch (IOException rollback) { ex.addSuppressed(rollback); }
+				}
+				throw ex;
 			}
-		});
+			// Consume only after the new properties and archived old save are durable in the directory.
+			Files.move(next, root.resolve("kapisma-next-applied-" + UUID.randomUUID() + ".json"), StandardCopyOption.ATOMIC_MOVE);
+			if (archived) System.out.println("[Kapisma] Eski dunya arsivlendi: " + backup.getFileName());
+		} finally {
+			Files.deleteIfExists(stage);
+		}
 	}
 }

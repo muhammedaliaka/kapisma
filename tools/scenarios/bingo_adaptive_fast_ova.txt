@@ -1,0 +1,26 @@
+player Bot1 spawn
+player Bot2 spawn
+wait 2
+kapisma game BINGO
+kapisma origins off
+kapisma team solo
+kapisma seedclass qa_ova_retry
+kapisma rule BINGO borderStart 1000
+kapisma rule BINGO verifySec 45
+kapisma rule BINGO difficulty 3
+kapisma rule BINGO tasks 8
+kapisma rule BINGO sharedItems 1
+kapisma rule BINGO endTasks 0
+kapisma rule BINGO netherTasks 0
+kapisma rule BINGO minimap 0
+say QA_OVA_RETRY_1
+kapisma start
+await_regex Tombala başladı!|Bu seed ve sınırda 25 farklı hedef doğrulanamadı|Tombala dünyası zamanında doğrulanamadı
+kapisma stop
+await Arena depolama kapandı:
+kapisma rule BINGO verifySec 60
+say QA_OVA_RETRY_2
+kapisma start
+await_regex Tombala başladı!|Bu seed ve sınırda 25 farklı hedef doğrulanamadı|Tombala dünyası zamanında doğrulanamadı
+kapisma stop
+await Arena depolama kapandı:

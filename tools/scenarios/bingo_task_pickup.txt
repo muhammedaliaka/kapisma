@@ -1,0 +1,37 @@
+# Real vanilla item-entity pickup; no advancement grant.
+player Bot1 spawn
+player Bot2 spawn
+wait 2
+kapisma game BINGO
+kapisma origins off
+kapisma team solo
+kapisma seedclass qa_task_pickup
+kapisma rule BINGO borderStart 1000
+kapisma rule BINGO verifySec 45
+kapisma rule BINGO tasks 8
+kapisma rule BINGO sharedItems 1
+kapisma rule BINGO endTasks 0
+kapisma rule BINGO netherTasks 0
+kapisma rule BINGO goal 0
+kapisma rule BINGO lines 12
+kapisma rule BINGO startFood 0
+kapisma rule BINGO minimap 0
+kapisma start
+await Tombala başladı!
+difficulty peaceful
+execute at Bot1 run summon item ~ ~0.1 ~ {Item:{id:"minecraft:crafting_table",count:1},PickupDelay:0s}
+await Bot1 tamamladı: Görev: Çalışma masası edin
+execute if entity @a[name=Bot1,advancements={minecraft:story/root=true}] run say QA_PICKUP_ADV
+capture advancement (QA_PICKUP_ADV)
+scoreboard objectives add qa_pickup dummy
+execute store result score pickup qa_pickup run clear Bot1 minecraft:crafting_table 0
+scoreboard players get pickup qa_pickup
+capture pickup_count pickup has (1) \[qa_pickup\]
+execute at Bot1 run summon item ~ ~0.1 ~ {Item:{id:"minecraft:crafting_table",count:1},PickupDelay:0s}
+wait 2
+execute store result score pickup qa_pickup run clear Bot1 minecraft:crafting_table 0
+scoreboard players get pickup qa_pickup
+capture pickup_repeat pickup has (2) \[qa_pickup\]
+scoreboard objectives remove qa_pickup
+kapisma stop
+await Arena depolama kapandı:

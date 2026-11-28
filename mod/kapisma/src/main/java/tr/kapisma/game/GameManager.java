@@ -18,7 +18,7 @@ public final class GameManager {
 	public final Settings settings;
 	public final SeedPool seeds;
 	public final MenuService menus;
-	public Game current;
+	public volatile Game current;
 	/** Son biten oyun (istatistik icin). */
 	public Game last;
 	/** Lobide secilen takim rengi/ismi (oyuncu basina, sunucu acik kaldikca hatirlanir). */
@@ -33,6 +33,8 @@ public final class GameManager {
 	private int restartTicks = -1;
 	private final java.util.Map<UUID, Integer> pendingOriginReset = new java.util.HashMap<>();
 	private final java.util.Map<UUID, Integer> pendingLobby = new java.util.HashMap<>();
+	private final java.util.Map<UUID, ArenaJoin> pendingArenaJoin = new java.util.HashMap<>();
+	private record ArenaJoin(Game game, int tick) {}
 
 	public GameManager(MinecraftServer server) {
 		this.server = server;
@@ -68,7 +70,7 @@ public final class GameManager {
 	public void onJoin(ServerPlayer p) {
 		if (!joinOrder.contains(p.getUUID())) joinOrder.add(p.getUUID());
 		if (current != null && current.contains(p.getUUID())) {
-			current.onJoin(p);
+			pendingArenaJoin.put(p.getUUID(), new ArenaJoin(current, server.getTickCount() + 3));
 			return;
 		}
 		pendingLobby.put(p.getUUID(), 3);            // katilma olayi bitmeden dunya degistirme: birkac tik sonra
@@ -82,6 +84,9 @@ public final class GameManager {
 	}
 
 	public void onDisconnect(ServerPlayer p) {
+		pendingArenaJoin.remove(p.getUUID());
+		pendingLobby.remove(p.getUUID());
+		pendingOriginReset.remove(p.getUUID());
 		tr.kapisma.lobby.Parkour.forget(p);
 		if (current != null && current.contains(p.getUUID())) current.onDisconnect(p);
 	}
@@ -100,6 +105,22 @@ public final class GameManager {
 
 	public void tick() {
 		if (server.getTickCount() % 20 == 0) watchHost();
+		for (var it = pendingArenaJoin.entrySet().iterator(); it.hasNext();) {
+			var entry = it.next();
+			var join = entry.getValue();
+			if (server.getTickCount() < join.tick()) continue;
+			it.remove();
+			ServerPlayer p = server.getPlayerList().getPlayer(entry.getKey());
+			if (p == null) continue;
+			if (current != null && !current.isClosed() && current.contains(p.getUUID())) {
+				// A delayed callback from the previous match must not reset a
+				// participant of the next match to the lobby.
+				if (current == join.game()) current.onJoin(p);
+			} else {
+				Lobby.send(server, p);
+				OriginService.reset(server, p);
+			}
+		}
 		if (restartTicks > 0 && --restartTicks == 0) {
 			for (ServerPlayer p : new ArrayList<>(server.getPlayerList().getPlayers()))
 				p.connection.disconnect(net.minecraft.network.chat.Component.literal("Yeni dünya için sunucu yeniden başlıyor, ~40 sn sonra tekrar bağlan."));
@@ -136,10 +157,11 @@ public final class GameManager {
 
 	// ---- oyun kontrolu ----
 	public String start() {
+		if (restartTicks > 0) return "Yeni dünya için yeniden başlatma bekleniyor.";
 		if (current != null && !current.isClosed()) return "Zaten bir oyun çalışıyor.";
 		List<ServerPlayer> ps = new ArrayList<>(server.getPlayerList().getPlayers());
 		if (ps.isEmpty()) return "Oyuncu yok.";
-		int min = "BINGO".equals(settings.game) ? 1 : "KATIL".equals(settings.game) ? 3 : 2;
+		int min = "BINGO".equals(settings.game) || "ESYA".equals(settings.game) ? 1 : "KATIL".equals(settings.game) ? 3 : 2;
 		boolean dragonGame = "MANHUNT".equals(settings.game) || "KATIL".equals(settings.game);
 		if (ps.size() < min) {
 			return ("KATIL".equals(settings.game)
@@ -149,13 +171,20 @@ public final class GameManager {
 				: "UHC için en az 2 oyuncu gerekir (tek kişiyle kazanan hemen belli olur).")
 				+ " Şu an " + ps.size() + " oyuncu var.";
 		}
-		if (dragonGame && ManhuntGame.worldUsed(server)) {
+		if ("KATIL".equals(settings.game)) {
+			var missing = ps.stream().filter(p -> !ManhuntGame.supportsDisguise(p)).map(p -> p.getGameProfile().getName()).toList();
+			if (!missing.isEmpty()) return "Katil Kim için Kapışma HUD modu gerekli. Kurması gereken oyuncular: " + String.join(", ", missing);
+		}
+		if (!seeds.selectable(settings.seedClass))
+			return "Seçilen seed sınıfında doğrulanmış dünya yok: " + seeds.displayName(settings.seedClass);
+		if (dragonGame && (ManhuntGame.worldUsed(server) || !seeds.matches(settings.seedClass, server.overworld().getSeed()))) {
 			requestNewWorld();
 			return null;
 		}
 		Game g = switch (settings.game) {
 			case "UHC" -> new UhcGame(this);
 			case "BINGO" -> new BingoGame(this);
+			case "ESYA" -> new ItemRaceGame(this);
 			case "MANHUNT" -> new ManhuntGame(this, false);
 			case "KATIL" -> new ManhuntGame(this, true);
 			default -> null;
@@ -171,6 +200,7 @@ public final class GameManager {
 		}
 		if (err != null) return err;
 		current = g;
+		tr.kapisma.voice.VoiceBridge.refresh(server);
 		Msg.broadcast(server, g.title() + " hazırlanıyor... (" + ps.size() + " oyuncu)");
 		return null;
 	}
@@ -180,12 +210,25 @@ public final class GameManager {
 	 * kapisma_next.json yazilir ve sunucu kapanir; start.bat dunyayi silip yeni seed ile acar.
 	 */
 	public void requestNewWorld() {
+		if (restartTicks > 0) { Msg.broadcast(server, "Yeniden başlatma zaten planlandı."); return; }
+		if (current != null && !current.isClosed()) { Msg.broadcast(server, "Yeni dünya istemeden önce maçı durdur."); return; }
 		SeedPool.Entry e = seeds.pick(settings.seedClass, new java.util.Random());
+		if (e == null && !"random".equals(settings.seedClass)) {
+			Msg.broadcast(server, "Seçilen seed sınıfında doğrulanmış dünya yok; yeniden başlatılmadı.");
+			return;
+		}
 		try {
 			var o = new com.google.gson.JsonObject();
 			o.addProperty("seed", e != null ? Long.toString(e.seed()) : "");
 			o.addProperty("class", e != null ? e.cls() : "random");
-			java.nio.file.Files.writeString(server.getServerDirectory().resolve("kapisma_next.json"), o.toString());
+			var root = server.getServerDirectory();
+			var pending = root.resolve("kapisma_next.json");
+			if (java.nio.file.Files.exists(pending)) throw new java.io.IOException("Bekleyen dünya isteği var");
+			var stage = java.nio.file.Files.createTempFile(root, ".kapisma-next-", ".tmp");
+			try {
+				java.nio.file.Files.writeString(stage, o.toString());
+				java.nio.file.Files.move(stage, pending, java.nio.file.StandardCopyOption.ATOMIC_MOVE);
+			} finally { java.nio.file.Files.deleteIfExists(stage); }
 		} catch (Exception ex) {
 			Msg.broadcast(server, "Yeni dünya isteği yazılamadı: " + ex.getMessage());
 			return;
@@ -199,6 +242,7 @@ public final class GameManager {
 			current.stop(reason);
 			last = current;
 			current = null;
+			tr.kapisma.voice.VoiceBridge.refresh(server);
 		}
 	}
 }

@@ -1,0 +1,73 @@
+# Vanilla portal blocks lead only to this match's temporary dimensions and return.
+player Bot1 spawn
+player Bot2 spawn
+kapisma game BINGO
+kapisma origins off
+kapisma seedclass orman
+kapisma rule BINGO tasks 2
+kapisma rule BINGO endTasks 1
+kapisma rule BINGO netherTasks 1
+kapisma rule BINGO netherRadius 300
+kapisma rule BINGO borderStart 500
+kapisma start
+await Maçın End portalı X 0, Z 0
+execute as Bot1 at @s positioned 0 0 0 positioned over world_surface run tp @s ~ ~-0.95 ~
+await Bot1 tamamladı: Görev: End'e geç
+execute as Bot1 at @s positioned 104 0 4 positioned over world_surface run tp @s ~ ~-0.95 ~
+wait 2
+execute at Bot2 if entity @a[name=Bot1,distance=..2000] run say BINGO_END_RETURN
+expect BINGO_END_RETURN
+execute as Bot2 at @s run gamerule playersNetherPortalDefaultDelay 1
+execute as Bot2 at @s positioned 8 0 10 positioned over world_surface run tp @s ~ ~-3 ~
+await Bot2 tamamladı: Görev: Nether'a geç
+attribute Bot2 minecraft:generic.gravity base set 0
+execute as Bot2 at @s run tp @s 285 105 0
+wait 4
+execute as Bot2 at @s run gamerule playersNetherPortalDefaultDelay 1
+execute as Bot2 at @s run fill 281 103 -3 289 110 4 air
+execute as Bot2 at @s run fill 281 103 -3 289 103 4 netherrack
+execute as Bot2 at @s run fill 284 104 1 287 108 1 obsidian
+execute as Bot2 at @s run fill 285 105 1 286 107 1 nether_portal[axis=x]
+execute as Bot2 at @s run tp @s 285.5 105 1.5
+wait 3
+capture return_platform Tombala Nether uzak dönüş: -?\d+, -?\d+, -?\d+ aday=\d+ platform=(true|false)
+execute at Bot1 if entity @a[name=Bot2,x=-150,y=-64,z=-150,dx=299,dy=383,dz=299,distance=..2000] run say BINGO_FAR_NETHER_RETURN
+expect BINGO_FAR_NETHER_RETURN
+attribute Bot2 minecraft:generic.gravity base set 0.08
+kapisma stop
+# İkinci seed sınıfında yeni maç, önceki geçici boyutlar kapandıktan sonra.
+# Vanilla portal blocks lead only to this match's temporary dimensions and return.
+kapisma game BINGO
+kapisma origins off
+kapisma seedclass col_mesa
+kapisma rule BINGO tasks 2
+kapisma rule BINGO endTasks 1
+kapisma rule BINGO netherTasks 1
+kapisma rule BINGO netherRadius 300
+kapisma rule BINGO borderStart 500
+kapisma start
+await Maçın End portalı X 0, Z 0
+execute as Bot1 at @s positioned 0 0 0 positioned over world_surface run tp @s ~ ~-0.95 ~
+await Bot1 tamamladı: Görev: End'e geç
+execute as Bot1 at @s positioned 104 0 4 positioned over world_surface run tp @s ~ ~-0.95 ~
+wait 2
+execute at Bot2 if entity @a[name=Bot1,distance=..2000] run say BINGO_END_RETURN_2
+expect BINGO_END_RETURN_2
+execute as Bot2 at @s run gamerule playersNetherPortalDefaultDelay 1
+execute as Bot2 at @s positioned 8 0 10 positioned over world_surface run tp @s ~ ~-3 ~
+await Bot2 tamamladı: Görev: Nether'a geç
+attribute Bot2 minecraft:generic.gravity base set 0
+execute as Bot2 at @s run tp @s 285 105 0
+wait 4
+execute as Bot2 at @s run gamerule playersNetherPortalDefaultDelay 1
+execute as Bot2 at @s run fill 281 103 -3 289 110 4 air
+execute as Bot2 at @s run fill 281 103 -3 289 103 4 netherrack
+execute as Bot2 at @s run fill 284 104 1 287 108 1 obsidian
+execute as Bot2 at @s run fill 285 105 1 286 107 1 nether_portal[axis=x]
+execute as Bot2 at @s run tp @s 285.5 105 1.5
+wait 3
+capture return_platform Tombala Nether uzak dönüş: -?\d+, -?\d+, -?\d+ aday=\d+ platform=(true|false)
+execute at Bot1 if entity @a[name=Bot2,x=-150,y=-64,z=-150,dx=299,dy=383,dz=299,distance=..2000] run say BINGO_FAR_NETHER_RETURN_2
+expect BINGO_FAR_NETHER_RETURN_2
+attribute Bot2 minecraft:generic.gravity base set 0.08
+kapisma stop

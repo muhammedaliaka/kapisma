@@ -35,6 +35,7 @@ public final class LobbyBoard {
 			case "UHC" -> "§7PvP §f" + (int) st.num("UHC", "pvpGraceMin") + " dk sonra §7· sınır §f±" + (int) st.num("UHC", "borderStart");
 			case "BINGO" -> "§f" + (int) st.num("BINGO", "lines") + " çizgi §7· PvP §f" + (!st.flag("BINGO", "pvp") ? "kapalı"
 				: (int) st.num("BINGO", "pvpGraceMin") > 0 ? (int) st.num("BINGO", "pvpGraceMin") + " dk sonra" : "açık");
+			case "ESYA" -> "§f5 can §7· §f" + (int) st.num("ESYA", "roundSec") + " sn / tur";
 			case "MANHUNT" -> "§7Runner §f" + (st.runnerNames.isEmpty() ? (int) st.num("MANHUNT", "runners") + " (rastgele)" : String.join(",", st.runnerNames));
 			case "KATIL" -> "§f" + (int) st.num("KATIL", "killers") + " gizli katil §7· ses önerilir";
 			default -> "";
@@ -51,7 +52,13 @@ public final class LobbyBoard {
 		l.add("§8──────────");
 		l.add("§a▶ §f" + MenuService.gameLabel(st.game));
 		l.add(summary(st));
-		l.add("§7" + ("DUO".equals(st.teamMode) ? "Duo" : "Solo") + " §8· §7Irk §f" + MenuService.originModeLabel(st.originMode.getOrDefault(st.game, "RANDOM")).split(" ")[0]);
+		String teamMode = switch (st.game) {
+			case "KATIL" -> "Gizli roller";
+			case "MANHUNT" -> "Runner / Hunter";
+			case "ESYA" -> "Solo";
+			default -> "DUO".equals(st.teamMode) ? "Duo" : "Solo";
+		};
+		l.add("§7" + teamMode + " §8· §7Irk §f" + MenuService.originModeLabel(st.originMode.getOrDefault(st.game, "RANDOM")).split(" ")[0]);
 		l.add("§8──────────");
 		l.add("§6Parkur ilk 3");
 		var tp = Lobby.scores.topParkour(3);

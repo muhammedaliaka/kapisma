@@ -1,0 +1,6 @@
+# Kit İhalesi 0.1
+
+2–8 bireysel yarışmacı, 100 maç jetonu (gerçek para yok), 3 gizli 20 saniyelik ihale (kılıç/kalkan, yay/ok, zırh), 90 saniye hayatta kalma. /trigger ki_bid set N, -1 geri çekme; geçersiz teklif önceki geçerli teklifi değiştirmez. Sadece kazanan öder; aynı en yüksek teklif rastgele tek kazanan; teklif yoksa ödül yok. Tüm kayıtlılar çevrimiçi değilse ihale ve canlı kalanlar eksikse PvP durur; eski bekleyen teklif silinir, geçerli teklif korunur. Son hayatta kalan kazanır; zaman aşımı veya eşzamanlı sıfır canlı beraberlik. 29 vanilla işlev, ayrı QA dünya; `function ki:start`, `function ki:reset`.
+
+23 PASS / Exit 0. Para/teklif sınırı, çekme, tek ödeme, eşitlik, ihale/maç duraklama, kit, 8/9 kapasite, survivor. acceptance.log SHA256 1AF31D4A64FEF9F3AD8673D29A290F7AB89C2BC16D3FE945AE98B90824A57DE1. Bot ölüm sayacı ve bazı zaman eşikleri enjekte edildi; gerçek insan PvP, aktif restart, 3–7 kapasite, doğal tam maç açık. sgui entegrasyonu KOD alanında; gerçek para/ekonomi yok.
+Gerçek istemci gizlilik kabulü: ortak `../verify_private_modes.py`, 6 PASS. İki gerçek Java istemcisi kendi 63/27 tekliflerini gördü, diğerinin teklifini almadı. Kazananın kalan 37 jetonu yalnız kendisine, kazanan kimliği ikisine de gitti. acceptance_privacy.log SHA256 F8BF8DC54A5EDBC5AAD2D7BE3CD3C089874DF5099DDAFF03AAF093EC19C76255.

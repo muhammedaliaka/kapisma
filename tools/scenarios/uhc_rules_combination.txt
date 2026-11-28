@@ -1,0 +1,20 @@
+# PvP kapalıyken ekran aynı durumu gösterir ve yanlış son sınır arenayı büyütmez.
+player Bot1 spawn
+player Bot2 spawn
+kapisma game UHC
+kapisma origins off
+kapisma seedclass col_mesa
+kapisma rule UHC borderStart 200
+kapisma rule UHC borderEnd 500
+kapisma rule UHC treasureChests 4
+kapisma rule UHC pvp 0
+kapisma rule UHC pvpGraceMin 0
+kapisma rule UHC shrinkStartMin 5
+kapisma start
+await UHC başladı! PvP kapalı.
+expect 4 hazine sandığı hazır
+damage Bot2 4 minecraft:player_attack by Bot1
+expect Target is invulnerable to the given damage type
+tick sprint 6000
+await Sınır daralmaya başladı! Hedef: ±200 blok
+kapisma stop

@@ -1,0 +1,14 @@
+player Bot1 spawn
+player Bot2 spawn
+function krts:status
+execute if score #phase krts_ctrl matches 4 if score #p1 krts_ctrl matches 19 if score #g1 krts_ctrl matches 8 if score #left krts_ctrl matches 27 run say PROTO_SAVED_MATCH
+await PROTO_SAVED_MATCH
+execute store result score #units krts_ctrl if entity @e[tag=krts.unit]
+execute if score #units krts_ctrl matches 16 run say PROTO_SAVED_UNITS
+await PROTO_SAVED_UNITS
+function krts:resume
+await Maç devam ediyor.
+execute if score #phase krts_ctrl matches 1 run say PROTO_RESUMED_PREP
+await PROTO_RESUMED_PREP
+function krts:reset
+await Prototip maçı sıfırlandı

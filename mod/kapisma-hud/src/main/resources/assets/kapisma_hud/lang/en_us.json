@@ -1,5 +1,6 @@
 {
   "key.kapisma_hud.toggle": "Show / hide Kapisma HUD",
+  "key.kapisma_hud.killer": "Toggle killer power",
   "category.kapisma_hud": "Kapisma",
   "origin.kapisma.golem.name": "Golem",
   "origin.kapisma.golem.description": "Dayanıklı ama yavaş: 3 kalp fazla can, geri savrulmaya dirençli, %12 yavaş.",

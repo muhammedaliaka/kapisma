@@ -84,6 +84,19 @@ public final class Cmds {
 			.then(Commands.literal("ping").executes(c -> say(c, "Kapışma çalışıyor, sürüm " + Kapisma.BUILD)))
 			.then(Commands.literal("menu").executes(Cmds::menu))
 			.then(Commands.literal("debug").requires(src -> src.hasPermission(2))
+				.then(Commands.literal("race").requires(src -> src.getEntity() == null)
+					.then(Commands.argument("name", StringArgumentType.word()).executes(c -> {
+						if (!(gm().current instanceof tr.kapisma.game.ItemRaceGame race)) return say(c, "Eşya Yarışı çalışmıyor.");
+						return say(c, race.debugProgress(StringArgumentType.getString(c, "name")));
+					})))
+				.then(Commands.literal("caveaccess").executes(c -> {
+					var src = c.getSource();
+					var pos = net.minecraft.core.BlockPos.containing(src.getPosition());
+					boolean reachable = tr.kapisma.game.BingoSurvey.debugCaveAccess(src.getLevel(), pos);
+					String result = "caveaccess " + pos.toShortString() + ": " + (reachable ? "REACHABLE" : "UNPROVEN");
+					Kapisma.LOG.info("{}", result);
+					return say(c, result);
+				}))
 				.then(Commands.literal("xray")
 					.then(Commands.literal("audit").executes(c -> { String r = tr.kapisma.xray.Xray.audit(c.getSource().getPlayerOrException()); Kapisma.LOG.info("xray audit: {}", r); return say(c, r); }))
 					.then(Commands.literal("copytest").executes(c -> { String r = tr.kapisma.xray.Xray.copyTest(c.getSource().getPlayerOrException()); Kapisma.LOG.info("xray {}", r); return say(c, r); }))
@@ -180,12 +193,12 @@ public final class Cmds {
 				gm().setHost(p);
 				return say(c, "Yeni host: " + p.getGameProfile().getName());
 			})))
-			.then(Commands.literal("game").executes(c -> usage(c, "/kapisma game <UHC|BINGO|MANHUNT|KATIL>")).then(Commands.argument("oyun", StringArgumentType.word())
-				.suggests((c, b) -> net.minecraft.commands.SharedSuggestionProvider.suggest(new String[] {"UHC", "BINGO", "MANHUNT", "KATIL"}, b))
+			.then(Commands.literal("game").executes(c -> usage(c, "/kapisma game <UHC|BINGO|ESYA|MANHUNT|KATIL>")).then(Commands.argument("oyun", StringArgumentType.word())
+				.suggests((c, b) -> net.minecraft.commands.SharedSuggestionProvider.suggest(new String[] {"UHC", "BINGO", "ESYA", "MANHUNT", "KATIL"}, b))
 				.executes(c -> {
 					if (!admin(c)) return deny(c);
 					String g = StringArgumentType.getString(c, "oyun").toUpperCase();
-					if (!g.equals("UHC") && !g.equals("BINGO") && !g.equals("MANHUNT") && !g.equals("KATIL")) return say(c, "Geçerli: UHC, BINGO, MANHUNT, KATIL");
+					if (!java.util.List.of("UHC", "BINGO", "ESYA", "MANHUNT", "KATIL").contains(g)) return say(c, "Geçerli: UHC, BINGO, ESYA, MANHUNT, KATIL");
 					gm().settings.game = g;
 					gm().settings.save();
 					return say(c, "Oyun modu: " + g);
@@ -206,7 +219,9 @@ public final class Cmds {
 				})
 				.executes(c -> {
 					if (!admin(c)) return deny(c);
-					gm().settings.seedClass = StringArgumentType.getString(c, "sinif");
+					String chosen = StringArgumentType.getString(c, "sinif");
+					if (!gm().seeds.selectable(chosen)) return say(c, "Seed sınıfı boş veya geçersiz: " + chosen + ". Ayar değiştirilmedi.");
+					gm().settings.seedClass = chosen;
 					gm().settings.save();
 					return say(c, "Seed sınıfı: " + gm().settings.seedClass);
 				})))
@@ -237,9 +252,9 @@ public final class Cmds {
 					gm().settings.save();
 					return say(c, "Yasak kaldırıldı.");
 				})))
-			.then(Commands.literal("rule").executes(c -> usage(c, "/kapisma rule <UHC|BINGO|MANHUNT|KATIL> <kural> <değer>  (liste: /kapisma rules <oyun>)"))
+			.then(Commands.literal("rule").executes(c -> usage(c, "/kapisma rule <UHC|BINGO|ESYA|MANHUNT|KATIL> <kural> <değer>  (liste: /kapisma rules <oyun>)"))
 				.then(Commands.argument("oyun", StringArgumentType.word())
-					.suggests((c, b) -> net.minecraft.commands.SharedSuggestionProvider.suggest(new String[] {"UHC", "BINGO", "MANHUNT", "KATIL"}, b))
+					.suggests((c, b) -> net.minecraft.commands.SharedSuggestionProvider.suggest(new String[] {"UHC", "BINGO", "ESYA", "MANHUNT", "KATIL"}, b))
 					.then(Commands.argument("kural", StringArgumentType.word())
 						.suggests((c, b) -> {
 							var keys = Rules.of(StringArgumentType.getString(c, "oyun").toUpperCase()).stream().map(RuleDef::key).toList();
@@ -262,7 +277,7 @@ public final class Cmds {
 					st.save();
 					return say(c, st.runnerNames.isEmpty() ? "Runner seçimi: rastgele" : "Runner'lar: " + String.join(", ", st.runnerNames));
 				})))
-			.then(Commands.literal("rules").executes(c -> usage(c, "/kapisma rules <UHC|BINGO|MANHUNT|KATIL>")).then(Commands.argument("oyun", StringArgumentType.word()).executes(Cmds::rules)));
+			.then(Commands.literal("rules").executes(c -> usage(c, "/kapisma rules <UHC|BINGO|ESYA|MANHUNT|KATIL>")).then(Commands.argument("oyun", StringArgumentType.word()).executes(Cmds::rules)));
 		d.register(root);
 		d.register(Commands.literal("oyun").executes(Cmds::menu));
 		d.register(Commands.literal("yardim").executes(Cmds::help));
@@ -343,6 +358,32 @@ public final class Cmds {
 			.executes(c -> compass(c, 1))
 			.then(Commands.literal("sonraki").executes(c -> compass(c, 1)))
 			.then(Commands.literal("onceki").executes(c -> compass(c, -1))));
+		d.register(Commands.literal("izle").executes(c -> {
+			var player = c.getSource().getPlayerOrException();
+			if (gm().current instanceof tr.kapisma.game.WorldGame game && game.openSpectatorMenu(player)) return 1;
+			return say(c, "İzleyici pusulası maçın seyircilerine açık.");
+		}).then(Commands.argument("oyuncu", StringArgumentType.word()).executes(c -> {
+			var viewer = c.getSource().getPlayerOrException();
+			if (gm().current instanceof tr.kapisma.game.WorldGame game) {
+				String target = StringArgumentType.getString(c, "oyuncu");
+				for (var id : game.players)
+					if (target.equalsIgnoreCase(game.names.get(id)) && game.visitSpectatorTarget(viewer, id)) return 1;
+			}
+			Msg.tell(viewer, "Bu oyuncunun izlenebilecek konumu yok veya izleyici değilsin.");
+			return 0;
+		})));
+		d.register(Commands.literal("katilgucu").executes(c -> {
+			if (gm().current instanceof tr.kapisma.game.ManhuntGame game) game.toggleKillerBoost(c.getSource().getPlayerOrException());
+			return 1;
+		}));
+		d.register(Commands.literal("gorev").executes(c -> {
+			if (gm().current instanceof tr.kapisma.game.ItemRaceGame race && race.showTask(c.getSource().getPlayerOrException())) return 1;
+			return say(c, "Aktif eşya görevin yok.");
+		}));
+		d.register(Commands.literal("atla").executes(c -> {
+			if (gm().current instanceof tr.kapisma.game.ItemRaceGame race && race.skip(c.getSource().getPlayerOrException())) return 1;
+			return say(c, "Şu an kullanabileceğin bir atlama hakkın yok.");
+		}));
 		d.register(Commands.literal("kart").executes(c -> {
 			ServerPlayer p = c.getSource().getPlayerOrException();
 			if (gm().current instanceof tr.kapisma.game.BingoGame b) b.openCard(p);
@@ -360,7 +401,9 @@ public final class Cmds {
 
 	/** Calisan oyun yoksa son biten oyun. */
 	private static tr.kapisma.game.Game statGame() {
-		return gm().current != null ? gm().current : gm().last;
+		var game = gm().current;
+		if (game == null || ("KATIL".equals(game.id()) && game.phase != tr.kapisma.game.Game.Phase.ENDED)) return gm().last;
+		return game;
 	}
 
 	private static String ascii(String t) {

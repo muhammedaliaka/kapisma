@@ -1,7 +1,6 @@
 package tr.kapisma.game;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -26,7 +25,7 @@ public abstract class Game {
 	protected final Random rnd = new Random();
 
 	public final List<UUID> players = new ArrayList<>();
-	public final Set<UUID> eliminated = new HashSet<>();
+	public final Set<UUID> eliminated = java.util.concurrent.ConcurrentHashMap.newKeySet();
 	public List<GameTeam> teams = List.of();
 	public Phase phase = Phase.PREP;
 	/** Oyuncu adlari (cikmis olsalar da istatistikte gorunsun). */

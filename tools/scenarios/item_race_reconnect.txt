@@ -1,0 +1,35 @@
+# Üretim kuralları ve Carpet oyuncuları: gizli hedefler farklı, çevrimdışı başlayan tur, yeniden bağlanma.
+player Bot1 spawn
+player Bot2 spawn
+kapisma game ESYA
+kapisma origins off
+kapisma seedclass orman
+kapisma rule ESYA roundSec 90
+kapisma rule ESYA roundLimit 3
+kapisma rule ESYA keepInventory 1
+kapisma start
+await Eşya Yarışı · Tur 1 başladı
+kapisma debug race Bot1
+capture item1 race Bot1 round=1 target=(minecraft:[a-z0-9_]+) known=true baseline=0 count=0 score=0 lives=5
+kapisma debug race Bot2
+capture item2 race Bot2 round=1 target=((?!%{item1} )minecraft:[a-z0-9_]+) known=true baseline=0 count=0 score=0 lives=5
+give Bot1 %{item1} 1
+wait 1
+kapisma debug race Bot1
+capture scored race Bot1 round=1 target=minecraft:[a-z0-9_]+ known=true baseline=0 count=1 score=(1) lives=5 skips=0 resolved=true
+player Bot1 kill
+await Bot1 left the game
+give Bot2 %{item2} 1
+await Eşya Yarışı · Tur 2 başladı
+kapisma debug race Bot1
+capture item3 race Bot1 round=2 target=(minecraft:[a-z0-9_]+) known=false baseline=0 count=-1 score=1 lives=5 skips=0 resolved=false
+player Bot1 spawn
+await Bot1 joined the game
+wait 2
+kapisma debug race Bot1
+capture baseline race Bot1 round=2 target=%{item3} known=true baseline=(\d+) count=\1 score=1 lives=5 skips=0 resolved=false
+give Bot1 %{item3} 1
+wait 1
+kapisma debug race Bot1
+capture score2 race Bot1 round=2 target=%{item3} known=true baseline=\d+ count=\d+ score=(2) lives=5 skips=0 resolved=true
+kapisma stop

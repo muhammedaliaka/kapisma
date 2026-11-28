@@ -1,0 +1,100 @@
+# Fixed resource-limited fixture. Five consecutive successes, one skip, timeout reset, death.
+player Bot1 spawn
+player Bot2 spawn
+wait 2
+kapisma game ESYA
+kapisma origins off
+kapisma rule ESYA borderStart 200
+kapisma rule ESYA roundSec 30
+kapisma rule ESYA roundLimit 10
+kapisma rule ESYA keepInventory 0
+kapisma rule ESYA minimap 0
+kapisma rule ESYA pvp 1
+kapisma start
+await Eşya Yarışı · Tur 1 başladı
+execute as Bot1 run atla
+capture no_skip (Şu an kullanabileceğin bir atlama hakkın yok.)
+kapisma debug race Bot1
+capture a1 race Bot1 round=1 target=(minecraft:[a-z0-9_]+) known=true baseline=\d+ count=\d+ score=0 lives=5 skips=0 resolved=false
+kapisma debug race Bot2
+capture b1 race Bot2 round=1 target=((?!%{a1} )minecraft:[a-z0-9_]+) known=true baseline=\d+ count=\d+ score=0 lives=5 skips=0 resolved=false
+give Bot1 %{a1} 1
+wait 0.5
+kapisma debug race Bot1
+capture a_scored1 race Bot1 round=1 target=%{a1} known=true baseline=\d+ count=\d+ score=(1) lives=5 skips=0 resolved=true
+give Bot2 %{b1} 1
+await Eşya Yarışı · Tur 2 başladı
+kapisma debug race Bot1
+capture a2 race Bot1 round=2 target=(minecraft:[a-z0-9_]+) known=true baseline=\d+ count=\d+ score=1 lives=5 skips=0 resolved=false
+kapisma debug race Bot2
+capture b2 race Bot2 round=2 target=((?!%{a2} )minecraft:[a-z0-9_]+) known=true baseline=\d+ count=\d+ score=1 lives=5 skips=0 resolved=false
+give Bot1 %{a2} 1
+wait 0.5
+kapisma debug race Bot1
+capture a_scored2 race Bot1 round=2 target=%{a2} known=true baseline=\d+ count=\d+ score=(2) lives=5 skips=0 resolved=true
+give Bot2 %{b2} 1
+await Eşya Yarışı · Tur 3 başladı
+kapisma debug race Bot1
+capture a3 race Bot1 round=3 target=(minecraft:[a-z0-9_]+) known=true baseline=\d+ count=\d+ score=2 lives=5 skips=0 resolved=false
+kapisma debug race Bot2
+capture b3 race Bot2 round=3 target=((?!%{a3} )minecraft:[a-z0-9_]+) known=true baseline=\d+ count=\d+ score=2 lives=5 skips=0 resolved=false
+give Bot1 %{a3} 1
+wait 0.5
+kapisma debug race Bot1
+capture a_scored3 race Bot1 round=3 target=%{a3} known=true baseline=\d+ count=\d+ score=(3) lives=5 skips=0 resolved=true
+give Bot2 %{b3} 1
+await Eşya Yarışı · Tur 4 başladı
+kapisma debug race Bot1
+capture a4 race Bot1 round=4 target=(minecraft:[a-z0-9_]+) known=true baseline=\d+ count=\d+ score=3 lives=5 skips=0 resolved=false
+kapisma debug race Bot2
+capture b4 race Bot2 round=4 target=((?!%{a4} )minecraft:[a-z0-9_]+) known=true baseline=\d+ count=\d+ score=3 lives=5 skips=0 resolved=false
+give Bot1 %{a4} 1
+wait 0.5
+kapisma debug race Bot1
+capture a_scored4 race Bot1 round=4 target=%{a4} known=true baseline=\d+ count=\d+ score=(4) lives=5 skips=0 resolved=true
+give Bot2 %{b4} 1
+await Eşya Yarışı · Tur 5 başladı
+kapisma debug race Bot1
+capture a5 race Bot1 round=5 target=(minecraft:[a-z0-9_]+) known=true baseline=\d+ count=\d+ score=4 lives=5 skips=0 resolved=false
+kapisma debug race Bot2
+capture b5 race Bot2 round=5 target=((?!%{a5} )minecraft:[a-z0-9_]+) known=true baseline=\d+ count=\d+ score=4 lives=5 skips=0 resolved=false
+give Bot1 %{a5} 1
+wait 0.5
+kapisma debug race Bot1
+capture a_scored5 race Bot1 round=5 target=%{a5} known=true baseline=\d+ count=\d+ score=(5) lives=5 skips=1 resolved=true
+give Bot2 %{b5} 1
+await Eşya Yarışı · Tur 6 başladı
+kapisma debug race Bot1
+capture skip_ready race Bot1 round=6 target=(minecraft:[a-z0-9_]+) known=true baseline=\d+ count=\d+ score=5 lives=5 skips=1 resolved=false
+execute as Bot1 run atla
+kapisma debug race Bot1
+capture skip_used race Bot1 round=6 target=%{skip_ready} known=true baseline=\d+ count=\d+ score=(5) lives=5 skips=0 resolved=true
+execute as Bot1 run atla
+capture duplicate_skip (Şu an kullanabileceğin bir atlama hakkın yok.)
+kapisma debug race Bot2
+capture b6 race Bot2 round=6 target=(minecraft:[a-z0-9_]+) known=true baseline=\d+ count=\d+ score=5 lives=5 skips=1 resolved=false
+give Bot2 %{b6} 1
+await Eşya Yarışı · Tur 7 başladı
+kapisma debug race Bot2
+capture b7 race Bot2 round=7 target=(minecraft:[a-z0-9_]+) known=true baseline=\d+ count=\d+ score=6 lives=5 skips=1 resolved=false
+give Bot2 %{b7} 1
+tick sprint 600
+await Eşya Yarışı · Tur 8 başladı
+kapisma debug race Bot1
+capture missed race Bot1 round=8 target=(minecraft:[a-z0-9_]+) known=true baseline=\d+ count=\d+ score=0 lives=4 skips=0 resolved=false
+kapisma debug race Bot2
+capture retained race Bot2 round=8 target=(minecraft:[a-z0-9_]+) known=true baseline=\d+ count=\d+ score=7 lives=5 skips=1 resolved=false
+# PvP kill grants no skip or score, and normal death does not consume a task life.
+execute at Bot1 run tp Bot1 ~32 ~2 ~
+wait 2
+damage Bot1 1000 minecraft:player_attack by Bot2
+await Bot1 left the game
+player Bot1 spawn
+await Bot1 joined the game
+wait 2
+kapisma debug race Bot1
+capture victim race Bot1 round=8 target=%{missed} known=true baseline=(\d+) count=\1 score=0 lives=4 skips=0 resolved=false
+kapisma debug race Bot2
+capture killer race Bot2 round=8 target=%{retained} known=true baseline=\d+ count=\d+ score=7 lives=5 skips=(1) resolved=false
+kapisma stop
+await Arena depolama kapandı:

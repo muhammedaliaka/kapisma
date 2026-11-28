@@ -1,0 +1,48 @@
+# Four participants, two eliminated; actual vanilla commands and custom message return values.
+player Bot1 spawn
+player Bot2 spawn
+player Bot3 spawn
+player Bot4 spawn
+wait 2
+kapisma game UHC
+kapisma origins off
+kapisma team solo
+kapisma seedclass random
+kapisma rule UHC borderStart 200
+kapisma rule UHC treasureChests 0
+kapisma rule UHC earlyBuffSec 0
+kapisma rule UHC pvp 0
+kapisma rule UHC minimap 0
+kapisma start
+await UHC başladı! PvP kapalı.
+difficulty peaceful
+damage Bot3 1000 minecraft:out_of_world
+damage Bot4 1000 minecraft:out_of_world
+wait 2
+execute if entity @a[name=Bot3,gamemode=spectator] if entity @a[name=Bot4,gamemode=spectator] run say BOTH_ELIMINATED
+capture eliminated (BOTH_ELIMINATED)
+execute as Bot1 run msg Bot3 QA_MSG_BLOCKED
+capture msgblock Sohbet izolasyonu: (1) alıcı engellendi \(Bot1\)
+execute as Bot2 run tell Bot4 QA_TELL_BLOCKED
+capture tellblock Sohbet izolasyonu: (1) alıcı engellendi \(Bot2\)
+execute as Bot1 run w Bot4 QA_W_BLOCKED
+capture wblock Sohbet izolasyonu: (1) alıcı engellendi \(Bot1\)
+team add qa_chat
+team join qa_chat Bot1
+team join qa_chat Bot3
+execute as Bot1 run teammsg QA_TEAMMSG_BLOCKED
+capture teamblock Sohbet izolasyonu: (1) alıcı engellendi \(Bot1\)
+scoreboard objectives add qa_chat_result dummy
+execute store result score blocked qa_chat_result run execute as Bot3 run ozel Bot1 QA_PRIVATE_BLOCKED
+scoreboard players get blocked qa_chat_result
+capture customblocked blocked has (0) \[qa_chat_result\]
+execute store result score allowed qa_chat_result run execute as Bot3 run ozel Bot4 QA_SPECTATORS_ALLOWED
+scoreboard players get allowed qa_chat_result
+capture customallowed allowed has (1) \[qa_chat_result\]
+execute store result score alive qa_chat_result run execute as Bot1 run ozel Bot2 QA_LIVE_ALLOWED
+scoreboard players get alive qa_chat_result
+capture customlive alive has (1) \[qa_chat_result\]
+team remove qa_chat
+scoreboard objectives remove qa_chat_result
+kapisma stop
+await Arena depolama kapandı:

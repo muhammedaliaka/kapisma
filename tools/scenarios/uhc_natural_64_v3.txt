@@ -1,0 +1,423 @@
+# Natural generation, fixed seed with nearest village >500 blocks in seed catalog.
+player Bot1 spawn
+player Bot2 spawn
+wait 2
+kapisma game UHC
+kapisma team solo
+kapisma origins off
+kapisma seedclass uhc_natural
+kapisma rule UHC borderStart 200
+kapisma rule UHC borderEnd 50
+kapisma rule UHC treasureChests 64
+kapisma rule UHC minimap 0
+kapisma rule UHC pvp 0
+kapisma rule UHC pvpGraceMin 0
+kapisma rule UHC earlyBuffSec 0
+kapisma start
+await UHC başladı! PvP kapalı.
+capture cx UHC dunyasi acildi:.* merkez=\((-?\d+),-?\d+\)
+capture cz UHC dunyasi acildi:.* merkez=\(-?\d+,(-?\d+)\)
+capture depotX 64 hazine sandığı hazır\. Haritalar (?:merkezdeki|köydeki) fıçılarda \(X (-?\d+), Z -?\d+\)
+capture depotZ 64 hazine sandığı hazır\. Haritalar (?:merkezdeki|köydeki) fıçılarda \(X -?\d+, Z (-?\d+)\)
+capture bx0 UHC hazine fıçısı 0: \((-?\d+),-?\d+,-?\d+\) harita=27
+capture by0 UHC hazine fıçısı 0: \(-?\d+,(-?\d+),-?\d+\) harita=27
+capture bz0 UHC hazine fıçısı 0: \(-?\d+,-?\d+,(-?\d+)\) harita=27
+capture bx1 UHC hazine fıçısı 1: \((-?\d+),-?\d+,-?\d+\) harita=27
+capture by1 UHC hazine fıçısı 1: \(-?\d+,(-?\d+),-?\d+\) harita=27
+capture bz1 UHC hazine fıçısı 1: \(-?\d+,-?\d+,(-?\d+)\) harita=27
+capture bx2 UHC hazine fıçısı 2: \((-?\d+),-?\d+,-?\d+\) harita=10
+capture by2 UHC hazine fıçısı 2: \(-?\d+,(-?\d+),-?\d+\) harita=10
+capture bz2 UHC hazine fıçısı 2: \(-?\d+,-?\d+,(-?\d+)\) harita=10
+execute at Bot1 positioned %{cx} 0 %{cz} run forceload add ~-50 ~-50 ~50 ~50
+execute at Bot1 run forceload add %{depotX} %{depotZ}
+wait 5
+execute at Bot1 run data get block %{bx0} %{by0} %{bz0} Items
+capture x0 Slot: 0b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z0 Slot: 0b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x1 Slot: 1b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z1 Slot: 1b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x2 Slot: 2b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z2 Slot: 2b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x3 Slot: 3b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z3 Slot: 3b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x4 Slot: 4b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z4 Slot: 4b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x5 Slot: 5b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z5 Slot: 5b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x6 Slot: 6b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z6 Slot: 6b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x7 Slot: 7b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z7 Slot: 7b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x8 Slot: 8b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z8 Slot: 8b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x9 Slot: 9b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z9 Slot: 9b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x10 Slot: 10b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z10 Slot: 10b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x11 Slot: 11b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z11 Slot: 11b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x12 Slot: 12b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z12 Slot: 12b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x13 Slot: 13b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z13 Slot: 13b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x14 Slot: 14b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z14 Slot: 14b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x15 Slot: 15b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z15 Slot: 15b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x16 Slot: 16b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z16 Slot: 16b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x17 Slot: 17b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z17 Slot: 17b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x18 Slot: 18b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z18 Slot: 18b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x19 Slot: 19b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z19 Slot: 19b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x20 Slot: 20b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z20 Slot: 20b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x21 Slot: 21b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z21 Slot: 21b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x22 Slot: 22b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z22 Slot: 22b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x23 Slot: 23b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z23 Slot: 23b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x24 Slot: 24b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z24 Slot: 24b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x25 Slot: 25b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z25 Slot: 25b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x26 Slot: 26b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z26 Slot: 26b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+execute at Bot1 run data get block %{bx1} %{by1} %{bz1} Items
+capture x27 Slot: 0b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z27 Slot: 0b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x28 Slot: 1b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z28 Slot: 1b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x29 Slot: 2b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z29 Slot: 2b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x30 Slot: 3b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z30 Slot: 3b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x31 Slot: 4b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z31 Slot: 4b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x32 Slot: 5b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z32 Slot: 5b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x33 Slot: 6b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z33 Slot: 6b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x34 Slot: 7b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z34 Slot: 7b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x35 Slot: 8b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z35 Slot: 8b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x36 Slot: 9b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z36 Slot: 9b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x37 Slot: 10b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z37 Slot: 10b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x38 Slot: 11b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z38 Slot: 11b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x39 Slot: 12b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z39 Slot: 12b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x40 Slot: 13b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z40 Slot: 13b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x41 Slot: 14b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z41 Slot: 14b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x42 Slot: 15b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z42 Slot: 15b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x43 Slot: 16b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z43 Slot: 16b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x44 Slot: 17b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z44 Slot: 17b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x45 Slot: 18b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z45 Slot: 18b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x46 Slot: 19b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z46 Slot: 19b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x47 Slot: 20b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z47 Slot: 20b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x48 Slot: 21b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z48 Slot: 21b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x49 Slot: 22b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z49 Slot: 22b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x50 Slot: 23b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z50 Slot: 23b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x51 Slot: 24b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z51 Slot: 24b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x52 Slot: 25b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z52 Slot: 25b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x53 Slot: 26b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z53 Slot: 26b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+execute at Bot1 run data get block %{bx2} %{by2} %{bz2} Items
+capture x54 Slot: 0b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z54 Slot: 0b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x55 Slot: 1b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z55 Slot: 1b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x56 Slot: 2b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z56 Slot: 2b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x57 Slot: 3b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z57 Slot: 3b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x58 Slot: 4b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z58 Slot: 4b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x59 Slot: 5b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z59 Slot: 5b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x60 Slot: 6b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z60 Slot: 6b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x61 Slot: 7b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z61 Slot: 7b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x62 Slot: 8b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z62 Slot: 8b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x63 Slot: 9b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z63 Slot: 9b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+execute at Bot1 positioned %{x0} 0 %{z0} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_0_OK
+capture chest0 (UHC_CHEST_0_OK)
+execute at Bot1 positioned %{x0} 0 %{z0} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot0 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x1} 0 %{z1} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_1_OK
+capture chest1 (UHC_CHEST_1_OK)
+execute at Bot1 positioned %{x1} 0 %{z1} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot1 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x2} 0 %{z2} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_2_OK
+capture chest2 (UHC_CHEST_2_OK)
+execute at Bot1 positioned %{x2} 0 %{z2} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot2 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x3} 0 %{z3} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_3_OK
+capture chest3 (UHC_CHEST_3_OK)
+execute at Bot1 positioned %{x3} 0 %{z3} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot3 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x4} 0 %{z4} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_4_OK
+capture chest4 (UHC_CHEST_4_OK)
+execute at Bot1 positioned %{x4} 0 %{z4} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot4 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x5} 0 %{z5} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_5_OK
+capture chest5 (UHC_CHEST_5_OK)
+execute at Bot1 positioned %{x5} 0 %{z5} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot5 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x6} 0 %{z6} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_6_OK
+capture chest6 (UHC_CHEST_6_OK)
+execute at Bot1 positioned %{x6} 0 %{z6} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot6 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x7} 0 %{z7} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_7_OK
+capture chest7 (UHC_CHEST_7_OK)
+execute at Bot1 positioned %{x7} 0 %{z7} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot7 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x8} 0 %{z8} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_8_OK
+capture chest8 (UHC_CHEST_8_OK)
+execute at Bot1 positioned %{x8} 0 %{z8} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot8 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x9} 0 %{z9} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_9_OK
+capture chest9 (UHC_CHEST_9_OK)
+execute at Bot1 positioned %{x9} 0 %{z9} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot9 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x10} 0 %{z10} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_10_OK
+capture chest10 (UHC_CHEST_10_OK)
+execute at Bot1 positioned %{x10} 0 %{z10} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot10 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x11} 0 %{z11} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_11_OK
+capture chest11 (UHC_CHEST_11_OK)
+execute at Bot1 positioned %{x11} 0 %{z11} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot11 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x12} 0 %{z12} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_12_OK
+capture chest12 (UHC_CHEST_12_OK)
+execute at Bot1 positioned %{x12} 0 %{z12} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot12 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x13} 0 %{z13} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_13_OK
+capture chest13 (UHC_CHEST_13_OK)
+execute at Bot1 positioned %{x13} 0 %{z13} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot13 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x14} 0 %{z14} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_14_OK
+capture chest14 (UHC_CHEST_14_OK)
+execute at Bot1 positioned %{x14} 0 %{z14} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot14 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x15} 0 %{z15} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_15_OK
+capture chest15 (UHC_CHEST_15_OK)
+execute at Bot1 positioned %{x15} 0 %{z15} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot15 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x16} 0 %{z16} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_16_OK
+capture chest16 (UHC_CHEST_16_OK)
+execute at Bot1 positioned %{x16} 0 %{z16} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot16 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x17} 0 %{z17} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_17_OK
+capture chest17 (UHC_CHEST_17_OK)
+execute at Bot1 positioned %{x17} 0 %{z17} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot17 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x18} 0 %{z18} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_18_OK
+capture chest18 (UHC_CHEST_18_OK)
+execute at Bot1 positioned %{x18} 0 %{z18} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot18 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x19} 0 %{z19} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_19_OK
+capture chest19 (UHC_CHEST_19_OK)
+execute at Bot1 positioned %{x19} 0 %{z19} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot19 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x20} 0 %{z20} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_20_OK
+capture chest20 (UHC_CHEST_20_OK)
+execute at Bot1 positioned %{x20} 0 %{z20} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot20 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x21} 0 %{z21} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_21_OK
+capture chest21 (UHC_CHEST_21_OK)
+execute at Bot1 positioned %{x21} 0 %{z21} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot21 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x22} 0 %{z22} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_22_OK
+capture chest22 (UHC_CHEST_22_OK)
+execute at Bot1 positioned %{x22} 0 %{z22} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot22 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x23} 0 %{z23} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_23_OK
+capture chest23 (UHC_CHEST_23_OK)
+execute at Bot1 positioned %{x23} 0 %{z23} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot23 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x24} 0 %{z24} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_24_OK
+capture chest24 (UHC_CHEST_24_OK)
+execute at Bot1 positioned %{x24} 0 %{z24} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot24 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x25} 0 %{z25} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_25_OK
+capture chest25 (UHC_CHEST_25_OK)
+execute at Bot1 positioned %{x25} 0 %{z25} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot25 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x26} 0 %{z26} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_26_OK
+capture chest26 (UHC_CHEST_26_OK)
+execute at Bot1 positioned %{x26} 0 %{z26} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot26 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x27} 0 %{z27} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_27_OK
+capture chest27 (UHC_CHEST_27_OK)
+execute at Bot1 positioned %{x27} 0 %{z27} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot27 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x28} 0 %{z28} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_28_OK
+capture chest28 (UHC_CHEST_28_OK)
+execute at Bot1 positioned %{x28} 0 %{z28} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot28 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x29} 0 %{z29} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_29_OK
+capture chest29 (UHC_CHEST_29_OK)
+execute at Bot1 positioned %{x29} 0 %{z29} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot29 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x30} 0 %{z30} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_30_OK
+capture chest30 (UHC_CHEST_30_OK)
+execute at Bot1 positioned %{x30} 0 %{z30} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot30 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x31} 0 %{z31} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_31_OK
+capture chest31 (UHC_CHEST_31_OK)
+execute at Bot1 positioned %{x31} 0 %{z31} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot31 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x32} 0 %{z32} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_32_OK
+capture chest32 (UHC_CHEST_32_OK)
+execute at Bot1 positioned %{x32} 0 %{z32} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot32 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x33} 0 %{z33} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_33_OK
+capture chest33 (UHC_CHEST_33_OK)
+execute at Bot1 positioned %{x33} 0 %{z33} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot33 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x34} 0 %{z34} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_34_OK
+capture chest34 (UHC_CHEST_34_OK)
+execute at Bot1 positioned %{x34} 0 %{z34} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot34 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x35} 0 %{z35} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_35_OK
+capture chest35 (UHC_CHEST_35_OK)
+execute at Bot1 positioned %{x35} 0 %{z35} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot35 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x36} 0 %{z36} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_36_OK
+capture chest36 (UHC_CHEST_36_OK)
+execute at Bot1 positioned %{x36} 0 %{z36} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot36 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x37} 0 %{z37} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_37_OK
+capture chest37 (UHC_CHEST_37_OK)
+execute at Bot1 positioned %{x37} 0 %{z37} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot37 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x38} 0 %{z38} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_38_OK
+capture chest38 (UHC_CHEST_38_OK)
+execute at Bot1 positioned %{x38} 0 %{z38} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot38 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x39} 0 %{z39} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_39_OK
+capture chest39 (UHC_CHEST_39_OK)
+execute at Bot1 positioned %{x39} 0 %{z39} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot39 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x40} 0 %{z40} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_40_OK
+capture chest40 (UHC_CHEST_40_OK)
+execute at Bot1 positioned %{x40} 0 %{z40} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot40 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x41} 0 %{z41} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_41_OK
+capture chest41 (UHC_CHEST_41_OK)
+execute at Bot1 positioned %{x41} 0 %{z41} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot41 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x42} 0 %{z42} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_42_OK
+capture chest42 (UHC_CHEST_42_OK)
+execute at Bot1 positioned %{x42} 0 %{z42} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot42 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x43} 0 %{z43} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_43_OK
+capture chest43 (UHC_CHEST_43_OK)
+execute at Bot1 positioned %{x43} 0 %{z43} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot43 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x44} 0 %{z44} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_44_OK
+capture chest44 (UHC_CHEST_44_OK)
+execute at Bot1 positioned %{x44} 0 %{z44} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot44 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x45} 0 %{z45} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_45_OK
+capture chest45 (UHC_CHEST_45_OK)
+execute at Bot1 positioned %{x45} 0 %{z45} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot45 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x46} 0 %{z46} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_46_OK
+capture chest46 (UHC_CHEST_46_OK)
+execute at Bot1 positioned %{x46} 0 %{z46} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot46 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x47} 0 %{z47} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_47_OK
+capture chest47 (UHC_CHEST_47_OK)
+execute at Bot1 positioned %{x47} 0 %{z47} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot47 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x48} 0 %{z48} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_48_OK
+capture chest48 (UHC_CHEST_48_OK)
+execute at Bot1 positioned %{x48} 0 %{z48} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot48 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x49} 0 %{z49} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_49_OK
+capture chest49 (UHC_CHEST_49_OK)
+execute at Bot1 positioned %{x49} 0 %{z49} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot49 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x50} 0 %{z50} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_50_OK
+capture chest50 (UHC_CHEST_50_OK)
+execute at Bot1 positioned %{x50} 0 %{z50} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot50 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x51} 0 %{z51} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_51_OK
+capture chest51 (UHC_CHEST_51_OK)
+execute at Bot1 positioned %{x51} 0 %{z51} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot51 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x52} 0 %{z52} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_52_OK
+capture chest52 (UHC_CHEST_52_OK)
+execute at Bot1 positioned %{x52} 0 %{z52} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot52 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x53} 0 %{z53} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_53_OK
+capture chest53 (UHC_CHEST_53_OK)
+execute at Bot1 positioned %{x53} 0 %{z53} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot53 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x54} 0 %{z54} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_54_OK
+capture chest54 (UHC_CHEST_54_OK)
+execute at Bot1 positioned %{x54} 0 %{z54} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot54 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x55} 0 %{z55} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_55_OK
+capture chest55 (UHC_CHEST_55_OK)
+execute at Bot1 positioned %{x55} 0 %{z55} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot55 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x56} 0 %{z56} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_56_OK
+capture chest56 (UHC_CHEST_56_OK)
+execute at Bot1 positioned %{x56} 0 %{z56} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot56 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x57} 0 %{z57} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_57_OK
+capture chest57 (UHC_CHEST_57_OK)
+execute at Bot1 positioned %{x57} 0 %{z57} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot57 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x58} 0 %{z58} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_58_OK
+capture chest58 (UHC_CHEST_58_OK)
+execute at Bot1 positioned %{x58} 0 %{z58} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot58 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x59} 0 %{z59} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_59_OK
+capture chest59 (UHC_CHEST_59_OK)
+execute at Bot1 positioned %{x59} 0 %{z59} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot59 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x60} 0 %{z60} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_60_OK
+capture chest60 (UHC_CHEST_60_OK)
+execute at Bot1 positioned %{x60} 0 %{z60} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot60 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x61} 0 %{z61} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_61_OK
+capture chest61 (UHC_CHEST_61_OK)
+execute at Bot1 positioned %{x61} 0 %{z61} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot61 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x62} 0 %{z62} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_62_OK
+capture chest62 (UHC_CHEST_62_OK)
+execute at Bot1 positioned %{x62} 0 %{z62} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot62 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x63} 0 %{z63} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_63_OK
+capture chest63 (UHC_CHEST_63_OK)
+execute at Bot1 positioned %{x63} 0 %{z63} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot63 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 run forceload remove all
+kapisma stop
+await Arena depolama kapandı:

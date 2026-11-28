@@ -6,7 +6,7 @@ player Bot1 spawn
 player Bot2 spawn
 wait 3
 kapisma start
-wait 20
+await Tombala başladı!
 kapisma debug givecard Bot2 1
 wait 2
 kapisma debug givecard Bot1 25

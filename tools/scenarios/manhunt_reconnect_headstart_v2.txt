@@ -1,0 +1,45 @@
+# Hunter avantaj içinde geri döner, yeniden ayrılır ve süre bitince normalleşir.
+player Bot1 spawn
+player Bot2 spawn
+player Bot3 spawn
+wait 2
+kapisma game MANHUNT
+kapisma origins off
+kapisma runner Bot1
+kapisma rule MANHUNT headStartSec 30
+difficulty peaceful
+kapisma rule MANHUNT friendlyFire 1
+kapisma rule MANHUNT pvp 1
+kapisma start
+await Manhunt başladı!
+attribute Bot2 minecraft:generic.jump_strength get
+capture first_jump is (0\.0)
+player Bot2 kill
+await Bot2 left the game
+player Bot2 spawn
+await Bot2 joined the game
+attribute Bot2 minecraft:generic.jump_strength get
+capture reconnect_jump is (0\.0)
+attribute Bot2 minecraft:generic.movement_speed get
+capture reconnect_speed is (0\.0)
+damage Bot2 1000 minecraft:fall
+capture fall_guard (Target is invulnerable to the given damage type)
+damage Bot3 4 minecraft:player_attack by Bot2
+capture friendly_guard (Target is invulnerable to the given damage type)
+damage Bot1 4 minecraft:player_attack by Bot2
+capture runner_guard (Target is invulnerable to the given damage type)
+player Bot2 kill
+await Bot2 left the game
+tick sprint 600
+await Runner avantajı bitti
+attribute Bot3 minecraft:generic.jump_strength get
+capture online_jump is (0\.[1-9]\d*)
+player Bot2 spawn
+await Bot2 joined the game
+attribute Bot2 minecraft:generic.jump_strength get
+capture released_jump is (0\.[1-9]\d*)
+attribute Bot2 minecraft:generic.movement_speed get
+capture released_speed is (0\.[1-9]\d*)
+damage Bot3 4 minecraft:player_attack by Bot2
+capture released_hit (Applied 4\.0 damage to Bot3)
+kapisma stop

@@ -3,6 +3,6 @@
 	"minVersion": "0.8",
 	"package": "tr.kapismahud.mixin",
 	"compatibilityLevel": "JAVA_21",
-	"client": ["PlayerInfoMixin"],
+	"client": ["PlayerInfoMixin", "AbstractClientPlayerMixin", "KeyboardHandlerMixin"],
 	"injectors": { "defaultRequire": 1 }
 }

@@ -1,0 +1,38 @@
+# Server decisions with glass, partial blocks, corners, chunk and dimension transitions.
+kapisma debug guard force 1
+player Bot1 spawn
+player Bot2 spawn
+wait 3
+gamemode survival Bot1
+gamemode survival Bot2
+attribute Bot1 minecraft:generic.gravity base set 0
+attribute Bot2 minecraft:generic.gravity base set 0
+execute in minecraft:overworld run tp Bot1 15.5 100 0.5
+execute in minecraft:overworld run tp Bot2 16.5 100 3.0
+wait 2
+fill 12 97 -3 21 104 7 minecraft:air
+wait 1
+kapisma debug guard hit Bot1 Bot2 1
+capture cross_chunk (engellenen=0 gecen=1)
+fill 15 99 1 16 102 1 minecraft:stone
+kapisma debug guard hit Bot1 Bot2 1
+capture full_block (engellenen=1 gecen=0)
+fill 15 99 1 16 102 1 minecraft:air
+fill 15 101 1 16 101 1 minecraft:stone_slab[type=bottom]
+kapisma debug guard hit Bot1 Bot2 1
+capture slab (engellenen=0 gecen=1)
+fill 15 101 1 16 101 1 minecraft:air
+setblock 15 101 1 minecraft:stone
+execute in minecraft:overworld run tp Bot2 17.4 100 2.5
+kapisma debug guard hit Bot1 Bot2 1
+capture corner (engellenen=0 gecen=1)
+setblock 15 101 1 minecraft:air
+execute in minecraft:the_nether run tp Bot2 0.5 100 0.5
+wait 2
+kapisma debug guard hit Bot1 Bot2 1
+capture dimension (engellenen=1 gecen=0)
+execute in minecraft:overworld run tp Bot2 16.5 100 3.0
+wait 2
+kapisma debug guard hit Bot1 Bot2 1
+capture returned (engellenen=0 gecen=1)
+kapisma debug guard force -1

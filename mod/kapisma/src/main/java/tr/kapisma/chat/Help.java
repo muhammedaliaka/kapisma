@@ -28,6 +28,7 @@ public final class Help {
 		return switch (game) {
 			case "UHC" -> "UHC: PvP başta kapalı, süre bitince açılır. Sınır daralır, merkeze ilerle. Pusula: rakip, takım arkadaşı, sınır merkezi, başlangıç noktan.";
 			case "BINGO" -> "Tombala: 9. slottaki kâğıda sağ tık = kart (/kart). Eşyayı ilk alan takım sayar. Pusula: rakip, takım arkadaşı, başlangıç noktası.";
+			case "ESYA" -> "Eşya Yarışı. /gorev gizli eşyanı gösterir. /atla ile kazandığın atlama hakkını kullanabilirsin.";
 			case "MANHUNT" -> "Manhunt: hunter pusulası runner'ı gösterir; sağ tık = en yakın / en uzak / belirli runner / takım arkadaşı.";
 			case "KATIL" -> "Katil Kim: pusula en yakın / en uzak oyuncuyu gösterir (isim yazmaz). Sağ tık hedefi değiştirir.";
 			default -> null;
@@ -48,6 +49,7 @@ public final class Help {
 		head(p, "Oyun sırasında");
 		p.sendSystemMessage(cmd("/pusula [sonraki|onceki]", "pusulanın hedefini değiştirir (pusulaya sağ tık ile aynı; Shift+sağ tık = geri)"));
 		p.sendSystemMessage(cmd("/kart", "Tombala kartını açar (kâğıda sağ tık ile aynı)"));
+		p.sendSystemMessage(cmd("/izle", "izleyici pusulası menüsünü açar"));
 		p.sendSystemMessage(cmd("/koord", "bulunduğun yeri takımına yazar"));
 		p.sendSystemMessage(cmd("/istatistik [oyuncu]", "son oyunda kim kimi kaç kez öldürdü / nasıl öldü"));
 
@@ -74,7 +76,7 @@ public final class Help {
 		p.sendSystemMessage(Component.literal(admin ? "▌ Host / yönetici (yetkin var)" : "▌ Host / yönetici (yetkin YOK, host: " + (host != null ? host.getGameProfile().getName() : "yok") + ")")
 			.withStyle(admin ? ChatFormatting.GREEN : ChatFormatting.RED, ChatFormatting.BOLD));
 		p.sendSystemMessage(cmd("/kapisma start | stop", "oyunu başlat / durdur"));
-		p.sendSystemMessage(cmd("/kapisma game <UHC|BINGO|MANHUNT|KATIL>", "hangi oyunun oynanacağını seç"));
+		p.sendSystemMessage(cmd("/kapisma game <UHC|BINGO|ESYA|MANHUNT|KATIL>", "hangi oyunun oynanacağını seç"));
 		p.sendSystemMessage(cmd("/kapisma team <solo|duo>", "herkes tek mi, ikili takım mı"));
 		p.sendSystemMessage(cmd("/kapisma origins <random|select|off>", "ırk: rastgele / herkes seçsin / kapalı"));
 		p.sendSystemMessage(cmd("/kapisma ban|unban <ırk>", "bir ırkı yasakla / serbest bırak"));

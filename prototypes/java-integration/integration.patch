@@ -1,0 +1,355 @@
+--- a/tr/kapisma/game/GameManager.java
++++ b/tr/kapisma/game/GameManager.java
+@@ -117,8 +117,8 @@
+ 				// participant of the next match to the lobby.
+ 				if (current == join.game()) current.onJoin(p);
+ 			} else {
+-				Lobby.send(server, p);
+-				OriginService.reset(server, p);
++				if (!ArenaRecovery.recoverOrLobby(server, p)) p.connection.disconnect(net.minecraft.network.chat.Component.literal("Arena dönüşü doğrulanamadı; hosta bildir."));
++				else OriginService.reset(server, p);
+ 			}
+ 		}
+ 		if (restartTicks > 0 && --restartTicks == 0) {
+@@ -132,7 +132,10 @@
+ 				var e = it.next();
+ 				if (e.setValue(e.getValue() - 1) <= 1) {
+ 					ServerPlayer p = server.getPlayerList().getPlayer(e.getKey());
+-					if (p != null && (current == null || !current.contains(p.getUUID()))) Lobby.send(server, p);
++					if (p != null && (current == null || !current.contains(p.getUUID()))) {
++                        if (ArenaRecovery.recoverOrLobby(server, p)) {}
++                        else p.connection.disconnect(net.minecraft.network.chat.Component.literal("Arena dönüşü doğrulanamadı; hosta bildir."));
++                    }
+ 					it.remove();
+ 				}
+ 			}
+@@ -161,6 +164,9 @@
+ 		if (current != null && !current.isClosed()) return "Zaten bir oyun çalışıyor.";
+ 		List<ServerPlayer> ps = new ArrayList<>(server.getPlayerList().getPlayers());
+ 		if (ps.isEmpty()) return "Oyuncu yok.";
++		try { for (var p : ps) if (ArenaRecovery.unresolved(server, p.getUUID())) return "Önce arena dönüş kaydı tamamlanmalı."; } catch (java.io.IOException ex) { return "Arena dönüş günlüğü okunamadı."; }
++		if (NativeArenaGame.isNew(settings.game) && !NativeArenaGame.enabled()) return "Deneysel arenalar devre dışı.";
++		if (NativeArenaGame.isNew(settings.game) && (ps.size() < 2 || ps.size() > 8)) return "Arena oyunları için 2–8 oyuncu gerekli.";
+ 		int min = "BINGO".equals(settings.game) || "ESYA".equals(settings.game) ? 1 : "KATIL".equals(settings.game) ? 3 : 2;
+ 		boolean dragonGame = "MANHUNT".equals(settings.game) || "KATIL".equals(settings.game);
+ 		if (ps.size() < min) {
+@@ -175,7 +181,7 @@
+ 			var missing = ps.stream().filter(p -> !ManhuntGame.supportsDisguise(p)).map(p -> p.getGameProfile().getName()).toList();
+ 			if (!missing.isEmpty()) return "Katil Kim için Kapışma HUD modu gerekli. Kurması gereken oyuncular: " + String.join(", ", missing);
+ 		}
+-		if (!seeds.selectable(settings.seedClass))
++		if (!NativeArenaGame.isNew(settings.game) && !seeds.selectable(settings.seedClass))
+ 			return "Seçilen seed sınıfında doğrulanmış dünya yok: " + seeds.displayName(settings.seedClass);
+ 		if (dragonGame && (ManhuntGame.worldUsed(server) || !seeds.matches(settings.seedClass, server.overworld().getSeed()))) {
+ 			requestNewWorld();
+@@ -187,6 +193,13 @@
+ 			case "ESYA" -> new ItemRaceGame(this);
+ 			case "MANHUNT" -> new ManhuntGame(this, false);
+ 			case "KATIL" -> new ManhuntGame(this, true);
++			case RotatingOutpostGame.ID -> new RotatingOutpostGame(this);
++			case "KERVAN_BASKINI" -> new NativeArenaGame(this, NativeArenaGame.Mode.CARAVAN);
++			case "YASAYAN_HARITA" -> new NativeArenaGame(this, NativeArenaGame.Mode.CLUES);
++			case "INSA_ET_SAVUN" -> new NativeArenaGame(this, NativeArenaGame.Mode.BUILD);
++			case "KIT_IHALESI" -> new NativeArenaGame(this, NativeArenaGame.Mode.AUCTION);
++			case "ALCAK_IRTIFA" -> new NativeArenaGame(this, NativeArenaGame.Mode.FLIGHT);
++			case "KIRIK_TELSIZ" -> new NativeArenaGame(this, NativeArenaGame.Mode.RADIO);
+ 			default -> null;
+ 		};
+ 		if (g == null) return "Bu oyun modu henüz hazır değil: " + settings.game;
+@@ -196,9 +209,13 @@
+ 		} catch (Exception e) {
+ 			tr.kapisma.Kapisma.LOG.error("Oyun hazirlanamadi", e);
+ 			g.stop("Hata: " + e.getMessage());
++			if ((g instanceof RotatingOutpostGame arena && arena.cleanupPending()) || (g instanceof NativeArenaGame n && n.cleanupPending())) current = g;
+ 			return "Oyun başlatılamadı: " + e;
+ 		}
+-		if (err != null) return err;
++		if (err != null) {
++			if ((g instanceof RotatingOutpostGame arena && arena.cleanupPending()) || (g instanceof NativeArenaGame n && n.cleanupPending())) current = g;
++			return err;
++		}
+ 		current = g;
+ 		tr.kapisma.voice.VoiceBridge.refresh(server);
+ 		Msg.broadcast(server, g.title() + " hazırlanıyor... (" + ps.size() + " oyuncu)");
+@@ -240,6 +257,7 @@
+ 	public void stop(String reason) {
+ 		if (current != null) {
+ 			current.stop(reason);
++			if ((current instanceof RotatingOutpostGame arena && arena.cleanupPending()) || (current instanceof NativeArenaGame n && n.cleanupPending())) return;
+ 			last = current;
+ 			current = null;
+ 			tr.kapisma.voice.VoiceBridge.refresh(server);
+--- a/tr/kapisma/config/Rules.java
++++ b/tr/kapisma/config/Rules.java
+@@ -109,12 +109,21 @@
+ 		RuleDef.num("antiXray", "X-ray koruması", "0 kapalı · 1 gömülü cevherleri gizler.", 1, 0, 1, 1, Items.ENDER_EYE)
+ 	);
+ 
++	public static final List<RuleDef> DONEN_KARAKOL = List.of(
++        RuleDef.num("rotationSeconds", "Karakol süresi (sn)", "Aktif bölgenin değişim süresi.", 30, 10, 120, 5, Items.CLOCK),
++        RuleDef.num("scoreGoal", "Kazanma puanı", "Bir takımın kazanmak için gereken puanı.", 40, 5, 200, 5, Items.GOLD_BLOCK),
++        RuleDef.flag("teamVoice", "Takım ses kanalı", "Takım ses grubu; ses izolasyonu kabulü tamamlanmadan kapalı tutulur.", false, Items.NOTE_BLOCK)
++    );
++    public static final List<RuleDef> ARENA = List.of(RuleDef.flag("teamVoice", "Takım ses kanalı", "Deneysel ses koruması doğrulanana kadar kapalı.", false, Items.NOTE_BLOCK));
++
+ 	public static List<RuleDef> of(String game) {
+ 		return switch (game) {
+ 			case "UHC" -> UHC;
+ 			case "BINGO" -> BINGO;
+ 			case "KATIL" -> KATIL;
+ 			case "ESYA" -> ESYA;
++			case "DONEN_KARAKOL" -> DONEN_KARAKOL;
++			case "KERVAN_BASKINI", "YASAYAN_HARITA", "INSA_ET_SAVUN", "KIT_IHALESI", "ALCAK_IRTIFA", "KIRIK_TELSIZ" -> ARENA;
+ 			default -> MANHUNT;
+ 		};
+ 	}
+--- a/tr/kapisma/config/Settings.java
++++ b/tr/kapisma/config/Settings.java
+@@ -33,6 +33,13 @@
+ 		originMode.put("UHC", "RANDOM");
+ 		originMode.put("BINGO", "RANDOM");
+ 		originMode.put("ESYA", "OFF");
++		originMode.put("DONEN_KARAKOL", "OFF");
++		originMode.put("KERVAN_BASKINI", "OFF");
++		originMode.put("YASAYAN_HARITA", "OFF");
++		originMode.put("INSA_ET_SAVUN", "OFF");
++		originMode.put("KIT_IHALESI", "OFF");
++		originMode.put("ALCAK_IRTIFA", "OFF");
++		originMode.put("KIRIK_TELSIZ", "OFF");
+ 		originMode.put("MANHUNT", "SELECT");
+ 		originMode.put("KATIL", "OFF");
+ 	}
+@@ -77,6 +84,13 @@
+ 					for (String g : new String[] {"UHC", "BINGO", "MANHUNT"}) s.originMode.putIfAbsent(g, "RANDOM");
+ 					s.originMode.putIfAbsent("KATIL", "OFF");
+ 					s.originMode.putIfAbsent("ESYA", "OFF");
++					s.originMode.putIfAbsent("DONEN_KARAKOL", "OFF");
++					s.originMode.putIfAbsent("KERVAN_BASKINI", "OFF");
++					s.originMode.putIfAbsent("YASAYAN_HARITA", "OFF");
++					s.originMode.putIfAbsent("INSA_ET_SAVUN", "OFF");
++					s.originMode.putIfAbsent("KIT_IHALESI", "OFF");
++					s.originMode.putIfAbsent("ALCAK_IRTIFA", "OFF");
++					s.originMode.putIfAbsent("KIRIK_TELSIZ", "OFF");
+ 					return s;
+ 				}
+ 			}
+--- a/tr/kapisma/ui/MenuService.java
++++ b/tr/kapisma/ui/MenuService.java
+@@ -41,6 +41,13 @@
+ 			case "BINGO" -> "Tombala (Bingo)";
+ 			case "ESYA" -> "Eşya Yarışı";
+ 			case "KATIL" -> "Katil Kim";
++			case "DONEN_KARAKOL" -> "Dönen Karakol";
++			case "KERVAN_BASKINI" -> "Kervan Baskını";
++			case "YASAYAN_HARITA" -> "Yaşayan Harita";
++			case "INSA_ET_SAVUN" -> "İnşa Et, Savun";
++			case "KIT_IHALESI" -> "Kit İhalesi";
++			case "ALCAK_IRTIFA" -> "Alçak İrtifa";
++			case "KIRIK_TELSIZ" -> "Kırık Telsiz";
+ 			default -> "Manhunt";
+ 		};
+ 	}
+@@ -111,14 +118,16 @@
+ 	private void buildMain(SimpleGui gui, ServerPlayer p) {
+ 		Settings st = mgr.settings;
+ 		for (int i = 0; i < 54; i++) gui.clearSlot(i);
+-		String[] games = {"UHC", "BINGO", "ESYA", "MANHUNT", "KATIL"};
+-		Item[] icons = {Items.GOLDEN_APPLE, Items.FILLED_MAP, Items.CHEST, Items.COMPASS, Items.IRON_SWORD};
++		String[] games = {"UHC", "BINGO", "ESYA", "MANHUNT", "KATIL", "DONEN_KARAKOL", "KERVAN_BASKINI", "YASAYAN_HARITA", "INSA_ET_SAVUN", "KIT_IHALESI", "ALCAK_IRTIFA", "KIRIK_TELSIZ"};
++		Item[] icons = {Items.GOLDEN_APPLE, Items.FILLED_MAP, Items.CHEST, Items.COMPASS, Items.IRON_SWORD, Items.GOLD_BLOCK, Items.HAY_BLOCK, Items.MAP, Items.OAK_PLANKS, Items.GOLD_INGOT, Items.ELYTRA, Items.NOTE_BLOCK};
+ 		String[] descs = {"Doğal can yok, daralan sınır, son takım kazanır.", "5x5 eşya kartı, çizgileri ilk tamamlayan kazanır.",
+ 			"Her tur sana özel gizli eşya, 5 can ve seriyle kazanılan atlama hakları.", "Runner Ejderha'yı öldürmeye, hunter'lar runner'ı avlamaya çalışır.",
+-			"Herkes aynı skin'de, 200x200 alanda rastgele doğar. Masumlar katil hepsini öldürmeden Ejderha'yı öldürür; gizli katil masumları avlar. Sesli sohbet."};
+-		int[] slots = {9, 11, 13, 15, 17};
++			"Herkes aynı skin'de, 200x200 alanda rastgele doğar. Masumlar katil hepsini öldürmeden Ejderha'yı öldürür; gizli katil masumları avlar. Sesli sohbet.",
++			"İki takım, sırayla etkin üç karakol. Çekişmeli alan puan vermez.", "Kervanı koru veya durdur.", "Takımının sıradaki ipucunu bul.", "İnşa ve hücum rolleri değişir.", "Gizli jeton teklifleri, ardından PvP.", "Dört sıralı Elytra geçidi.", "Özel sinyal parçalarını birleştir."};
++		int[] slots = {9, 11, 13, 15, 17, 18, 19, 20, 21, 22, 23, 24};
+ 		for (int i = 0; i < games.length; i++) {
+ 			final String g = games[i];
++			if (tr.kapisma.game.NativeArenaGame.isNew(g) && !tr.kapisma.game.NativeArenaGame.enabled()) continue;
+ 			boolean sel = st.game.equals(g);
+ 			gui.setSlot(slots[i], new GuiElementBuilder(icons[i])
+ 				.setName(name(gameLabel(g) + (sel ? "  ✔" : ""), sel ? ChatFormatting.GREEN : ChatFormatting.WHITE, ChatFormatting.BOLD))
+@@ -163,8 +172,10 @@
+ 				.addLoreLine(lore(mgr.server.getPlayerList().getPlayerCount() + " oyuncu katılacak"))
+ 				.setCallback((idx, type, action) -> {
+ 					if (!admin(p)) return;
++					boolean outpost = tr.kapisma.game.NativeArenaGame.isNew(mgr.settings.game);
++					if (outpost) gui.close();
+ 					String err = mgr.start();
+-					gui.close();
++					if (!outpost) gui.close();
+ 					if (err != null) p.sendSystemMessage(Msg.error(err));
+ 				}));
+ 		if ("MANHUNT".equals(st.game)) {
+--- a/tr/kapisma/Cmds.java
++++ b/tr/kapisma/Cmds.java
+@@ -193,12 +193,13 @@
+ 				gm().setHost(p);
+ 				return say(c, "Yeni host: " + p.getGameProfile().getName());
+ 			})))
+-			.then(Commands.literal("game").executes(c -> usage(c, "/kapisma game <UHC|BINGO|ESYA|MANHUNT|KATIL>")).then(Commands.argument("oyun", StringArgumentType.word())
+-				.suggests((c, b) -> net.minecraft.commands.SharedSuggestionProvider.suggest(new String[] {"UHC", "BINGO", "ESYA", "MANHUNT", "KATIL"}, b))
++			.then(Commands.literal("game").executes(c -> usage(c, "/kapisma game <UHC|BINGO|ESYA|MANHUNT|KATIL|DONEN_KARAKOL|KERVAN_BASKINI|YASAYAN_HARITA|INSA_ET_SAVUN|KIT_IHALESI|ALCAK_IRTIFA|KIRIK_TELSIZ>")).then(Commands.argument("oyun", StringArgumentType.word())
++				.suggests((c, b) -> net.minecraft.commands.SharedSuggestionProvider.suggest(new String[] {"UHC", "BINGO", "ESYA", "MANHUNT", "KATIL", "DONEN_KARAKOL", "KERVAN_BASKINI", "YASAYAN_HARITA", "INSA_ET_SAVUN", "KIT_IHALESI", "ALCAK_IRTIFA", "KIRIK_TELSIZ"}, b))
+ 				.executes(c -> {
+ 					if (!admin(c)) return deny(c);
+ 					String g = StringArgumentType.getString(c, "oyun").toUpperCase();
+-					if (!java.util.List.of("UHC", "BINGO", "ESYA", "MANHUNT", "KATIL").contains(g)) return say(c, "Geçerli: UHC, BINGO, ESYA, MANHUNT, KATIL");
++					if (!java.util.List.of("UHC", "BINGO", "ESYA", "MANHUNT", "KATIL", "DONEN_KARAKOL", "KERVAN_BASKINI", "YASAYAN_HARITA", "INSA_ET_SAVUN", "KIT_IHALESI", "ALCAK_IRTIFA", "KIRIK_TELSIZ").contains(g)) return say(c, "Geçerli: UHC, BINGO, ESYA, MANHUNT, KATIL, DONEN_KARAKOL, KERVAN_BASKINI, YASAYAN_HARITA, INSA_ET_SAVUN, KIT_IHALESI, ALCAK_IRTIFA, KIRIK_TELSIZ");
++					if (tr.kapisma.game.NativeArenaGame.isNew(g) && !tr.kapisma.game.NativeArenaGame.enabled()) return say(c, "Deneysel arenalar devre dışı.");
+ 					gm().settings.game = g;
+ 					gm().settings.save();
+ 					return say(c, "Oyun modu: " + g);
+@@ -252,9 +253,9 @@
+ 					gm().settings.save();
+ 					return say(c, "Yasak kaldırıldı.");
+ 				})))
+-			.then(Commands.literal("rule").executes(c -> usage(c, "/kapisma rule <UHC|BINGO|ESYA|MANHUNT|KATIL> <kural> <değer>  (liste: /kapisma rules <oyun>)"))
++			.then(Commands.literal("rule").executes(c -> usage(c, "/kapisma rule <UHC|BINGO|ESYA|MANHUNT|KATIL|DONEN_KARAKOL|KERVAN_BASKINI|YASAYAN_HARITA|INSA_ET_SAVUN|KIT_IHALESI|ALCAK_IRTIFA|KIRIK_TELSIZ> <kural> <değer>  (liste: /kapisma rules <oyun>)"))
+ 				.then(Commands.argument("oyun", StringArgumentType.word())
+-					.suggests((c, b) -> net.minecraft.commands.SharedSuggestionProvider.suggest(new String[] {"UHC", "BINGO", "ESYA", "MANHUNT", "KATIL"}, b))
++					.suggests((c, b) -> net.minecraft.commands.SharedSuggestionProvider.suggest(new String[] {"UHC", "BINGO", "ESYA", "MANHUNT", "KATIL", "DONEN_KARAKOL", "KERVAN_BASKINI", "YASAYAN_HARITA", "INSA_ET_SAVUN", "KIT_IHALESI", "ALCAK_IRTIFA", "KIRIK_TELSIZ"}, b))
+ 					.then(Commands.argument("kural", StringArgumentType.word())
+ 						.suggests((c, b) -> {
+ 							var keys = Rules.of(StringArgumentType.getString(c, "oyun").toUpperCase()).stream().map(RuleDef::key).toList();
+@@ -277,7 +278,7 @@
+ 					st.save();
+ 					return say(c, st.runnerNames.isEmpty() ? "Runner seçimi: rastgele" : "Runner'lar: " + String.join(", ", st.runnerNames));
+ 				})))
+-			.then(Commands.literal("rules").executes(c -> usage(c, "/kapisma rules <UHC|BINGO|ESYA|MANHUNT|KATIL>")).then(Commands.argument("oyun", StringArgumentType.word()).executes(Cmds::rules)));
++			.then(Commands.literal("rules").executes(c -> usage(c, "/kapisma rules <UHC|BINGO|ESYA|MANHUNT|KATIL|DONEN_KARAKOL|KERVAN_BASKINI|YASAYAN_HARITA|INSA_ET_SAVUN|KIT_IHALESI|ALCAK_IRTIFA|KIRIK_TELSIZ>")).then(Commands.argument("oyun", StringArgumentType.word()).executes(Cmds::rules)));
+ 		d.register(root);
+ 		d.register(Commands.literal("oyun").executes(Cmds::menu));
+ 		d.register(Commands.literal("yardim").executes(Cmds::help));
+--- a/tr/kapisma/Kapisma.java
++++ b/tr/kapisma/Kapisma.java
+@@ -86,10 +86,19 @@
+ 		});
+ 
+ 		net.fabricmc.fabric.api.event.player.AttackEntityCallback.EVENT.register(tr.kapisma.guard.AntiCheat::onAttack);
+-		net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents.BEFORE.register((world, player, pos, state, entity) ->
+-			!countdownPlayer(player) && (GM == null || !(GM.current instanceof tr.kapisma.game.BingoGame game) || !game.protectedPortal(world, pos)));
+-		net.fabricmc.fabric.api.event.player.UseBlockCallback.EVENT.register((player, world, hand, hit) ->
+-			!world.isClientSide && countdownPlayer(player) ? net.minecraft.world.InteractionResult.FAIL : net.minecraft.world.InteractionResult.PASS);
++		net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents.BEFORE.register((world, player, pos, state, entity) -> {
++            if (player instanceof ServerPlayer sp && GM != null && GM.current instanceof tr.kapisma.game.NativeArenaGame arena && arena.arenaLevel(world)) {
++                arena.breakBlock(sp, net.minecraft.world.InteractionHand.MAIN_HAND, pos);
++                return false;
++            }
++            return !countdownPlayer(player) && (GM == null || !(GM.current instanceof tr.kapisma.game.BingoGame game) || !game.protectedPortal(world, pos));
++        });
++		net.fabricmc.fabric.api.event.player.UseBlockCallback.EVENT.register((player, world, hand, hit) -> {
++            if (!world.isClientSide && player instanceof ServerPlayer sp && GM != null && GM.current instanceof tr.kapisma.game.NativeArenaGame arena)
++                return arena.useBlock(sp, hand, hit);
++            return !world.isClientSide && countdownPlayer(player) ? net.minecraft.world.InteractionResult.FAIL : net.minecraft.world.InteractionResult.PASS;
++        });
++        tr.kapisma.game.ArenaCommands.register();
+ 
+ 		UseItemCallback.EVENT.register((player, world, hand) -> {
+ 			var stack = player.getItemInHand(hand);
+--- a/tr/kapisma/voice/VoicePolicy.java
++++ b/tr/kapisma/voice/VoicePolicy.java
+@@ -4,9 +4,13 @@
+ import java.util.UUID;
+ 
+ /** Immutable snapshot, safe to read from the voice networking thread. */
+-record VoicePolicy(Set<UUID> participants, Set<UUID> spectators, boolean killer, boolean voice, boolean deepVoice) {
++record VoicePolicy(Set<UUID> participants, Set<UUID> spectators, boolean killer, boolean voice, boolean deepVoice, Object epoch, boolean radioOnly) {
+ 	static final VoicePolicy LOBBY = new VoicePolicy(Set.of(), Set.of(), false, true, false);
+-	VoicePolicy {
++	VoicePolicy(Set<UUID> participants, Set<UUID> spectators, boolean killer, boolean voice, boolean deepVoice) {
++        this(participants, spectators, killer, voice, deepVoice, new Object(), false);
++    }
++    VoicePolicy {
++		java.util.Objects.requireNonNull(epoch);
+ 		participants = Set.copyOf(participants);
+ 		spectators = Set.copyOf(spectators);
+ 	}
+--- a/tr/kapisma/voice/KapismaVoice.java
++++ b/tr/kapisma/voice/KapismaVoice.java
+@@ -31,18 +31,23 @@
+ 
+ 	private static volatile VoicechatServerApi api;
+ 	private static volatile VoicePolicy policy = VoicePolicy.LOBBY;
++    private static Game epochGame;
++    private static Object epochToken = VoicePolicy.LOBBY.epoch();
+ 
+ 	// Only the Minecraft server thread reads mutable game/player state.
+ 	static void refresh(net.minecraft.server.MinecraftServer server) {
+ 		var gm = Kapisma.GM;
+ 		var g = gm == null ? null : gm.current;
+-		if (g == null || g.isClosed()) { policy = VoicePolicy.LOBBY; return; }
++		Game active = g == null || g.isClosed() ? null : g;
++        if (active != epochGame) { epochGame = active; epochToken = new Object(); }
++        VoiceRouteScope.publishEpoch(epochToken);
++        if (active == null) { policy = new VoicePolicy(java.util.Set.of(), java.util.Set.of(), false, true, false, epochToken, false); return; }
+ 		var spectators = new java.util.HashSet<>(g.eliminated);
+ 		for (var p : server.getPlayerList().getPlayers())
+ 			if (g.contains(p.getUUID()) && p.isSpectator()) spectators.add(p.getUUID());
+ 		boolean killer = "KATIL".equals(g.id());
+ 		policy = new VoicePolicy(new java.util.HashSet<>(g.players), spectators, killer,
+-			!killer || gm.settings.flag("KATIL", "voice"), killer && gm.settings.flag("KATIL", "deepVoice"));
++			!killer || gm.settings.flag("KATIL", "voice"), killer && gm.settings.flag("KATIL", "deepVoice"), epochToken, "KIRIK_TELSIZ".equals(g.id()));
+ 	}
+ 	/** takim kimligi -> ses grubu (acik tur: grup disindakiler de yakindan duyar). */
+ 	private static final Map<String, Group> groups = new ConcurrentHashMap<>();
+@@ -57,12 +62,28 @@
+ 	}
+ 
+ 	private void isolateSpectator(SoundPacketEvent<?> event) {
+-		var sender = event.getSenderConnection();
+-		var receiver = event.getReceiverConnection();
+-		VoicePolicy snapshot = policy;
+-		if (sender != null && receiver != null && sender.getPlayer() != null && receiver.getPlayer() != null
+-			&& !snapshot.permits(sender.getPlayer().getUuid(), receiver.getPlayer().getUuid())) event.cancel();
+-	}
++        var sender = event.getSenderConnection();
++        var receiver = event.getReceiverConnection();
++        UUID from = sender == null || sender.getPlayer() == null ? null : sender.getPlayer().getUuid();
++        UUID to = receiver == null || receiver.getPlayer() == null ? null : receiver.getPlayer().getUuid();
++        VoicePolicy snapshot = policy;
++        if (!Boolean.getBoolean("kapisma.experimentalAnalogVoice") || !SoundPacketEvent.SOURCE_PLUGIN.equals(event.getSource())) {
++            if (snapshot.radioOnly() && !VoiceRouteScope.permitsOrdinaryRadio(snapshot.participants(), snapshot.spectators(), from, to)) event.cancel();
++            else if (from != null && to != null && !snapshot.permits(from, to)) event.cancel();
++            return;
++        }
++        VoiceRouteScope.Route route = null;
++        if (event.getPacket() instanceof de.maxhenkel.voicechat.api.packets.SoundPacket packet && to != null) {
++            var key = new VoiceRouteScope.Key(packet.getSender(), packet.getChannelId(), packet.getSequenceNumber());
++            if (event instanceof LocationalSoundPacketEvent)
++                route = VoiceRouteScope.current(to, key, VoiceRouteScope.Kind.ANALOG);
++            else if (event instanceof StaticSoundPacketEvent)
++                route = VoiceRouteScope.current(to, key, VoiceRouteScope.Kind.SPECTATOR_RELAY);
++        }
++        if (!(snapshot.radioOnly() ? VoiceRouteScope.permitsRadioPlugin(snapshot.participants(), snapshot.spectators(), from, to, route)
++                : VoiceRouteScope.permitsPlugin(snapshot.participants(), snapshot.spectators(), from, to, route))
++                || (route != null && (route.epoch() != snapshot.epoch() || !snapshot.micEnabled(route.from()) || !snapshot.micEnabled(route.carrier())))) event.cancel();
++    }
+ 
+ 	/** Oyuncunun sesli sohbet istemcisi bagli mi? */
+ 	static boolean hasVoice(UUID id) {
+@@ -163,7 +184,11 @@
+ 		for (UUID other : snapshot.spectators()) {
+ 			if (other.equals(id)) continue;
+ 			VoicechatConnection c = api.getConnectionOf(other);
+-			if (c != null && c.isConnected()) api.sendStaticSoundPacketTo(c, packet);
++			if (c != null && c.isConnected()) {
++                var key = new VoiceRouteScope.Key(packet.getSender(), packet.getChannelId(), packet.getSequenceNumber());
++                VoiceRouteScope.send(VoiceRouteScope.Kind.SPECTATOR_RELAY, id, other, key,
++                    () -> api.sendStaticSoundPacketTo(c, packet));
++            }
+ 		}
+ 	}
+ }
+--- a/resources/fabric.mod.json
++++ b/resources/fabric.mod.json
+@@ -7,7 +7,7 @@
+ 	"authors": ["Kapisma"],
+ 	"license": "MIT",
+ 	"environment": "server",
+-	"mixins": ["kapisma.mixins.json"],
++	"mixins": ["kapisma.mixins.json", "kapisma.analog-voice.mixins.json", "kapisma.arena.mixins.json"],
+ 	"entrypoints": {
+ 		"preLaunch": ["tr.kapisma.boot.Boot"],
+ 		"main": ["tr.kapisma.Kapisma"],

@@ -33,13 +33,20 @@ public final class VoiceBridge {
 		joined.remove(p.getUUID());
 	}
 
+	public static void refresh(MinecraftServer server) {
+		if (PRESENT) KapismaVoice.refresh(server);
+	}
+
 	public static void tick(MinecraftServer server) {
-		if (!PRESENT || failed) return;
+		if (!PRESENT) return;
+		refresh(server);
+		if (failed) return;
 		int t = server.getTickCount();
 		if (t % 20 != 7) return;
 		try {
 			Game g = Kapisma.GM == null ? null : Kapisma.GM.current;
-			boolean want = g != null && g.phase == Game.Phase.RUNNING && !"KATIL".equals(g.id()) && Kapisma.GM.settings.flag(g.id(), "teamVoice");
+			boolean want = g != null && g.phase == Game.Phase.RUNNING && !"KATIL".equals(g.id())
+				&& g.teams.stream().anyMatch(team -> team.members.size() > 1) && Kapisma.GM.settings.flag(g.id(), "teamVoice");
 			if (applied != null && (!want || applied != g)) {
 				KapismaVoice.clearGroups(applied);
 				applied = null;

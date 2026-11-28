@@ -1,0 +1,8 @@
+﻿{
+    "url":  "https://repo.maven.apache.org/maven2/net/java/dev/jna/jna/5.14.0/jna-5.14.0.aar",
+    "upstream_sha1":  "17B4B6C99BDC5586644D7F97FCA4DD84D8889FB0",
+    "aar_sha256":  "81A8B9AFC65F9D6B205338C25908AF8DE0FF8411A00985104C9D83FFFDFAB380",
+    "native_sha256":  "3730CE014F7A6807AE74AF78C3B9F5A3CBA1F5886316B3D3858493DF923EFE96",
+    "abi":  "arm64-v8a",
+    "version":  "5.14.0"
+}

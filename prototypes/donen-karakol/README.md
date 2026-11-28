@@ -1,0 +1,27 @@
+# Dönen Karakol — 0.1 prototip (26.11.2026)
+
+Bağımsız Minecraft Java 1.21.1 veri paketi. Ana Kapışma veya RTS entegrasyonu değildir. Fabric API + Carpet sadece laboratuvar testi için kullanılır; oyun işlevleri vanilla komutlarıdır.
+
+## İlk kural seti
+- 2–8 aktif oyuncu; sırayla kırmızı/mavi takıma atanır. Seyirciler başlangıçta dahil edilmez.
+- Batı (-24, -60, 0), merkez (0, -60, 0), doğu (24, -60, 0). 9×9 altın zemin etkin karakol, gri zemin etkisiz karakol. Puanlama 9×9 yatay alanı ve üzerinde üç blok yüksekliği kapsar; Minecraft AABB seçicisinin oyuncu hitbox temas semantiği geçerlidir.
+- Etkin karakol her 30 sunucu saniyesinde değişir; 5 saniye kala sohbet uyarısı. Tek takım varsa saniyede bir puan; ikisi birden veya hiç kimse yoksa puan yok. 40 puan kazandırır. Her iki takımın kayıtlı, çevrimiçi ve seyirci olmayan en az bir üyesi yoksa skor ve değişim sayacı durur.
+- Eski maçın epoch değerine sahip çevrimdışı üyeler yeni maçta etkisizdir. Sıfırlama ve başlangıç çevrimiçi etiketleri temizler.
+- Konsol: `function dk:start` ve `function dk:reset`. Önceden yüklenmiş, ayrı düz QA dünyasında kullanım içindir. Laboratuvar testçisi arena parçalarını `forceload add -48 -16 48 16` ile yükler (21 parça). **Normal oyun dünyasında çalıştırma: dk:arena sabit koordinatlarda zemin bloklarını değiştirir.**
+- 30/5/40 değerleri, arena boyutu ve sıra tasarım adaylarıdır; kullanıcı onaylı final denge değildir.
+
+## Test ve açık işler
+`prepare.py` üretici; `verify.py` gerçek Fabric sunucusunda `donen-karakol-lab` dünyası ve ortak MOD laboratuvar kilidi ile çalışır. Önceden alınan kalıcı ayar snapshot'ı, sonunda iki ayar dosyasının ve bağımlılık hash'lerinin kontrolü. Sadece 127.0.0.1:25578, Carpet botları. Test puan/süre eşiklerine konsoldan değer atar; tam doğal maç veya insan PvP testi değildir.
+
+Henüz özel PvP kitleri, takım içi hasar kuralları, ölüm/yeniden doğma, arena dışı sınır, oyuncu arayüzü/renkli takım adları, eşit erişim mesafeleri, aktif maç sunucu yeniden başlatması, 3–7 kapasite ayrı kabul, gerçek istemci görsel deneyimi ve entegrasyon tamamlanmadı. Bu sürüm alan kontrolü çekirdeğidir. Kırık Telsiz ses entegrasyonu ayrı bloke, RTS 0.7.0 değişmedi.
+## Kabul sonucu
+Son koşu **27 PASS / Exit 0**. 19 işlev kaynakla eşleşti. `acceptance.log` SHA-256 `1924F44E0166F28D55061118246EBE7EDE32EBC53C0E2CC0BACD35BA9F87A9F3`. İlk üç başarısız test günlükleri saklandı; uyarı logu, yanlış sabit bot takımı ve eski çevrimdışı etiket varsayımı düzeltildi. İki takımın kazanması ve eski epoch aktif oyuncu dışlaması geçti. Dünya ve ayar kapsamı sadece MOD laboratuvarı. Ayrıntılı kanıt AI_MOD_KOD_YANIT.md.
+
+## Dönen Karakol 0.2 — PvP ve kayıt · 26 Kasım 2026 19:07 TRT
+- 25 işlev, prepare.py SHA256 E63764BD069839ECBEFA827245F112F494DCD68EDC0D968F285687527A1E404F. Simetrik üsler (0,-60,±11), iki takımın eşit demir zırh/kılıç/yay/kalkan/16 ok/16 et, vanilla team friendlyFire false, keepInventory/immediateRespawn, ölüm sayacı ile kit yenileme, 1t arena sınır kontrolü, maç bitince spectator, reset kit/etiket/takım temizliği. Yalnız ayrı düz QA dünya; gamerule/clear komutları canlı dünyaya uygulanmamalı. Denge değerleri tasarım adayı.
+- Genişletilmiş regresyon 31 PASS / Exit 0; verify.py SHA256 7E0FDB59B9B8ADBDC41F90651BD52B283B272F6A4E08EA7F771CFC277340F363; acceptance_v02.log B69E347B0236A0E20930E1076D7D30609A65F7759AD9BC96EE66ECEA6FDEA68B. İlk iki Carpet bot ölüm koşusu başarısız (Carpet kill bağlantıyı kesiyor ve deathCount normal istemci gibi davranmıyor); loglar korundu. Bot regresyonu ölüm sayacı enjeksiyonuyla kit mantığını test eder; gerçek ölüm ayrı testte doğrulandı.
+- verify_lifecycle.py SHA256 899D8E55E136AA9AF193B46AB528A89D12E92F30CE5E2718391B88F9A381F917: iki gerçek Java istemcisi ve bir Carpet saldırgan, aynı takım saldırısında Health 20, rakip saldırısında Health azalması, vanilla kill sonrası gerçek istemci auto respawn, kit ve doğru mavi üs; aktif maç save-all flush/stop ve yeni Java süreci ile phase/epoch/red/blue/point/left korunması, tek takım çevrimiçi duraklama ve iki takım ile devam. 15 PASS / Exit 0. acceptance_lifecycle.log 104053071FF18434BF69541C232C55A84839D3C1ACE0ED1C3DA95D597D1E8CAE; istemci logları son yeniden bağlantı oturumuna ait. Her koşuda profil/bağımlılık hash geri yükleme geçti. JAR üretimi yok.
+- Açık: kayıtlı olmayan aktif oyuncunun PvP müdahalesi otomatik spectator ile engellenmeli, 3–7 kapasite ayrı, doğal 40 puan tam maç, fiziksel insan oynanış ve canlı entegrasyon. Kervan Baskını bağımsız prototipi hazırlanıyor.
+## 0.3 — doğal maç ve katılım sınırı
+27 işlev, kaynak F2A1FB2A0309C09BE303EB924BEFCEBE91F67F5D7A52E333834CDC1D65FD359C. Kayıt dışı oyuncu otomatik spectator, reset sonrası geri dönüş. `verify_natural.py`: 16 PASS / Exit 0, 39.84 gerçek saniyede doğal 40 puan, 30 saniye karakol rotasyonu ve 5 saniye uyarısı, 3–8 kapasite ayrı, eski katılım engeli. `acceptance_natural.log` SHA256 477D8DCB29EE8E3181515507A2A2D002D0F9FBB80A2132FD305F547543F719F0. Önceki 31+15 kontrol v0.2, son 16 v0.3; önceki kapsamın tamamı v0.3'te yeniden koşulmadı. İnsan PvP, üretim entegrasyonu ve Android yük testi açık.
+0.3 son tam tekrar: 31 PASS / Exit 0 (acceptance_v03.log 7DD1719C1437585905D44E990CB9AA9CA9B9624D36453D980406268AFB014FFF), 15 PASS / Exit 0 (acceptance_lifecycle_v03.log 3D47FCB6F444104DFB27418E202C013BCCF4DC6FEC5D95439477112F96D88692); doğal 16 ile son sürüm 62 kabul kontrolü. Önceki 0.2 kanıtı da korundu.

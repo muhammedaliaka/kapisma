@@ -122,7 +122,7 @@ public final class Knowledge {
 				int sp = p.spacing();
 				for (int rx = Math.floorDiv(ccx - rc, sp) - 1; rx <= Math.floorDiv(ccx + rc, sp) + 1; rx++) {
 					for (int rz = Math.floorDiv(ccz - rc, sp) - 1; rz <= Math.floorDiv(ccz + rc, sp) + 1; rz++) {
-						ChunkPos cp = p.getPotentialStructureChunk(st.getLevelSeed(), rx, rz);
+						ChunkPos cp = p.getPotentialStructureChunk(st.getLevelSeed(), rx * sp, rz * sp);
 						if (Math.abs(cp.x - ccx) > rc || Math.abs(cp.z - ccz) > rc) continue;
 						if (!p.isStructureChunk(st, cp.x, cp.z)) continue;
 						int bx = cp.x * 16 + 8, bz = cp.z * 16 + 8;

@@ -1,0 +1,19 @@
+player Bot1 spawn
+player Bot2 spawn
+player Bot3 spawn
+player Bot4 spawn
+player Bot5 spawn
+player Bot6 spawn
+player Bot7 spawn
+player Bot8 spawn
+function krts:start
+await Hazırlık başladı.
+execute store result score #units krts_ctrl if entity @e[tag=krts.unit]
+execute if score #units krts_ctrl matches 16 if score #slot krts_ctrl matches 8 run say PROTO_EIGHT
+await PROTO_EIGHT
+function krts:pause
+await Puan, süre ve satın alma durdu.
+scoreboard players set #p1 krts_ctrl 19
+scoreboard players set #g1 krts_ctrl 8
+scoreboard players set #left krts_ctrl 27
+save-all flush

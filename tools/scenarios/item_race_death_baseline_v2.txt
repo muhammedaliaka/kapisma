@@ -1,0 +1,43 @@
+# Resource-sparse flat generator: force a positive baseline, then die with keepInventory disabled.
+player Bot1 spawn
+player Bot2 spawn
+wait 2
+kapisma game ESYA
+kapisma origins off
+kapisma rule ESYA borderStart 200
+kapisma rule ESYA roundSec 90
+kapisma rule ESYA roundLimit 3
+kapisma rule ESYA keepInventory 0
+kapisma rule ESYA minimap 0
+kapisma start
+await Eşya Yarışı · Tur 1 başladı
+kapisma debug race Bot1
+capture first race Bot1 round=1 target=(minecraft:(?:dirt|sand|gravel)) known=true baseline=0 count=0 score=0 lives=5
+kapisma debug race Bot2
+capture second race Bot2 round=1 target=((?!%{first} )minecraft:(?:dirt|sand|gravel)) known=true baseline=0 count=0 score=0 lives=5
+give Bot1 %{first} 1
+wait 1
+give Bot1 minecraft:dirt 3
+give Bot1 minecraft:sand 3
+give Bot1 minecraft:gravel 3
+give Bot2 %{second} 1
+await Eşya Yarışı · Tur 2 başladı
+kapisma debug race Bot1
+capture next race Bot1 round=2 target=(minecraft:(?:dirt|sand|gravel)) known=true baseline=[34] count=[34] score=1 lives=5 skips=0 resolved=false
+execute at Bot1 run gamerule keepInventory
+capture keep (keepInventory is currently set to: false)
+execute at Bot1 run tp Bot1 ~32 ~2 ~
+wait 2
+damage Bot1 1000 minecraft:out_of_world
+await Bot1 left the game
+player Bot1 spawn
+await Bot1 joined the game
+wait 2
+kapisma debug race Bot1
+capture after_death race Bot1 round=2 target=%{next} known=true baseline=(\d+) count=0 score=1 lives=5 skips=0 resolved=false
+give Bot1 %{next} 1
+wait 1
+kapisma debug race Bot1
+capture gained race Bot1 round=2 target=%{next} known=true baseline=0 count=1 score=(2) lives=5 skips=0 resolved=true
+kapisma stop
+await Arena depolama kapandı:

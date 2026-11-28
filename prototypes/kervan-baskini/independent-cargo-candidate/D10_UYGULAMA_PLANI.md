@@ -1,0 +1,3 @@
+# D10 — görsel ve native at sürüşü
+- QA istemcisinin kendi Minecraft framebuffer ekran görüntüleri (yalnız sentetik client, masaüstü yakalama yok), harita ve araba üçüncü taraf gözlem. PNG kanıtlarını incele, gerekirse model/harita iyileştir. Test helper mevcut tek QA klasöründe, release'e dahil değil.
+- Native at sürüşü: kontrollü başlangıçta gerçek vanilla mount, gerçek W/yaw input, 3 hareket/duruş aralığı, sınır dışı atın sahibini taşımadan geri dönmesi ve aynı UUID. Sunucu manipülasyonları açıkça fixture. KOD/live/RTS koru; önceki D9 21 PASS, kaynak manifest 22/22. Yeni indirme/üretim build yok.

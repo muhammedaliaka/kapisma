@@ -28,9 +28,9 @@ public final class ChatService {
 		return Kapisma.GM != null ? Kapisma.GM.current : null;
 	}
 
-	private static boolean eliminated(ServerPlayer p) {
+	public static boolean isSpectator(ServerPlayer p) {
 		Game g = game();
-		return g != null && g.contains(p.getUUID()) && g.eliminated.contains(p.getUUID());
+		return g != null && !g.isClosed() && g.contains(p.getUUID()) && (p.isSpectator() || g.eliminated.contains(p.getUUID()));
 	}
 
 	private static boolean teamChatActive(ServerPlayer p) {
@@ -41,15 +41,19 @@ public final class ChatService {
 	/** Normal (komutsuz) sohbet yazisi. true = vanilla olarak herkese gitsin. */
 	public static boolean handlePlain(ServerPlayer sender, String text) {
 		Game g = game();
-		if (g == null || !g.contains(sender.getUUID())) return true;
-		if (g.eliminated.contains(sender.getUUID())) {
+		if (g == null || g.isClosed()) return true;
+		if (!g.contains(sender.getUUID())) {
+			all(sender, text); // lobby arrivals must not broadcast to active spectators
+			return false;
+		}
+		if (isSpectator(sender)) {
 			Component line = Component.literal("[Seyirci] " + name(sender) + ": " + text).withStyle(ChatFormatting.GRAY);
 			for (ServerPlayer r : sender.getServer().getPlayerList().getPlayers()) {
-				if (g.eliminated.contains(r.getUUID())) r.sendSystemMessage(line);
+				if (isSpectator(r)) r.sendSystemMessage(line);
 			}
 			return false;
 		}
-		if (!teamChatActive(sender)) return true;
+		if (!teamChatActive(sender)) { all(sender, text); return false; }
 		if (g.globalChat()) { all(sender, text); return false; }
 		team(sender, text);
 		if (tipGame != g) { tipGame = g; tipped.clear(); }
@@ -57,6 +61,18 @@ public final class ChatService {
 			Msg.tell(sender, "Oyun sırasında yazdığın mesaj sadece takımına gider. Herkese: /herkes <mesaj>, başka takıma: /takim <ad> <mesaj>, tek kişiye: /ozel <oyuncu> <mesaj>");
 		}
 		return false;
+	}
+
+	/** Filter vanilla /msg, /tell, /w and /teammsg recipients before sending. */
+	public static java.util.Collection<ServerPlayer> filterVanilla(net.minecraft.commands.CommandSourceStack source, java.util.Collection<ServerPlayer> recipients) {
+		ServerPlayer sender = source.getPlayer();
+		if (sender == null) return recipients;
+		var filtered = recipients.stream().filter(r -> isSpectator(sender) == isSpectator(r)).toList();
+		if (filtered.size() != recipients.size()) {
+			Msg.tell(sender, "Seyirciler kendi aralarında yazışabilir.");
+			Kapisma.LOG.info("Sohbet izolasyonu: {} alıcı engellendi ({})", recipients.size() - filtered.size(), sender.getGameProfile().getName());
+		}
+		return filtered;
 	}
 
 	private static String name(ServerPlayer p) {
@@ -72,7 +88,7 @@ public final class ChatService {
 	}
 
 	private static void deliver(ServerPlayer from, Iterable<ServerPlayer> to, Component line) {
-		for (ServerPlayer r : to) r.sendSystemMessage(line);
+		for (ServerPlayer r : to) if (isSpectator(from) == isSpectator(r)) r.sendSystemMessage(line);
 		from.getServer().sendSystemMessage(line);
 	}
 
@@ -83,7 +99,8 @@ public final class ChatService {
 			Msg.tell(p, "Takım sohbeti sadece oyun içinde çalışır. Lobide normal yazı herkese gider.");
 			return 0;
 		}
-		if (eliminated(p)) { Msg.tell(p, "Elendin: sadece diğer seyircilere yazabilirsin."); return 0; }
+		if (isSpectator(p)) { Msg.tell(p, "Yalnızca diğer seyircilere yazabilirsin."); return 0; }
+		if ("KATIL".equals(g.id())) return all(p, text);
 		GameTeam t = g.teamOf(p.getUUID());
 		Component line = tag("Takım", ChatFormatting.AQUA).copy().append(body(p, text));
 		deliver(p, members(g, t), line);
@@ -100,7 +117,7 @@ public final class ChatService {
 
 	/** Herkese. */
 	public static int all(ServerPlayer p, String text) {
-		if (eliminated(p)) { Msg.tell(p, "Elendin: sadece diğer seyircilere yazabilirsin."); return 0; }
+		if (isSpectator(p)) { Msg.tell(p, "Yalnızca diğer seyircilere yazabilirsin."); return 0; }
 		Component line = tag("Herkes", ChatFormatting.GOLD).copy().append(body(p, text));
 		deliver(p, p.getServer().getPlayerList().getPlayers(), line);
 		return 1;
@@ -113,7 +130,7 @@ public final class ChatService {
 			Msg.tell(p, "Takımlar oyun başlayınca oluşur. Şimdilik /herkes veya /ozel <oyuncu> kullan.");
 			return 0;
 		}
-		if (eliminated(p)) { Msg.tell(p, "Elendin: sadece diğer seyircilere yazabilirsin."); return 0; }
+		if (isSpectator(p) || "KATIL".equals(g.id())) { Msg.tell(p, "Bu oyunda hedefli takım sohbetini kullanamazsın."); return 0; }
 		String key = norm(teamToken);
 		GameTeam found = null;
 		for (GameTeam t : g.teams) {
@@ -138,8 +155,8 @@ public final class ChatService {
 
 	/** Tek kisiye. */
 	public static int whisper(ServerPlayer p, ServerPlayer target, String text) {
-		if (eliminated(p) && !eliminatedBoth(p, target)) {
-			Msg.tell(p, "Elendin: sadece diğer seyircilere yazabilirsin.");
+		if (isSpectator(p) != isSpectator(target)) {
+			Msg.tell(p, "Seyirciler kendi aralarında yazışabilir.");
 			return 0;
 		}
 		Component toT = Component.literal("[Özel] ").withStyle(ChatFormatting.LIGHT_PURPLE).copy().append(body(p, text));
@@ -151,17 +168,13 @@ public final class ChatService {
 		return 1;
 	}
 
-	private static boolean eliminatedBoth(ServerPlayer a, ServerPlayer b) {
-		return eliminated(a) && eliminated(b);
-	}
-
 	private static String norm(String s) {
 		return s.toLowerCase(new Locale("tr")).replace(' ', '_');
 	}
 
 	public static List<String> teamTokens() {
 		Game g = game();
-		if (g == null) return List.of();
+		if (g == null || "KATIL".equals(g.id())) return List.of();
 		return g.teams.stream().map(t -> t.name.replace(' ', '_')).toList();
 	}
 }

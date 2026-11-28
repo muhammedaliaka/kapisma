@@ -6,17 +6,26 @@ OUT=tools/run_all.out
 : > $OUT
 cp mod/kapisma/build/libs/kapisma-0.1.0.jar server_test/mods/ || exit 1
 python tools/gen_parkour_scenario.py > /dev/null
-for s in lobby_board compass_pvp player_guard uhc_basic uhc_kill uhc_select bingo_basic bingo_lines bingo_tasks manhunt_basic manhunt_runner katil_basic katil_rules katil_scatter origin_join balance_check avian_kit new_races lobby_parkour xray_audit xray_nether voice_groups; do
+failed=0
+for s in lobby_board compass_pvp player_guard uhc_basic uhc_kill uhc_select uhc_treasure uhc_rules_combination bingo_basic bingo_lines bingo_tasks bingo_shared bingo_cave_access bingo_portals bingo_portal_distribution bingo_seed_matrix_full item_race item_race_reconnect manhunt_basic manhunt_runner manhunt_headstart katil_basic katil_rules katil_scatter katil_power origin_join balance_check avian_kit new_races lobby_parkour xray_audit xray_nether voice_groups; do
   echo "### $s" >> $OUT
-  PYTHONIOENCODING=utf-8 timeout 420 python tools/mctest.py tools/scenarios/$s.txt --dir server_test --xmx 4G > tools/last_$s.log 2>&1
+  limit=420
+  if [ "$s" = bingo_seed_matrix_full ]; then limit=900; fi
+  PYTHONIOENCODING=utf-8 timeout "$limit" python tools/mctest.py tools/scenarios/$s.txt --dir server_test --xmx 4G > tools/last_$s.log 2>&1 || failed=1
   grep -a "OZET\|BEKLENEN YOK" tools/last_$s.log >> $OUT
   case $s in xray_*) echo "xray SORUN satiri: $(grep -a -c " SORUN" tools/last_$s.log), TEMIZ satiri: $(grep -a -c " TEMIZ" tools/last_$s.log)" >> $OUT;; esac
 done
 # Zayif cihaz (LITE profil, Xmx3G): hile korumasi ve temel oyun akislari
 for s in xray_audit uhc_basic bingo_basic; do
   echo "### $s (LITE profil)" >> $OUT
-  PYTHONIOENCODING=utf-8 timeout 420 python tools/mctest.py tools/scenarios/$s.txt --dir server_test --xmx 3G > tools/last_${s}_lite.log 2>&1
+  PYTHONIOENCODING=utf-8 timeout 420 python tools/mctest.py tools/scenarios/$s.txt --dir server_test --xmx 3G > tools/last_${s}_lite.log 2>&1 || failed=1
   grep -a "OZET\|BEKLENEN YOK" tools/last_${s}_lite.log >> $OUT
-  grep -a -q "Donanim profili: LITE" tools/last_${s}_lite.log && echo "profil LITE dogrulandi" >> $OUT || echo "!! LITE profil secilmedi" >> $OUT
+  if grep -a -q "Donanim profili: LITE" tools/last_${s}_lite.log; then
+    echo "profil LITE dogrulandi" >> $OUT
+  else
+    echo "!! LITE profil secilmedi" >> $OUT
+    failed=1
+  fi
 done
 echo "### BITTI" >> $OUT
+exit "$failed"

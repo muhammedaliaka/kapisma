@@ -1,0 +1,38 @@
+{
+  "tr/kapisma/game/GameManager.java": {
+    "base_sha256": "854e9f91926540d0e32cea22b07ea6a93cb7a54b9550d29937086b76a1d5d13a",
+    "overlay_sha256": "cc16063efeedcf68db9f43871065e4485cbed41d7841dd9f74e348708399833b"
+  },
+  "tr/kapisma/config/Rules.java": {
+    "base_sha256": "6cbf3fa7280008cb5f055fbce0dbd8fdd8d6b1e21ce220bbf3cf56ef8ec8169e",
+    "overlay_sha256": "c0b4b664da258158ea927c0be1e2aa4bd8792d18998adaa1af6f55bbeee667ef"
+  },
+  "tr/kapisma/config/Settings.java": {
+    "base_sha256": "4cf7b530cac7bb874e59b5e89a22fe8bc66b7cabcd8b2714eddae1deaca60c54",
+    "overlay_sha256": "1b5bf676a9fc5bdbf3a213a1923407572bda2152470ba666ad143049a424e2c8"
+  },
+  "tr/kapisma/ui/MenuService.java": {
+    "base_sha256": "f8590c11549321f70b5f892029de51240b38f2287f26711fe6f3d58d36c0a7fe",
+    "overlay_sha256": "389fe228885f93426c5395536f3aa9f95b9779c847486e2ef07a5ee53155b1ee"
+  },
+  "tr/kapisma/Cmds.java": {
+    "base_sha256": "d468f0d67aceb037617d882cf1761d1965780b279e4036627379a56375a8c192",
+    "overlay_sha256": "1fbb41c928161c9d61ffdb1ecf638f16f4b07bcd57597150ddd3198ce66a8cbd"
+  },
+  "tr/kapisma/Kapisma.java": {
+    "base_sha256": "40d513f3601cf4affd1ccffe0b15c170945d99d93a5410107b6a7f594c77d59f",
+    "overlay_sha256": "1cf4fe33f06e64cf775399b39112df84ee0564be2efb27c46dbedc758d667253"
+  },
+  "tr/kapisma/voice/VoicePolicy.java": {
+    "base_sha256": "e5c0c80c81ed15dbc1e5477e8af8a0125fb70090714b0b788583c2972b64431e",
+    "overlay_sha256": "14e9e65a898639ae2f088d8d6ead199261c9ae6bfff9ff84062fe62c372b0f29"
+  },
+  "tr/kapisma/voice/KapismaVoice.java": {
+    "base_sha256": "19d8289d5c0e391e934e6697f0767242bc4fb4ad0c1801b72c069c373165e668",
+    "overlay_sha256": "545fec5b60ee22cf52044c264ca64d83d440a9361c35a852cc8832a08f1a3ab0"
+  },
+  "resources/fabric.mod.json": {
+    "base_sha256": "e07a314d87bf6b987345b1ed14bb6350ade90af0595b34fd4249a577d0331aed",
+    "overlay_sha256": "5f544b62f4743e1401bcbde0549b2c0c38f67f7c5333ef54f10c6d2ec15bc10f"
+  }
+}

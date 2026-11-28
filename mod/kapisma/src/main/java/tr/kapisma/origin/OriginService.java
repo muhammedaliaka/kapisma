@@ -40,6 +40,20 @@ public final class OriginService {
 		Map.entry("dwarf", Items.IRON_PICKAXE), Map.entry("frostborn", Items.SNOWBALL), Map.entry("wolf", Items.BONE));
 
 	private static final Map<String, String> LABELS = Map.of("golem", "Golem", "fox", "Tilki", "dwarf", "Cüce", "frostborn", "Buz Ruhu", "wolf", "Kurt");
+	public static final Map<String, List<String>> FEATURES = Map.ofEntries(
+		Map.entry("human", List.of("Özel güç veya zayıflık yok.")),
+		Map.entry("arachnid", List.of("Duvarlara tırmanır ve ağlarda rahat hareket eder.", "Sadece et yer, daha az canı vardır.")),
+		Map.entry("avian", List.of("Yavaş düşer, hareketi daha hızlıdır.", "Et yiyemez ve uyumak için yüksek yer ister.")),
+		Map.entry("blazeborn", List.of("Ateşe ve lava dayanıklıdır, yanarken daha güçlüdür.", "Su ve yağmur hasar verir.")),
+		Map.entry("enderian", List.of("İnciyle ışınlanabilir ve daha uzaktan erişir.", "Su hasar verir, balkabağıyla görüşü kısıtlanır.")),
+		Map.entry("feline", List.of("Düşme hasarı almaz, karanlıkta görür.", "Daha az canı vardır, doğal taşı kırması kısıtlanır.")),
+		Map.entry("merling", List.of("Suda nefes alır, hızlı yüzer ve su altında rahat kazar.", "Karada nefesi tükenir.")),
+		Map.entry("shulk", List.of("Doğal zırhı ve ayrı bir eşya bölmesi vardır.", "Kalkan kullanamaz, daha hızlı acıkır.")),
+		Map.entry("golem", List.of("+3 kalp ve %60 geri savrulma direnci.", "%12 daha yavaş hareket eder.")),
+		Map.entry("fox", List.of("%12 hız, %25 daha yüksek sıçrama, düşme hasarı yok.", "1 kalp daha az can.")),
+		Map.entry("dwarf", List.of("Taşı %50 hızlı kırar, %15 daha küçüktür.", "1 kalp daha az can.")),
+		Map.entry("frostborn", List.of("Donmaya bağışık, karda hızlı, vurduğu kişiyi yavaşlatır.", "Ateşten %50 daha çok hasar alır.")),
+		Map.entry("wolf", List.of("%10 hızlı. Canı 5 kalbe inince +3 yakın dövüş hasarı.", "Sadece et yer.")));
 
 	public static String label(String id) {
 		return LABELS.getOrDefault(id, Character.toUpperCase(id.charAt(0)) + id.substring(1));

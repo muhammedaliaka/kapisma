@@ -1,0 +1,35 @@
+function krts:reset
+player Bot1 spawn
+player Bot2 spawn
+tag Bot1 add krts.host
+execute as Bot2 run trigger krts_host set 1
+execute if score #phase krts_ctrl matches 0 run say RTS_NON_HOST_REJECTED
+await RTS_NON_HOST_REJECTED
+execute as Bot1 run trigger krts_menu
+execute as Bot1 run trigger krts_host set 1
+await Hazırlık başladı.
+data get storage krts:arena h1
+data get storage krts:arena h2
+scoreboard players set #left krts_ctrl 1
+await Merkez açık.
+execute as @e[tag=krts.unit] run data merge entity @s {NoAI:1b}
+tp @e[tag=krts.unit,tag=krts.s1,type=hundred_years_war:militia] 0 -60 0
+wait 2
+execute if block 0 -61 0 red_wool if score #p1 krts_ctrl matches 1.. run say RTS_CENTER_CAPTURE
+await RTS_CENTER_CAPTURE
+tp @e[tag=krts.unit,tag=krts.s2,type=hundred_years_war:militia] 1 -60 0
+wait 2
+execute if block 0 -61 0 lodestone run say RTS_CENTER_CONTESTED
+await RTS_CENTER_CONTESTED
+tp @e[tag=krts.unit,tag=krts.s1,type=hundred_years_war:militia] 0 -60 -64
+tp @e[tag=krts.unit,tag=krts.s2,type=hundred_years_war:militia] 0 -60 64
+scoreboard players set #income_left krts_ctrl 12
+scoreboard players set #g1 krts_ctrl 10
+execute as @a[scores={krts_slot=1},limit=1] run trigger krts_buy set 2
+wait 1.5
+execute store result score #militias krts_ctrl if entity @e[tag=krts.unit,tag=krts.s1,type=hundred_years_war:militia]
+execute if score #militias krts_ctrl matches 2 if score #g1 krts_ctrl matches 7 run say RTS_MILITIA_RECRUITED
+await RTS_MILITIA_RECRUITED
+damage @e[tag=krts.capital,tag=krts.s1,limit=1] 500 minecraft:mob_attack by @e[tag=krts.unit,tag=krts.s2,limit=1]
+await Devlet 2 kazandı. Son başkent ayakta.
+function krts:reset

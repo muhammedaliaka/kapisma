@@ -7,6 +7,10 @@ import de.maxhenkel.voicechat.api.events.EventRegistration;
 import de.maxhenkel.voicechat.api.Group;
 import de.maxhenkel.voicechat.api.events.MicrophonePacketEvent;
 import de.maxhenkel.voicechat.api.events.VoicechatServerStartedEvent;
+import de.maxhenkel.voicechat.api.events.SoundPacketEvent;
+import de.maxhenkel.voicechat.api.events.EntitySoundPacketEvent;
+import de.maxhenkel.voicechat.api.events.LocationalSoundPacketEvent;
+import de.maxhenkel.voicechat.api.events.StaticSoundPacketEvent;
 import de.maxhenkel.voicechat.api.opus.OpusDecoder;
 import de.maxhenkel.voicechat.api.opus.OpusEncoder;
 import java.util.Map;
@@ -26,6 +30,20 @@ public final class KapismaVoice implements VoicechatPlugin {
 	}
 
 	private static volatile VoicechatServerApi api;
+	private static volatile VoicePolicy policy = VoicePolicy.LOBBY;
+
+	// Only the Minecraft server thread reads mutable game/player state.
+	static void refresh(net.minecraft.server.MinecraftServer server) {
+		var gm = Kapisma.GM;
+		var g = gm == null ? null : gm.current;
+		if (g == null || g.isClosed()) { policy = VoicePolicy.LOBBY; return; }
+		var spectators = new java.util.HashSet<>(g.eliminated);
+		for (var p : server.getPlayerList().getPlayers())
+			if (g.contains(p.getUUID()) && p.isSpectator()) spectators.add(p.getUUID());
+		boolean killer = "KATIL".equals(g.id());
+		policy = new VoicePolicy(new java.util.HashSet<>(g.players), spectators, killer,
+			!killer || gm.settings.flag("KATIL", "voice"), killer && gm.settings.flag("KATIL", "deepVoice"));
+	}
 	/** takim kimligi -> ses grubu (acik tur: grup disindakiler de yakindan duyar). */
 	private static final Map<String, Group> groups = new ConcurrentHashMap<>();
 
@@ -33,6 +51,17 @@ public final class KapismaVoice implements VoicechatPlugin {
 	public void registerEvents(EventRegistration reg) {
 		reg.registerEvent(VoicechatServerStartedEvent.class, e -> api = e.getVoicechat());
 		reg.registerEvent(MicrophonePacketEvent.class, this::onMic);
+		reg.registerEvent(EntitySoundPacketEvent.class, this::isolateSpectator);
+		reg.registerEvent(LocationalSoundPacketEvent.class, this::isolateSpectator);
+		reg.registerEvent(StaticSoundPacketEvent.class, this::isolateSpectator);
+	}
+
+	private void isolateSpectator(SoundPacketEvent<?> event) {
+		var sender = event.getSenderConnection();
+		var receiver = event.getReceiverConnection();
+		VoicePolicy snapshot = policy;
+		if (sender != null && receiver != null && sender.getPlayer() != null && receiver.getPlayer() != null
+			&& !snapshot.permits(sender.getPlayer().getUuid(), receiver.getPlayer().getUuid())) event.cancel();
 	}
 
 	/** Oyuncunun sesli sohbet istemcisi bagli mi? */
@@ -58,9 +87,13 @@ public final class KapismaVoice implements VoicechatPlugin {
 			if (team.members.size() < 2) continue;
 			Group grp = groups.computeIfAbsent(team.id, k -> a.groupBuilder().setName(team.name).setType(Group.Type.OPEN).setPersistent(false).build());
 			for (UUID m : team.members) {
-				if (g.eliminated.contains(m)) continue;
 				VoicechatConnection c = a.getConnectionOf(m);
 				if (c == null || !c.isInstalled()) continue;
+				if (policy.spectator(m)) {
+					Group current = c.getGroup();
+					if (current != null && groups.values().stream().anyMatch(owned -> owned.getId().equals(current.getId()))) c.setGroup(null);
+					continue;
+				}
 				if (c.getGroup() == null || !grp.getId().equals(c.getGroup().getId())) c.setGroup(grp);
 			}
 		}
@@ -74,7 +107,7 @@ public final class KapismaVoice implements VoicechatPlugin {
 				try {
 					VoicechatConnection c = a.getConnectionOf(m);
 					Group cur = c == null ? null : c.getGroup();
-					if (cur != null && groups.containsValue(cur)) c.setGroup(null);
+					if (cur != null && groups.values().stream().anyMatch(owned -> owned.getId().equals(cur.getId()))) c.setGroup(null);
 				} catch (Throwable ignored) {}
 			}
 		}
@@ -117,22 +150,17 @@ public final class KapismaVoice implements VoicechatPlugin {
 
 	private void onMic(MicrophonePacketEvent e) {
 		VoicechatConnection sender = e.getSenderConnection();
-		if (sender == null || sender.getPlayer() == null || Kapisma.GM == null) return;
-		Game g = Kapisma.GM.current;
-		if (g == null || g.phase == Game.Phase.ENDED) return;
+		if (sender == null || sender.getPlayer() == null) return;
+		VoicePolicy snapshot = policy;
 		UUID id = sender.getPlayer().getUuid();
-		if (!g.contains(id)) return;
-		if ("KATIL".equals(g.id())) {
-			var st = Kapisma.GM.settings;
-			if (!st.flag("KATIL", "voice")) { e.cancel(); return; }          // oyun icinde ses kapali
-			if (st.flag("KATIL", "deepVoice")) deepen(e, id);               // herkes ayni kalin ses
-		}
-		if (!g.eliminated.contains(id)) return;
+		if (!snapshot.micEnabled(id)) { e.cancel(); return; }
+		if (snapshot.deepen(id)) deepen(e, id);
+		if (!snapshot.spectator(id)) return;
 		// seyirci konusuyor: varsayilan dagitimi iptal et, sadece diger seyircilere gonder
 		e.cancel();
 		VoicechatServerApi api = e.getVoicechat();
 		var packet = e.getPacket().toStaticSoundPacket();
-		for (UUID other : g.eliminated) {
+		for (UUID other : snapshot.spectators()) {
 			if (other.equals(id)) continue;
 			VoicechatConnection c = api.getConnectionOf(other);
 			if (c != null && c.isConnected()) api.sendStaticSoundPacketTo(c, packet);

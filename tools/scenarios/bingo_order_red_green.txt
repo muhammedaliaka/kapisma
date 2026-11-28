@@ -1,0 +1,23 @@
+# Aynı sunucu komut dizisinde ilk oyuncu hedefi alıp bırakır, sonra diğer oyuncu alır.
+player Bot1 spawn
+player Bot2 spawn
+wait 2
+kapisma game BINGO
+kapisma team solo
+kapisma origins off
+kapisma seedclass orman
+kapisma rule BINGO borderStart 200
+kapisma rule BINGO tasks 0
+kapisma rule BINGO startFood 0
+kapisma rule BINGO compass 0
+kapisma rule BINGO minimap 0
+kapisma rule BINGO lines 12
+kapisma rule BINGO sharedItems 0
+kapisma start
+await Tombala başladı!
+function kapisma_test:order
+await ORDER_FUNCTION_DONE
+wait 2
+kapisma stop
+await Arena depolama kapandı:
+expect Bot2 aldı:

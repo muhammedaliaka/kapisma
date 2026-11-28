@@ -1,0 +1,22 @@
+# Explicit actual start before attempting the team group lifecycle.
+player Bot1 spawn
+player Bot2 spawn
+player Bot3 spawn
+player Bot4 spawn
+wait 2
+kapisma game UHC
+kapisma origins off
+kapisma team duo
+kapisma seedclass random
+kapisma rule UHC borderStart 200
+kapisma rule UHC treasureChests 0
+kapisma rule UHC teamVoice 1
+kapisma rule UHC pvp 0
+kapisma rule UHC earlyBuffSec 0
+kapisma rule UHC minimap 0
+kapisma start
+await UHC başladı! PvP kapalı.
+wait 3
+kapisma stop
+await Arena depolama kapandı:
+kapisma team solo

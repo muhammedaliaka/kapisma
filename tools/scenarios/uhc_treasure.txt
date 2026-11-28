@@ -1,0 +1,19 @@
+# Altın elma dönüşümü cut-clean'den bağımsız, hazineler ve tek oyunculu uyku kuralı hazır.
+player Bot1 spawn
+player Bot2 spawn
+kapisma game UHC
+kapisma origins off
+kapisma rule UHC treasureChests 4
+kapisma rule UHC cutClean 0
+kapisma rule UHC borderStart 500
+kapisma start
+await 4 hazine sandığı hazır
+execute as Bot1 at @s run gamerule playersSleepingPercentage
+expect playersSleepingPercentage is currently set to: 0
+execute as Bot1 at @s run summon minecraft:item ~ ~1 ~ {Item:{id:"minecraft:apple",count:2},PickupDelay:32767s}
+execute as Bot1 at @s as @e[type=minecraft:item,distance=..12,nbt={Item:{id:"minecraft:golden_apple",count:2}}] run say GOLDEN_DROP_OK
+expect GOLDEN_DROP_OK
+damage Bot2 1000 minecraft:out_of_world
+execute if data entity Bot2 Inventory[{id:"minecraft:compass"}].components."minecraft:custom_data".kapisma_spectator_compass run say SPECTATOR_COMPASS_OK
+expect SPECTATOR_COMPASS_OK
+kapisma stop

@@ -1,0 +1,131 @@
+{
+  "lithium": {
+    "project_id": "gvQqBUqZ",
+    "version_id": "N08Z8wog",
+    "version_number": "mc1.21.1-0.15.4-fabric",
+    "file": "lithium-fabric-0.15.4+mc1.21.1.jar",
+    "url": "https://cdn.modrinth.com/data/gvQqBUqZ/versions/N08Z8wog/lithium-fabric-0.15.4%2Bmc1.21.1.jar",
+    "size": 797454,
+    "sha256": "92329d98c57f5a22091a0adb509fdb1d60113a5602c708b799b13134bad13baa",
+    "sha512": "182064b00e6315e2255b857eaab8eb759e6b042ebd4cc8b855ff0d93f875a5a7188fac49f878d7b29d4ef7e6b6341190ad7f6f6f39f4a6d2c62003468b08e4c6",
+    "metadata": {
+      "id": "lithium",
+      "version": "0.15.4+mc1.21.1",
+      "environment": "*",
+      "depends": {
+        "fabricloader": ">=0.15.1",
+        "minecraft": [
+          "1.21",
+          "1.21.1"
+        ]
+      },
+      "breaks": {
+        "optifabric": "*"
+      },
+      "max_class_major": 65,
+      "native_entries": [],
+      "nested_jars": [],
+      "mixins": [
+        "lithium.mixins.json",
+        "lithium-fabric.mixins.json"
+      ]
+    }
+  },
+  "ferrite-core": {
+    "project_id": "uXXizFIs",
+    "version_id": "sOzRw3CG",
+    "version_number": "7.0.3-fabric",
+    "file": "ferritecore-7.0.3-fabric.jar",
+    "url": "https://cdn.modrinth.com/data/uXXizFIs/versions/sOzRw3CG/ferritecore-7.0.3-fabric.jar",
+    "size": 123450,
+    "sha256": "98c3ab1d5aab8f14b5d082d3f1a467727fd335f02d124555c94339761c4c18f2",
+    "sha512": "3ad31620fac4ff44327dc7dedbe162b2d978f3f246dc16255a6e400ce9592a0d326fe36a626f3c1bf30a11f813093cbb4dcc107af039cff724d0cdf648541fdf",
+    "metadata": {
+      "id": "ferritecore",
+      "version": "7.0.3",
+      "environment": "*",
+      "depends": {
+        "fabricloader": ">=0.14.21",
+        "minecraft": ">=1.21.1 <1.22"
+      },
+      "breaks": {
+        "hydrogen": "<=0.3"
+      },
+      "max_class_major": 65,
+      "native_entries": [],
+      "nested_jars": [],
+      "mixins": [
+        "ferritecore.accessors.mixin.json",
+        "ferritecore.blockstatecache.mixin.json",
+        "ferritecore.dedupmultipart.mixin.json",
+        "ferritecore.fastmap.mixin.json",
+        "ferritecore.mrl.mixin.json",
+        "ferritecore.predicates.mixin.json",
+        "ferritecore.dedupbakedquad.mixin.json",
+        "ferritecore.threaddetec.mixin.json",
+        "ferritecore.modelsides.mixin.json",
+        "ferritecore.datacomponents.mixin.json",
+        "ferritecore.fabric.mixin.json"
+      ]
+    }
+  },
+  "modernfix": {
+    "project_id": "nmDcB62a",
+    "version_id": "ARc7GQfp",
+    "version_number": "5.25.0+mc1.21.1",
+    "file": "modernfix-fabric-5.25.0+mc1.21.1.jar",
+    "url": "https://cdn.modrinth.com/data/nmDcB62a/versions/ARc7GQfp/modernfix-fabric-5.25.0%2Bmc1.21.1.jar",
+    "size": 473794,
+    "sha256": "c21cf4a868e17f36634dd63b9d3c6299c695064c09fcd6257cf533c556560773",
+    "sha512": "ab858c8bce9444225d1e63692cdd24ec1689edfb3e0cccd811fe040ce968af2060d27a009ab8d281ea539a2737cb5a5fe6a8d7954ceb5bbdbecec6ad2398dc1d",
+    "metadata": {
+      "id": "modernfix",
+      "version": "5.25.0+mc1.21.1",
+      "environment": "*",
+      "depends": {
+        "minecraft": ">=1.16.2",
+        "fabricloader": ">=0.16.10"
+      },
+      "breaks": {
+        "dashloader": "<5.0.0-beta.1"
+      },
+      "max_class_major": 65,
+      "native_entries": [],
+      "nested_jars": [],
+      "mixins": [
+        "modernfix-fabric.mixins.json",
+        "modernfix-common.mixins.json"
+      ]
+    }
+  },
+  "noisium": {
+    "project_id": "KuNKN7d2",
+    "version_id": "4sGQgiu2",
+    "version_number": "2.3.0+mc1.21-1.21.1",
+    "file": "noisium-fabric-2.3.0+mc1.21-1.21.1.jar",
+    "url": "https://cdn.modrinth.com/data/KuNKN7d2/versions/4sGQgiu2/noisium-fabric-2.3.0%2Bmc1.21-1.21.1.jar",
+    "size": 216183,
+    "sha256": "c32c163861e936b7786995ebe1209eb7a4c6e7bb493e7cc75747ddac3340cf85",
+    "sha512": "606ba78cf7f30d99e417c96aa042f600c1b626ed9c783919496d139de650013f1434fcf93545782e3889660322837ce6e85530d9e1a5cc20f9ad161357ede43e",
+    "metadata": {
+      "id": "noisium",
+      "version": "2.3.0+mc1.21-1.21.1",
+      "environment": "*",
+      "depends": {
+        "fabricloader": ">=0.15.11",
+        "minecraft": ">=1.21 <=1.21.1"
+      },
+      "breaks": {
+        "biox": "*"
+      },
+      "max_class_major": 65,
+      "native_entries": [],
+      "nested_jars": [
+        "META-INF/jars/mixinextras-fabric-0.3.5.jar"
+      ],
+      "mixins": [
+        "noisium-common.mixins.json"
+      ]
+    }
+  }
+}

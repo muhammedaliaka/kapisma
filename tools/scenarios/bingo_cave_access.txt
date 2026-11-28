@@ -1,0 +1,28 @@
+# Gerçek arena blokları: kapalı 2 hücre, geniş mağara, açık gökyüzü ve tehlikeli yaklaşım.
+player Bot1 spawn
+player Bot2 spawn
+kapisma game BINGO
+kapisma origins off
+kapisma seedclass orman
+kapisma rule BINGO borderStart 200
+kapisma rule BINGO tasks 0
+kapisma start
+await Tombala doğrulama:
+await Tombala başladı
+attribute Bot1 minecraft:generic.gravity base set 0
+execute as Bot1 at @s run tp @s 7.5 220 7.5
+wait 2
+execute at Bot1 run fill 1 209 1 14 214 14 minecraft:stone
+execute at Bot1 run fill 2 210 2 3 211 2 minecraft:air
+execute at Bot1 positioned 2 210 2 run kapisma debug caveaccess
+await caveaccess 2, 210, 2: UNPROVEN
+execute at Bot1 run fill 3 210 5 11 211 7 minecraft:air
+execute at Bot1 positioned 3 210 5 run kapisma debug caveaccess
+await caveaccess 3, 210, 5: REACHABLE
+execute at Bot1 run fill 2 212 2 3 214 2 minecraft:air
+execute at Bot1 positioned 2 210 2 run kapisma debug caveaccess
+await caveaccess 2, 210, 2: REACHABLE
+execute at Bot1 run setblock 2 210 2 minecraft:powder_snow
+execute at Bot1 positioned 2 210 2 run kapisma debug caveaccess
+await caveaccess 2, 210, 2: UNPROVEN
+kapisma stop

@@ -1,0 +1,53 @@
+player Bot1 spawn
+player Bot2 spawn
+wait 2
+kapisma game UHC
+kapisma team solo
+kapisma origins off
+kapisma seedclass natural_no_village
+kapisma rule UHC borderStart 200
+kapisma rule UHC borderEnd 50
+kapisma rule UHC treasureChests 4
+kapisma rule UHC minimap 0
+kapisma rule UHC pvp 0
+kapisma rule UHC earlyBuffSec 0
+kapisma start
+await UHC başladı! PvP kapalı.
+capture cx UHC dunyasi acildi:.* merkez=\((-?\d+),-?\d+\)
+capture cz UHC dunyasi acildi:.* merkez=\(-?\d+,(-?\d+)\)
+capture center_depot (4 hazine sandığı hazır\. Haritalar merkezdeki fıçılarda)
+capture bx UHC hazine fıçısı 0: \((-?\d+),-?\d+,-?\d+\) harita=4
+capture by UHC hazine fıçısı 0: \(-?\d+,(-?\d+),-?\d+\) harita=4
+capture bz UHC hazine fıçısı 0: \(-?\d+,-?\d+,(-?\d+)\) harita=4
+execute at Bot1 positioned %{cx} 0 %{cz} run locate structure #minecraft:village
+await_regex nearest .*village.*blocks away
+execute at Bot1 positioned %{cx} 0 %{cz} run forceload add ~-50 ~-50 ~50 ~50
+wait 4
+execute at Bot1 run data get block %{bx} %{by} %{bz} Items
+capture x0 Slot: 0b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z0 Slot: 0b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x1 Slot: 1b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z1 Slot: 1b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x2 Slot: 2b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z2 Slot: 2b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+capture x3 Slot: 3b, components: \{"minecraft:map_decorations": \{hazine: \{x: (-?\d+)\.0d, z: -?\d+\.0d
+capture z3 Slot: 3b, components: \{"minecraft:map_decorations": \{hazine: \{x: -?\d+\.0d, z: (-?\d+)\.0d
+execute at Bot1 positioned %{x0} 0 %{z0} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_0_OK
+capture chest0 (UHC_CHEST_0_OK)
+execute at Bot1 positioned %{x0} 0 %{z0} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot0 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x1} 0 %{z1} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_1_OK
+capture chest1 (UHC_CHEST_1_OK)
+execute at Bot1 positioned %{x1} 0 %{z1} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot1 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x2} 0 %{z2} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_2_OK
+capture chest2 (UHC_CHEST_2_OK)
+execute at Bot1 positioned %{x2} 0 %{z2} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot2 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 positioned %{x3} 0 %{z3} positioned over world_surface if block ~ ~-1 ~ minecraft:chest run say UHC_CHEST_3_OK
+capture chest3 (UHC_CHEST_3_OK)
+execute at Bot1 positioned %{x3} 0 %{z3} positioned over world_surface run data get block ~ ~-1 ~ Items
+capture loot3 (\[.*minecraft:golden_apple.*\])
+execute at Bot1 run forceload remove all
+kapisma stop
+await Arena depolama kapandı:

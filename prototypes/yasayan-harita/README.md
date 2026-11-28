@@ -1,0 +1,6 @@
+# Yaşayan Harita 0.1
+
+2–8 oyuncu, iki simetrik dört hedef rotası; yalnız o anki hedefin pusula lodestone bileşeni ve özel ipucu, /trigger yh_find ile üç blok içinde doğrulama. /trigger yh_hint yalnız geçerli ipucu. Takım puanı ayrı, aynı tikte iki takım bitirirse beraberlik. 180 oyun saniyesi; takım eksikse ilerleme/süre durur, bekleyen istekler silinir. Kayıt dışı oyuncu seyirci. 30 vanilla işlev; yalnız ayrı düz QA dünya. `function yh:start`, `function yh:reset`. Denge/harita ilk tasarım adayı.
+
+22 PASS / Exit 0 (Fabric + Carpet). Doğru ilk/sonraki pusulalar, gelecek ve diğer takım hedefi reddi, tekrar/eskimiş trigger reddi, bağlantı duraklaması, tam dört hedef zinciri, aynı tik beraberliği ve 8/9 kapasite. acceptance.log SHA256 D50DB91483DA8B8D83363CCFD831AF8E9DFB15F1C1E78F2FBC7DB52121540075. Fiziksel insan yürüyüşü, gerçek istemci pusula görünümü, aktif restart ve canlı entegrasyon açık. Testte konumlar komutla değiştirildi.
+Gerçek istemci gizlilik kabulü: ortak `../verify_private_modes.py`, 7 PASS, iki bağımsız Java istemcisi. Takımın ilerlemesi ve ipucu tekrarının diğer istemciye gönderilmediği [CHAT] günlükleri ile doğrulandı. acceptance_privacy.log SHA256 1E52D68D0F93F0A556D23D119B3E463A31F55BC39861D10602E376F63FA8A941. Fiziksel yürüyüş ve insan testi açık.

@@ -1,0 +1,17 @@
+player Bot1 spawn
+player Bot2 spawn
+wait 2
+kapisma game BINGO
+kapisma origins off
+kapisma team solo
+kapisma seedclass col_mesa
+kapisma rule BINGO borderStart 1000
+kapisma rule BINGO verifySec 60
+kapisma rule BINGO difficulty 2
+kapisma rule BINGO tasks 3
+kapisma rule BINGO sharedItems 1
+kapisma start
+await_regex BINGO dunyasi acildi: seed=-335906671735727005 .*biyom=(desert|badlands|wooded_badlands|eroded_badlands)
+await_regex Tombala başladı!|Bu seed ve sınırda 25 farklı hedef doğrulanamadı|Tombala dünyası zamanında doğrulanamadı
+kapisma stop
+await_regex Arena depolama kapandı:

@@ -1,0 +1,105 @@
+function krts:reset
+player Bot1 spawn
+player Bot2 spawn
+player Bot3 spawn
+function krts:start
+await Hazırlık başladı.
+scoreboard players set #left krts_ctrl 1
+await Merkez açık.
+wait 2
+execute as @a[scores={krts_slot=1},limit=1] run hyw relation set @a[scores={krts_slot=2},limit=1] hostile
+damage @e[tag=krts.capital,tag=krts.s1,limit=1] 5 minecraft:mob_attack by @e[tag=krts.unit,tag=krts.s2,limit=1]
+execute if entity @e[tag=krts.capital,tag=krts.s1,nbt={Health:60.0d}] run say RTS_PEACE_DAMAGE_BLOCKED
+await RTS_PEACE_DAMAGE_BLOCKED
+scoreboard players set #income_left krts_ctrl 900
+scoreboard players set #g1 krts_ctrl 16
+execute as @a[scores={krts_slot=1},limit=1] run trigger krts_trade set 2
+execute as @a[scores={krts_slot=1},limit=1] run trigger krts_pact set 2
+execute if score #trade_offer12 krts_ctrl matches 1 if score #offer12 krts_ctrl matches 31 if score #trade12 krts_ctrl matches 0 if score #pact12 krts_ctrl matches 0 run say RTS_PARALLEL_OFFERS_NEED_CONSENT
+await RTS_PARALLEL_OFFERS_NEED_CONSENT
+execute as @a[scores={krts_slot=2},limit=1] run trigger krts_trade set -1
+await 60 saniyelik ticaret anlaşması yaptı.
+execute as @a[scores={krts_slot=1},limit=1] run trigger krts_war set 2
+execute if score #pact12 krts_ctrl matches 0 if score #trade12 krts_ctrl matches 1.. if score #g1 krts_ctrl matches 16 if score #offer12 krts_ctrl matches 31 run say RTS_TRADE_LOCK
+await RTS_TRADE_LOCK
+execute as @a[scores={krts_slot=2},limit=1] run trigger krts_pact set -1
+await 100 saniyelik saldırmazlık paktı yaptı.
+execute if score #pact12 krts_ctrl matches 5 if score #trade12 krts_ctrl matches 1.. run say RTS_TRADE_AND_PACT_COEXIST
+await RTS_TRADE_AND_PACT_COEXIST
+scoreboard players set #g1 krts_ctrl 40
+scoreboard players set #g2 krts_ctrl 40
+scoreboard players set #g3 krts_ctrl 40
+scoreboard players set #income_left krts_ctrl 1
+execute if score #g1 krts_ctrl matches 42 if score #g2 krts_ctrl matches 42 if score #g3 krts_ctrl matches 41 run say RTS_TRADE_INCOME_ONLY_FOR_PARTNERS
+await RTS_TRADE_INCOME_ONLY_FOR_PARTNERS
+scoreboard players set #income_left krts_ctrl 900
+scoreboard players set #trade12 krts_ctrl 1
+await ticaretin süresi doldu.
+execute as @a[scores={krts_slot=1},limit=1] run trigger krts_war set 2
+execute if score #pact12 krts_ctrl matches 5 if score #trade12 krts_ctrl matches 0 run say RTS_PACT_LOCK
+await RTS_PACT_LOCK
+execute as @a[scores={krts_slot=2},limit=1] run trigger krts_trade set -1
+execute if score #trade_offer12 krts_ctrl matches 0 if score #trade12 krts_ctrl matches 0 run say RTS_STALE_ACCEPT_CREATES_NO_OFFER
+await RTS_STALE_ACCEPT_CREATES_NO_OFFER
+execute as @a[scores={krts_slot=1},limit=1] run trigger krts_trade set 2
+execute as @a[scores={krts_slot=2},limit=1] run trigger krts_trade set 1
+await 60 saniyelik ticaret anlaşması yaptı.
+scoreboard players set #clock12 krts_ctrl 1
+await anlaşmanın süresi doldu.
+execute if score #pact12 krts_ctrl matches 0 if score #trade12 krts_ctrl matches 1.. run say RTS_PACT_EXPIRY_PRESERVES_TRADE
+await RTS_PACT_EXPIRY_PRESERVES_TRADE
+scoreboard players set #trade12 krts_ctrl 1
+await ticaretin süresi doldu.
+execute as @a[scores={krts_slot=1},limit=1] run trigger krts_war set 2
+await savaş 15 saniye sonra başlar.
+execute as @a[scores={krts_slot=2},limit=1] run trigger krts_trade set 1
+execute if score #pact12 krts_ctrl matches 1 if score #trade_offer12 krts_ctrl matches 0 run say RTS_WARNING_REJECTS_TRADE
+await RTS_WARNING_REJECTS_TRADE
+damage @e[tag=krts.capital,tag=krts.s1,limit=1] 5 minecraft:mob_attack by @e[tag=krts.unit,tag=krts.s2,limit=1]
+execute if entity @e[tag=krts.capital,tag=krts.s1,nbt={Health:60.0d}] run say RTS_WARNING_PROTECTS
+await RTS_WARNING_PROTECTS
+scoreboard players set #clock12 krts_ctrl 1
+await artık savaşta.
+damage @e[tag=krts.capital,tag=krts.s1,limit=1] 5 minecraft:mob_attack by @e[tag=krts.unit,tag=krts.s2,limit=1]
+execute if entity @e[tag=krts.capital,tag=krts.s1,nbt=!{Health:60.0d}] run say RTS_WAR_DAMAGE
+await RTS_WAR_DAMAGE
+execute as @a[scores={krts_slot=1},limit=1] run trigger krts_peace set 2
+wait 1
+execute if score #pact12 krts_ctrl matches 2 if score #offer12 krts_ctrl matches 0 run say RTS_MINIMUM_WAR
+await RTS_MINIMUM_WAR
+scoreboard players set #clock12 krts_ctrl 1
+wait 2
+execute as @a[scores={krts_slot=1},limit=1] run trigger krts_peace set 2
+execute as @a[scores={krts_slot=2},limit=1] run trigger krts_peace set 1
+await 45 saniyelik ateşkes yaptı.
+execute as @a[scores={krts_slot=1},limit=1] run trigger krts_trade set 2
+execute as @a[scores={krts_slot=2},limit=1] run trigger krts_trade set 1
+await 60 saniyelik ticaret anlaşması yaptı.
+execute if score #pact12 krts_ctrl matches 3 if score #trade12 krts_ctrl matches 1.. run say RTS_TRUCE_AND_TRADE_COEXIST
+await RTS_TRUCE_AND_TRADE_COEXIST
+execute as @a[scores={krts_slot=1},limit=1] run trigger krts_tech set 2
+wait 1
+execute if score #bow1 krts_ctrl matches 1 run say RTS_BOW_RESEARCH
+await RTS_BOW_RESEARCH
+scoreboard players set #clock13 krts_ctrl 24
+scoreboard players set #pact13 krts_ctrl 4
+execute if score #pact13 krts_ctrl matches 0 if score #clock13 krts_ctrl matches 0 if score #trade13 krts_ctrl matches 15..24 run say RTS_LEGACY_TRADE_MIGRATED
+await RTS_LEGACY_TRADE_MIGRATED
+scoreboard players set #offer_t23 krts_ctrl 25
+scoreboard players set #offer23 krts_ctrl 23
+execute if score #trade_offer23 krts_ctrl matches 3 if score #trade_t23 krts_ctrl matches 17..25 if score #offer23 krts_ctrl matches 0 run say RTS_LEGACY_TRADE_OFFER_MIGRATED
+await RTS_LEGACY_TRADE_OFFER_MIGRATED
+execute as @a[scores={krts_slot=2},limit=1] run trigger krts_trade set 3
+await Devlet 2 ve Devlet 3 60 saniyelik ticaret anlaşması yaptı.
+function krts:pause
+await Puan, süre ve satın alma durdu.
+scoreboard players operation #qaTrade krts_ctrl = #trade23 krts_ctrl
+wait 3
+execute if score #trade23 krts_ctrl = #qaTrade krts_ctrl run say RTS_TRADE_PAUSE_STOPS_TIMER
+await RTS_TRADE_PAUSE_STOPS_TIMER
+function krts:resume
+await Maç devam ediyor.
+kill @e[tag=krts.capital,tag=krts.s3,limit=1]
+execute if score #a3 krts_ctrl matches 0 if score #trade13 krts_ctrl matches 0 if score #trade23 krts_ctrl matches 0 if score #trade12 krts_ctrl matches 1.. run say RTS_ELIMINATION_CLEARS_ONLY_OWN_DEALS
+await RTS_ELIMINATION_CLEARS_ONLY_OWN_DEALS
+function krts:reset

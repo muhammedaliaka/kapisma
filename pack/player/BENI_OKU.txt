@@ -23,7 +23,9 @@ SORUN GIDERME
  - "Incompatible mod set": host ile ayni paket surumunu kullandiginizdan emin ol; yeniden kur.
  - Oyun acilmiyor: Java 21 gerekir (TLauncher / Mojang launcher 1.21.1 icin kendi Java'sini getirir).
  - Ses yok: hostta UDP 24454 acik olmali; oyunda V tusunda mikrofon secili mi bak.
- - Katil Kim modunda skin'ler herkes icin ayni gorunur (kapisma-hud yapar), bu normaldir.
+ - Katil Kim icin guncel Kapisma HUD gerekir. Bu modda herkes ayni skin ile gorunur.
+ - Katil, baslangic korumasi bitince P ile gizli gucunu acip kapatir.
+ - Izleyici pusulasi sag tikla acilir. /izle komutu da ayni menuyu acar.
  - Kurulum gunlugu: %TEMP%\kapisma-oyuncu-kurulum.txt
 
 LISANS: Kapisma ve kapisma-hud (MIT). Fabric API (Apache-2.0), Origins (MIT), Simple Voice Chat (All Rights Reserved;

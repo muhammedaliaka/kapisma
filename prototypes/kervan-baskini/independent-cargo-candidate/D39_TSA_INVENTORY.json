@@ -1,0 +1,7055 @@
+{
+  "status": "static review only, no production approval",
+  "sha512": "42570ac282b9c1ae4224a4fd834e842a65b8304ce7177314038f5cf2e1eb5e6936c42f5c5c730dbf114910f6e4eaf2cdf7e06d512dc721e0f5750a0ba0b041b3",
+  "decoration_count": 237,
+  "other_definitions": [
+    {
+      "path": "data/minecraft/filament/item-groups.json",
+      "id": null
+    },
+    {
+      "path": "data/minecraft/filament/item/nails.json",
+      "id": "tsa:nails"
+    }
+  ],
+  "categories": {
+    "interactive": 90,
+    "noncompact_or_unverified": 81,
+    "compact_noninteractive_candidate": 50,
+    "no_explicit_footprint": 15,
+    "review_unknown_fields": 1
+  },
+  "behaviour_counts": {
+    "seat": 66,
+    "showcase": 22,
+    "tsa:carpentry": 1,
+    "animation": 1,
+    "container": 1
+  },
+  "shortlist": [
+    "tsa:darkoak_table",
+    "tsa:small_darkoak_table",
+    "tsa:stone_brick_pile",
+    "tsa:small_spruce_table",
+    "tsa:spruce_table"
+  ],
+  "definitions": [
+    {
+      "id": "tsa:acacia_bench",
+      "path": "data/minecraft/filament/decoration/acacia/acacia_bench.json",
+      "model": "minecraft:custom/furniture/benches/acacia_bench",
+      "model_asset": "assets/minecraft/models/custom/furniture/benches/acacia_bench.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:acacia_cabinet",
+      "path": "data/minecraft/filament/decoration/acacia/acacia_cabinet.json",
+      "model": "minecraft:custom/furniture/boards/acacia_cabinet",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/acacia_cabinet.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:acacia_chair",
+      "path": "data/minecraft/filament/decoration/acacia/acacia_chair.json",
+      "model": "minecraft:custom/furniture/chairs/acacia_chair",
+      "model_asset": "assets/minecraft/models/custom/furniture/chairs/acacia_chair.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:acacia_chair_with_cushion",
+      "path": "data/minecraft/filament/decoration/acacia/acacia_chair_with_cushion.json",
+      "model": "minecraft:custom/furniture/chairs/acacia_chair_with_cushion",
+      "model_asset": "assets/minecraft/models/custom/furniture/chairs/acacia_chair_with_cushion.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:acacia_dresser",
+      "path": "data/minecraft/filament/decoration/acacia/acacia_dresser.json",
+      "model": "minecraft:custom/furniture/boards/acacia_dresser",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/acacia_dresser.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:acacia_end_table_cabinet",
+      "path": "data/minecraft/filament/decoration/acacia/acacia_end_table_cabinet.json",
+      "model": "minecraft:custom/furniture/boards/acacia_end_table_cabinet",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/acacia_end_table_cabinet.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:acacia_park_bench",
+      "path": "data/minecraft/filament/decoration/acacia/acacia_park_bench.json",
+      "model": "minecraft:custom/furniture/benches/acacia_park_bench",
+      "model_asset": "assets/minecraft/models/custom/furniture/benches/acacia_park_bench.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:acacia_shelf",
+      "path": "data/minecraft/filament/decoration/acacia/acacia_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/acacia_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/acacia_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "showcase"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:acacia_sidetable",
+      "path": "data/minecraft/filament/decoration/acacia/acacia_sidetable.json",
+      "model": "minecraft:custom/furniture/boards/acacia_sidetable",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/acacia_sidetable.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:acacia_table",
+      "path": "data/minecraft/filament/decoration/acacia/acacia_table.json",
+      "model": "minecraft:custom/furniture/tables/acacia_table",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/acacia_table.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:acacia_table_center_post",
+      "path": "data/minecraft/filament/decoration/acacia/acacia_table_center_post.json",
+      "model": "minecraft:custom/furniture/tables/acacia_table_center_post",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/acacia_table_center_post.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:cut_acacia_planks",
+      "path": "data/minecraft/filament/decoration/acacia/cut_acacia_planks.json",
+      "model": "minecraft:custom/furniture/misc/cut_acacia_planks",
+      "model_asset": "assets/minecraft/models/custom/furniture/misc/cut_acacia_planks.json",
+      "model_exists": true,
+      "blocks": null,
+      "behaviour": [],
+      "category": "no_explicit_footprint",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true
+      }
+    },
+    {
+      "id": "tsa:iron_acacia_wall_shelf",
+      "path": "data/minecraft/filament/decoration/acacia/iron_acacia_wall_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/iron_acacia_wall_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/iron_acacia_wall_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "placement": {
+          "wall": true
+        },
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:large_acacia_cabinet",
+      "path": "data/minecraft/filament/decoration/acacia/large_acacia_cabinet.json",
+      "model": "minecraft:custom/furniture/boards/large_acacia_cabinet",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/large_acacia_cabinet.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            3,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:slim_acacia_shelf",
+      "path": "data/minecraft/filament/decoration/acacia/slim_acacia_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/slim_acacia_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/slim_acacia_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "showcase"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:small_acacia_dresser",
+      "path": "data/minecraft/filament/decoration/acacia/small_acacia_dresser.json",
+      "model": "minecraft:custom/furniture/boards/small_acacia_dresser",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/small_acacia_dresser.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:small_acacia_table",
+      "path": "data/minecraft/filament/decoration/acacia/small_acacia_table.json",
+      "model": "minecraft:custom/furniture/tables/small_acacia_table",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/small_acacia_table.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:wooden_acacia_bench",
+      "path": "data/minecraft/filament/decoration/acacia/wooden_acacia_bench.json",
+      "model": "minecraft:custom/furniture/benches/wooden_acacia_bench",
+      "model_asset": "assets/minecraft/models/custom/furniture/benches/wooden_acacia_bench.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:wooden_acacia_picnic_table",
+      "path": "data/minecraft/filament/decoration/acacia/wooden_acacia_picnic_table.json",
+      "model": "minecraft:custom/furniture/tables/wooden_acacia_picnic_table",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/wooden_acacia_picnic_table.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            -1
+          ],
+          "size": [
+            2,
+            1,
+            2
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:wooden_acacia_wall_shelf",
+      "path": "data/minecraft/filament/decoration/acacia/wooden_acacia_wall_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/wooden_acacia_wall_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/wooden_acacia_wall_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "placement": {
+          "wall": true
+        },
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:bamboo_bench",
+      "path": "data/minecraft/filament/decoration/bamboo/bamboo_bench.json",
+      "model": "minecraft:custom/furniture/benches/bamboo_bench",
+      "model_asset": "assets/minecraft/models/custom/furniture/benches/bamboo_bench.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:bamboo_cabinet",
+      "path": "data/minecraft/filament/decoration/bamboo/bamboo_cabinet.json",
+      "model": "minecraft:custom/furniture/boards/bamboo_cabinet",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/bamboo_cabinet.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:bamboo_chair",
+      "path": "data/minecraft/filament/decoration/bamboo/bamboo_chair.json",
+      "model": "minecraft:custom/furniture/chairs/bamboo_chair",
+      "model_asset": "assets/minecraft/models/custom/furniture/chairs/bamboo_chair.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:bamboo_chair_with_cushion",
+      "path": "data/minecraft/filament/decoration/bamboo/bamboo_chair_with_cushion.json",
+      "model": "minecraft:custom/furniture/chairs/bamboo_chair_with_cushion",
+      "model_asset": "assets/minecraft/models/custom/furniture/chairs/bamboo_chair_with_cushion.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:bamboo_dresser",
+      "path": "data/minecraft/filament/decoration/bamboo/bamboo_dresser.json",
+      "model": "minecraft:custom/furniture/boards/bamboo_dresser",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/bamboo_dresser.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:bamboo_end_table_cabinet",
+      "path": "data/minecraft/filament/decoration/bamboo/bamboo_end_table_cabinet.json",
+      "model": "minecraft:custom/furniture/boards/bamboo_end_table_cabinet",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/bamboo_end_table_cabinet.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:bamboo_park_bench",
+      "path": "data/minecraft/filament/decoration/bamboo/bamboo_park_bench.json",
+      "model": "minecraft:custom/furniture/benches/bamboo_park_bench",
+      "model_asset": "assets/minecraft/models/custom/furniture/benches/bamboo_park_bench.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:bamboo_shelf",
+      "path": "data/minecraft/filament/decoration/bamboo/bamboo_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/bamboo_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/bamboo_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "showcase"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:bamboo_sidetable",
+      "path": "data/minecraft/filament/decoration/bamboo/bamboo_sidetable.json",
+      "model": "minecraft:custom/furniture/boards/bamboo_sidetable",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/bamboo_sidetable.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:bamboo_table",
+      "path": "data/minecraft/filament/decoration/bamboo/bamboo_table.json",
+      "model": "minecraft:custom/furniture/tables/bamboo_table",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/bamboo_table.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:bamboo_table_center_post",
+      "path": "data/minecraft/filament/decoration/bamboo/bamboo_table_center_post.json",
+      "model": "minecraft:custom/furniture/tables/bamboo_table_center_post",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/bamboo_table_center_post.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:cut_bamboo_planks",
+      "path": "data/minecraft/filament/decoration/bamboo/cut_bamboo_planks.json",
+      "model": "minecraft:custom/furniture/misc/cut_bamboo_planks",
+      "model_asset": "assets/minecraft/models/custom/furniture/misc/cut_bamboo_planks.json",
+      "model_exists": true,
+      "blocks": null,
+      "behaviour": [],
+      "category": "no_explicit_footprint",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true
+      }
+    },
+    {
+      "id": "tsa:iron_bamboo_wall_shelf",
+      "path": "data/minecraft/filament/decoration/bamboo/iron_bamboo_wall_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/iron_bamboo_wall_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/iron_bamboo_wall_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "placement": {
+          "wall": true
+        },
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:large_bamboo_cabinet",
+      "path": "data/minecraft/filament/decoration/bamboo/large_bamboo_cabinet.json",
+      "model": "minecraft:custom/furniture/boards/large_bamboo_cabinet",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/large_bamboo_cabinet.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            3,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:slim_bamboo_shelf",
+      "path": "data/minecraft/filament/decoration/bamboo/slim_bamboo_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/slim_bamboo_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/slim_bamboo_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "showcase"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:small_bamboo_dresser",
+      "path": "data/minecraft/filament/decoration/bamboo/small_bamboo_dresser.json",
+      "model": "minecraft:custom/furniture/boards/small_bamboo_dresser",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/small_bamboo_dresser.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:small_bamboo_table",
+      "path": "data/minecraft/filament/decoration/bamboo/small_bamboo_table.json",
+      "model": "minecraft:custom/furniture/tables/small_bamboo_table",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/small_bamboo_table.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:wooden_bamboo_bench",
+      "path": "data/minecraft/filament/decoration/bamboo/wooden_bamboo_bench.json",
+      "model": "minecraft:custom/furniture/benches/wooden_bamboo_bench",
+      "model_asset": "assets/minecraft/models/custom/furniture/benches/wooden_bamboo_bench.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:wooden_bamboo_picnic_table",
+      "path": "data/minecraft/filament/decoration/bamboo/wooden_bamboo_picnic_table.json",
+      "model": "minecraft:custom/furniture/tables/wooden_bamboo_picnic_table",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/wooden_bamboo_picnic_table.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            -1
+          ],
+          "size": [
+            2,
+            1,
+            2
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:wooden_bamboo_wall_shelf",
+      "path": "data/minecraft/filament/decoration/bamboo/wooden_bamboo_wall_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/wooden_bamboo_wall_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/wooden_bamboo_wall_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "placement": {
+          "wall": true
+        },
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:birch_bench",
+      "path": "data/minecraft/filament/decoration/birch/birch_bench.json",
+      "model": "minecraft:custom/furniture/benches/birch_bench",
+      "model_asset": "assets/minecraft/models/custom/furniture/benches/birch_bench.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:birch_cabinet",
+      "path": "data/minecraft/filament/decoration/birch/birch_cabinet.json",
+      "model": "minecraft:custom/furniture/boards/birch_cabinet",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/birch_cabinet.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:birch_chair",
+      "path": "data/minecraft/filament/decoration/birch/birch_chair.json",
+      "model": "minecraft:custom/furniture/chairs/birch_chair",
+      "model_asset": "assets/minecraft/models/custom/furniture/chairs/birch_chair.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:birch_chair_with_cushion",
+      "path": "data/minecraft/filament/decoration/birch/birch_chair_with_cushion.json",
+      "model": "minecraft:custom/furniture/chairs/birch_chair_with_cushion",
+      "model_asset": "assets/minecraft/models/custom/furniture/chairs/birch_chair_with_cushion.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:birch_dresser",
+      "path": "data/minecraft/filament/decoration/birch/birch_dresser.json",
+      "model": "minecraft:custom/furniture/boards/birch_dresser",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/birch_dresser.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:birch_end_table_cabinet",
+      "path": "data/minecraft/filament/decoration/birch/birch_end_table_cabinet.json",
+      "model": "minecraft:custom/furniture/boards/birch_end_table_cabinet",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/birch_end_table_cabinet.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:birch_park_bench",
+      "path": "data/minecraft/filament/decoration/birch/birch_park_bench.json",
+      "model": "minecraft:custom/furniture/benches/birch_park_bench",
+      "model_asset": "assets/minecraft/models/custom/furniture/benches/birch_park_bench.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:birch_shelf",
+      "path": "data/minecraft/filament/decoration/birch/birch_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/birch_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/birch_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "showcase"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:birch_sidetable",
+      "path": "data/minecraft/filament/decoration/birch/birch_sidetable.json",
+      "model": "minecraft:custom/furniture/boards/birch_sidetable",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/birch_sidetable.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:birch_table",
+      "path": "data/minecraft/filament/decoration/birch/birch_table.json",
+      "model": "minecraft:custom/furniture/tables/birch_table",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/birch_table.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:birch_table_center_post",
+      "path": "data/minecraft/filament/decoration/birch/birch_table_center_post.json",
+      "model": "minecraft:custom/furniture/tables/birch_table_center_post",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/birch_table_center_post.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:cut_birch_planks",
+      "path": "data/minecraft/filament/decoration/birch/cut_birch_planks.json",
+      "model": "minecraft:custom/furniture/misc/cut_birch_planks",
+      "model_asset": "assets/minecraft/models/custom/furniture/misc/cut_birch_planks.json",
+      "model_exists": true,
+      "blocks": null,
+      "behaviour": [],
+      "category": "no_explicit_footprint",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true
+      }
+    },
+    {
+      "id": "tsa:iron_birch_wall_shelf",
+      "path": "data/minecraft/filament/decoration/birch/iron_birch_wall_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/iron_birch_wall_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/iron_birch_wall_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "placement": {
+          "wall": true
+        },
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:large_birch_cabinet",
+      "path": "data/minecraft/filament/decoration/birch/large_birch_cabinet.json",
+      "model": "minecraft:custom/furniture/boards/large_birch_cabinet",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/large_birch_cabinet.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            3,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:slim_birch_shelf",
+      "path": "data/minecraft/filament/decoration/birch/slim_birch_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/slim_birch_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/slim_birch_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "showcase"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:small_birch_dresser",
+      "path": "data/minecraft/filament/decoration/birch/small_birch_dresser.json",
+      "model": "minecraft:custom/furniture/boards/small_birch_dresser",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/small_birch_dresser.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:small_birch_table",
+      "path": "data/minecraft/filament/decoration/birch/small_birch_table.json",
+      "model": "minecraft:custom/furniture/tables/small_birch_table",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/small_birch_table.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:wooden_birch_bench",
+      "path": "data/minecraft/filament/decoration/birch/wooden_birch_bench.json",
+      "model": "minecraft:custom/furniture/benches/wooden_birch_bench",
+      "model_asset": "assets/minecraft/models/custom/furniture/benches/wooden_birch_bench.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:wooden_birch_picnic_table",
+      "path": "data/minecraft/filament/decoration/birch/wooden_birch_picnic_table.json",
+      "model": "minecraft:custom/furniture/tables/wooden_birch_picnic_table",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/wooden_birch_picnic_table.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            -1
+          ],
+          "size": [
+            2,
+            1,
+            2
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:wooden_birch_wall_shelf",
+      "path": "data/minecraft/filament/decoration/birch/wooden_birch_wall_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/wooden_birch_wall_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/wooden_birch_wall_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "placement": {
+          "wall": true
+        },
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:carpentry_table",
+      "path": "data/minecraft/filament/decoration/carpentry_table.json",
+      "model": "minecraft:custom/furniture/tables/carpentry_table",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/carpentry_table.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "tsa:carpentry"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "stackSize": 64,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:cherry_bench",
+      "path": "data/minecraft/filament/decoration/cherry/cherry_bench.json",
+      "model": "minecraft:custom/furniture/benches/cherry_bench",
+      "model_asset": "assets/minecraft/models/custom/furniture/benches/cherry_bench.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:cherry_cabinet",
+      "path": "data/minecraft/filament/decoration/cherry/cherry_cabinet.json",
+      "model": "minecraft:custom/furniture/boards/cherry_cabinet",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/cherry_cabinet.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:cherry_chair",
+      "path": "data/minecraft/filament/decoration/cherry/cherry_chair.json",
+      "model": "minecraft:custom/furniture/chairs/cherry_chair",
+      "model_asset": "assets/minecraft/models/custom/furniture/chairs/cherry_chair.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:cherry_chair_with_cushion",
+      "path": "data/minecraft/filament/decoration/cherry/cherry_chair_with_cushion.json",
+      "model": "minecraft:custom/furniture/chairs/cherry_chair_with_cushion",
+      "model_asset": "assets/minecraft/models/custom/furniture/chairs/cherry_chair_with_cushion.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:cherry_dresser",
+      "path": "data/minecraft/filament/decoration/cherry/cherry_dresser.json",
+      "model": "minecraft:custom/furniture/boards/cherry_dresser",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/cherry_dresser.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:cherry_end_table_cabinet",
+      "path": "data/minecraft/filament/decoration/cherry/cherry_end_table_cabinet.json",
+      "model": "minecraft:custom/furniture/boards/cherry_end_table_cabinet",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/cherry_end_table_cabinet.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:cherry_park_bench",
+      "path": "data/minecraft/filament/decoration/cherry/cherry_park_bench.json",
+      "model": "minecraft:custom/furniture/benches/cherry_park_bench",
+      "model_asset": "assets/minecraft/models/custom/furniture/benches/cherry_park_bench.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:cherry_shelf",
+      "path": "data/minecraft/filament/decoration/cherry/cherry_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/cherry_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/cherry_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "showcase"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:cherry_sidetable",
+      "path": "data/minecraft/filament/decoration/cherry/cherry_sidetable.json",
+      "model": "minecraft:custom/furniture/boards/cherry_sidetable",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/cherry_sidetable.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:cherry_table",
+      "path": "data/minecraft/filament/decoration/cherry/cherry_table.json",
+      "model": "minecraft:custom/furniture/tables/cherry_table",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/cherry_table.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:cherry_table_center_post",
+      "path": "data/minecraft/filament/decoration/cherry/cherry_table_center_post.json",
+      "model": "minecraft:custom/furniture/tables/cherry_table_center_post",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/cherry_table_center_post.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:cut_cherry_planks",
+      "path": "data/minecraft/filament/decoration/cherry/cut_cherry_planks.json",
+      "model": "minecraft:custom/furniture/misc/cut_cherry_planks",
+      "model_asset": "assets/minecraft/models/custom/furniture/misc/cut_cherry_planks.json",
+      "model_exists": true,
+      "blocks": null,
+      "behaviour": [],
+      "category": "no_explicit_footprint",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true
+      }
+    },
+    {
+      "id": "tsa:iron_cherry_wall_shelf",
+      "path": "data/minecraft/filament/decoration/cherry/iron_cherry_wall_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/iron_cherry_wall_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/iron_cherry_wall_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "placement": {
+          "wall": true
+        },
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:large_cherry_cabinet",
+      "path": "data/minecraft/filament/decoration/cherry/large_cherry_cabinet.json",
+      "model": "minecraft:custom/furniture/boards/large_cherry_cabinet",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/large_cherry_cabinet.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            3,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:slim_cherry_shelf",
+      "path": "data/minecraft/filament/decoration/cherry/slim_cherry_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/slim_cherry_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/slim_cherry_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "showcase"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:small_cherry_dresser",
+      "path": "data/minecraft/filament/decoration/cherry/small_cherry_dresser.json",
+      "model": "minecraft:custom/furniture/boards/small_cherry_dresser",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/small_cherry_dresser.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:small_cherry_table",
+      "path": "data/minecraft/filament/decoration/cherry/small_cherry_table.json",
+      "model": "minecraft:custom/furniture/tables/small_cherry_table",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/small_cherry_table.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:wooden_cherry_bench",
+      "path": "data/minecraft/filament/decoration/cherry/wooden_cherry_bench.json",
+      "model": "minecraft:custom/furniture/benches/wooden_cherry_bench",
+      "model_asset": "assets/minecraft/models/custom/furniture/benches/wooden_cherry_bench.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:wooden_cherry_picnic_table",
+      "path": "data/minecraft/filament/decoration/cherry/wooden_cherry_picnic_table.json",
+      "model": "minecraft:custom/furniture/tables/wooden_cherry_picnic_table",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/wooden_cherry_picnic_table.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            -1
+          ],
+          "size": [
+            2,
+            1,
+            2
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:wooden_cherry_wall_shelf",
+      "path": "data/minecraft/filament/decoration/cherry/wooden_cherry_wall_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/wooden_cherry_wall_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/wooden_cherry_wall_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "placement": {
+          "wall": true
+        },
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:crimson_bench",
+      "path": "data/minecraft/filament/decoration/crimson/crimson_bench.json",
+      "model": "minecraft:custom/furniture/benches/crimson_bench",
+      "model_asset": "assets/minecraft/models/custom/furniture/benches/crimson_bench.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:crimson_cabinet",
+      "path": "data/minecraft/filament/decoration/crimson/crimson_cabinet.json",
+      "model": "minecraft:custom/furniture/boards/crimson_cabinet",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/crimson_cabinet.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:crimson_chair",
+      "path": "data/minecraft/filament/decoration/crimson/crimson_chair.json",
+      "model": "minecraft:custom/furniture/chairs/crimson_chair",
+      "model_asset": "assets/minecraft/models/custom/furniture/chairs/crimson_chair.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:crimson_chair_with_cushion",
+      "path": "data/minecraft/filament/decoration/crimson/crimson_chair_with_cushion.json",
+      "model": "minecraft:custom/furniture/chairs/crimson_chair_with_cushion",
+      "model_asset": "assets/minecraft/models/custom/furniture/chairs/crimson_chair_with_cushion.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:crimson_dresser",
+      "path": "data/minecraft/filament/decoration/crimson/crimson_dresser.json",
+      "model": "minecraft:custom/furniture/boards/crimson_dresser",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/crimson_dresser.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:crimson_end_table_cabinet",
+      "path": "data/minecraft/filament/decoration/crimson/crimson_end_table_cabinet.json",
+      "model": "minecraft:custom/furniture/boards/crimson_end_table_cabinet",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/crimson_end_table_cabinet.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:crimson_park_bench",
+      "path": "data/minecraft/filament/decoration/crimson/crimson_park_bench.json",
+      "model": "minecraft:custom/furniture/benches/crimson_park_bench",
+      "model_asset": "assets/minecraft/models/custom/furniture/benches/crimson_park_bench.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:crimson_shelf",
+      "path": "data/minecraft/filament/decoration/crimson/crimson_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/crimson_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/crimson_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "showcase"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:crimson_sidetable",
+      "path": "data/minecraft/filament/decoration/crimson/crimson_sidetable.json",
+      "model": "minecraft:custom/furniture/boards/crimson_sidetable",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/crimson_sidetable.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:crimson_table",
+      "path": "data/minecraft/filament/decoration/crimson/crimson_table.json",
+      "model": "minecraft:custom/furniture/tables/crimson_table",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/crimson_table.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:crimson_table_center_post",
+      "path": "data/minecraft/filament/decoration/crimson/crimson_table_center_post.json",
+      "model": "minecraft:custom/furniture/tables/crimson_table_center_post",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/crimson_table_center_post.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:cut_crimson_planks",
+      "path": "data/minecraft/filament/decoration/crimson/cut_crimson_planks.json",
+      "model": "minecraft:custom/furniture/misc/cut_crimson_planks",
+      "model_asset": "assets/minecraft/models/custom/furniture/misc/cut_crimson_planks.json",
+      "model_exists": true,
+      "blocks": null,
+      "behaviour": [],
+      "category": "no_explicit_footprint",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true
+      }
+    },
+    {
+      "id": "tsa:iron_crimson_wall_shelf",
+      "path": "data/minecraft/filament/decoration/crimson/iron_crimson_wall_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/iron_crimson_wall_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/iron_crimson_wall_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "placement": {
+          "wall": true
+        },
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:large_crimson_cabinet",
+      "path": "data/minecraft/filament/decoration/crimson/large_crimson_cabinet.json",
+      "model": "minecraft:custom/furniture/boards/large_crimson_cabinet",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/large_crimson_cabinet.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            3,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:slim_crimson_shelf",
+      "path": "data/minecraft/filament/decoration/crimson/slim_crimson_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/slim_crimson_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/slim_crimson_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "showcase"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:small_crimson_dresser",
+      "path": "data/minecraft/filament/decoration/crimson/small_crimson_dresser.json",
+      "model": "minecraft:custom/furniture/boards/small_crimson_dresser",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/small_crimson_dresser.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:small_crimson_table",
+      "path": "data/minecraft/filament/decoration/crimson/small_crimson_table.json",
+      "model": "minecraft:custom/furniture/tables/small_crimson_table",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/small_crimson_table.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:wooden_crimson_bench",
+      "path": "data/minecraft/filament/decoration/crimson/wooden_crimson_bench.json",
+      "model": "minecraft:custom/furniture/benches/wooden_crimson_bench",
+      "model_asset": "assets/minecraft/models/custom/furniture/benches/wooden_crimson_bench.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:wooden_crimson_picnic_table",
+      "path": "data/minecraft/filament/decoration/crimson/wooden_crimson_picnic_table.json",
+      "model": "minecraft:custom/furniture/tables/wooden_crimson_picnic_table",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/wooden_crimson_picnic_table.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            -1
+          ],
+          "size": [
+            2,
+            1,
+            2
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:wooden_crimson_wall_shelf",
+      "path": "data/minecraft/filament/decoration/crimson/wooden_crimson_wall_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/wooden_crimson_wall_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/wooden_crimson_wall_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "placement": {
+          "wall": true
+        },
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:cut_darkoak_planks",
+      "path": "data/minecraft/filament/decoration/darkoak/cut_darkoak_planks.json",
+      "model": "minecraft:custom/furniture/misc/cut_darkoak_planks",
+      "model_asset": "assets/minecraft/models/custom/furniture/misc/cut_darkoak_planks.json",
+      "model_exists": true,
+      "blocks": null,
+      "behaviour": [],
+      "category": "no_explicit_footprint",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true
+      }
+    },
+    {
+      "id": "tsa:darkoak_bench",
+      "path": "data/minecraft/filament/decoration/darkoak/darkoak_bench.json",
+      "model": "minecraft:custom/furniture/benches/darkoak_bench",
+      "model_asset": "assets/minecraft/models/custom/furniture/benches/darkoak_bench.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:darkoak_cabinet",
+      "path": "data/minecraft/filament/decoration/darkoak/darkoak_cabinet.json",
+      "model": "minecraft:custom/furniture/boards/darkoak_cabinet",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/darkoak_cabinet.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:darkoak_chair",
+      "path": "data/minecraft/filament/decoration/darkoak/darkoak_chair.json",
+      "model": "minecraft:custom/furniture/chairs/darkoak_chair",
+      "model_asset": "assets/minecraft/models/custom/furniture/chairs/darkoak_chair.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:darkoak_chair_with_cushion",
+      "path": "data/minecraft/filament/decoration/darkoak/darkoak_chair_with_cushion.json",
+      "model": "minecraft:custom/furniture/chairs/darkoak_chair_with_cushion",
+      "model_asset": "assets/minecraft/models/custom/furniture/chairs/darkoak_chair_with_cushion.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:darkoak_chest",
+      "path": "data/minecraft/filament/decoration/darkoak/darkoak_chest.json",
+      "model": "minecraft:custom/furniture/chests/darkoak_chest",
+      "model_asset": "assets/minecraft/models/custom/furniture/chests/darkoak_chest.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "animation",
+        "container"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:darkoak_dresser",
+      "path": "data/minecraft/filament/decoration/darkoak/darkoak_dresser.json",
+      "model": "minecraft:custom/furniture/boards/darkoak_dresser",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/darkoak_dresser.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:darkoak_end_table_cabinet",
+      "path": "data/minecraft/filament/decoration/darkoak/darkoak_end_table_cabinet.json",
+      "model": "minecraft:custom/furniture/boards/darkoak_end_table_cabinet",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/darkoak_end_table_cabinet.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:darkoak_end_table_cabinet_gilded",
+      "path": "data/minecraft/filament/decoration/darkoak/darkoak_end_table_cabinet_gilded.json",
+      "model": "minecraft:custom/furniture/boards/darkoak_end_table_cabinet_gilded",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/darkoak_end_table_cabinet_gilded.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:darkoak_globe",
+      "path": "data/minecraft/filament/decoration/darkoak/darkoak_globe.json",
+      "model": "minecraft:custom/furniture/misc/darkoak_globe",
+      "model_asset": "assets/minecraft/models/custom/furniture/misc/darkoak_globe.json",
+      "model_exists": true,
+      "blocks": null,
+      "behaviour": [],
+      "category": "no_explicit_footprint",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true
+      }
+    },
+    {
+      "id": "tsa:darkoak_park_bench",
+      "path": "data/minecraft/filament/decoration/darkoak/darkoak_park_bench.json",
+      "model": "minecraft:custom/furniture/benches/darkoak_park_bench",
+      "model_asset": "assets/minecraft/models/custom/furniture/benches/darkoak_park_bench.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:darkoak_shelf",
+      "path": "data/minecraft/filament/decoration/darkoak/darkoak_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/darkoak_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/darkoak_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "showcase"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:darkoak_sidetable",
+      "path": "data/minecraft/filament/decoration/darkoak/darkoak_sidetable.json",
+      "model": "minecraft:custom/furniture/boards/darkoak_sidetable",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/darkoak_sidetable.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:darkoak_table",
+      "path": "data/minecraft/filament/decoration/darkoak/darkoak_table.json",
+      "model": "minecraft:custom/furniture/tables/darkoak_table",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/darkoak_table.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:darkoak_table_center_post",
+      "path": "data/minecraft/filament/decoration/darkoak/darkoak_table_center_post.json",
+      "model": "minecraft:custom/furniture/tables/darkoak_table_center_post",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/darkoak_table_center_post.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:darkoak_table_gold",
+      "path": "data/minecraft/filament/decoration/darkoak/darkoak_table_gold.json",
+      "model": "minecraft:custom/furniture/tables/darkoak_table_gold",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/darkoak_table_gold.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:darkoak_table_gold_center_post",
+      "path": "data/minecraft/filament/decoration/darkoak/darkoak_table_gold_center_post.json",
+      "model": "minecraft:custom/furniture/tables/darkoak_table_gold_center_post",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/darkoak_table_gold_center_post.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:iron_darkoak_wall_shelf",
+      "path": "data/minecraft/filament/decoration/darkoak/iron_darkoak_wall_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/iron_darkoak_wall_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/iron_darkoak_wall_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "placement": {
+          "wall": true
+        },
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:large_darkoak_cabinet",
+      "path": "data/minecraft/filament/decoration/darkoak/large_darkoak_cabinet.json",
+      "model": "minecraft:custom/furniture/boards/large_darkoak_cabinet",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/large_darkoak_cabinet.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            3,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:large_darkoak_cabinet_gilded",
+      "path": "data/minecraft/filament/decoration/darkoak/large_darkoak_cabinet_gilded.json",
+      "model": "minecraft:custom/furniture/boards/large_darkoak_cabinet_gilded",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/large_darkoak_cabinet_gilded.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            3,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:large_darkoak_secretary_desk",
+      "path": "data/minecraft/filament/decoration/darkoak/large_darkoak_secretary_desk.json",
+      "model": "minecraft:custom/furniture/boards/large_darkoak_secretary_desk",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/large_darkoak_secretary_desk.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        },
+        {
+          "origin": [
+            0,
+            2,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:large_darkoak_secretary_desk_gilded",
+      "path": "data/minecraft/filament/decoration/darkoak/large_darkoak_secretary_desk_gilded.json",
+      "model": "minecraft:custom/furniture/boards/large_darkoak_secretary_desk_gilded",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/large_darkoak_secretary_desk_gilded.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        },
+        {
+          "origin": [
+            0,
+            2,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:slim_darkoak_shelf",
+      "path": "data/minecraft/filament/decoration/darkoak/slim_darkoak_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/slim_darkoak_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/slim_darkoak_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "showcase"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:small_darkoak_dresser",
+      "path": "data/minecraft/filament/decoration/darkoak/small_darkoak_dresser.json",
+      "model": "minecraft:custom/furniture/boards/small_darkoak_dresser",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/small_darkoak_dresser.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:small_darkoak_dresser_gilded",
+      "path": "data/minecraft/filament/decoration/darkoak/small_darkoak_dresser_gilded.json",
+      "model": "minecraft:custom/furniture/boards/small_darkoak_dresser_gilded",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/small_darkoak_dresser_gilded.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:small_darkoak_table",
+      "path": "data/minecraft/filament/decoration/darkoak/small_darkoak_table.json",
+      "model": "minecraft:custom/furniture/tables/small_darkoak_table",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/small_darkoak_table.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:wooden_darkoak_bench",
+      "path": "data/minecraft/filament/decoration/darkoak/wooden_darkoak_bench.json",
+      "model": "minecraft:custom/furniture/benches/wooden_darkoak_bench",
+      "model_asset": "assets/minecraft/models/custom/furniture/benches/wooden_darkoak_bench.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:wooden_darkoak_picnic_table",
+      "path": "data/minecraft/filament/decoration/darkoak/wooden_darkoak_picnic_table.json",
+      "model": "minecraft:custom/furniture/tables/wooden_darkoak_picnic_table",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/wooden_darkoak_picnic_table.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            -1
+          ],
+          "size": [
+            2,
+            1,
+            2
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:wooden_darkoak_wall_shelf",
+      "path": "data/minecraft/filament/decoration/darkoak/wooden_darkoak_wall_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/wooden_darkoak_wall_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/wooden_darkoak_wall_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "placement": {
+          "wall": true
+        },
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:cut_jungle_planks",
+      "path": "data/minecraft/filament/decoration/jungle/cut_jungle_planks.json",
+      "model": "minecraft:custom/furniture/misc/cut_jungle_planks",
+      "model_asset": "assets/minecraft/models/custom/furniture/misc/cut_jungle_planks.json",
+      "model_exists": true,
+      "blocks": null,
+      "behaviour": [],
+      "category": "no_explicit_footprint",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true
+      }
+    },
+    {
+      "id": "tsa:iron_jungle_wall_shelf",
+      "path": "data/minecraft/filament/decoration/jungle/iron_jungle_wall_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/iron_jungle_wall_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/iron_jungle_wall_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "placement": {
+          "wall": true
+        },
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:jungle_bench",
+      "path": "data/minecraft/filament/decoration/jungle/jungle_bench.json",
+      "model": "minecraft:custom/furniture/benches/jungle_bench",
+      "model_asset": "assets/minecraft/models/custom/furniture/benches/jungle_bench.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:jungle_cabinet",
+      "path": "data/minecraft/filament/decoration/jungle/jungle_cabinet.json",
+      "model": "minecraft:custom/furniture/boards/jungle_cabinet",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/jungle_cabinet.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:jungle_chair",
+      "path": "data/minecraft/filament/decoration/jungle/jungle_chair.json",
+      "model": "minecraft:custom/furniture/chairs/jungle_chair",
+      "model_asset": "assets/minecraft/models/custom/furniture/chairs/jungle_chair.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:jungle_chair_with_cushion",
+      "path": "data/minecraft/filament/decoration/jungle/jungle_chair_with_cushion.json",
+      "model": "minecraft:custom/furniture/chairs/jungle_chair_with_cushion",
+      "model_asset": "assets/minecraft/models/custom/furniture/chairs/jungle_chair_with_cushion.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:jungle_dresser",
+      "path": "data/minecraft/filament/decoration/jungle/jungle_dresser.json",
+      "model": "minecraft:custom/furniture/boards/jungle_dresser",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/jungle_dresser.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:jungle_end_table_cabinet",
+      "path": "data/minecraft/filament/decoration/jungle/jungle_end_table_cabinet.json",
+      "model": "minecraft:custom/furniture/boards/jungle_end_table_cabinet",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/jungle_end_table_cabinet.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:jungle_park_bench",
+      "path": "data/minecraft/filament/decoration/jungle/jungle_park_bench.json",
+      "model": "minecraft:custom/furniture/benches/jungle_park_bench",
+      "model_asset": "assets/minecraft/models/custom/furniture/benches/jungle_park_bench.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:jungle_shelf",
+      "path": "data/minecraft/filament/decoration/jungle/jungle_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/jungle_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/jungle_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "showcase"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:jungle_sidetable",
+      "path": "data/minecraft/filament/decoration/jungle/jungle_sidetable.json",
+      "model": "minecraft:custom/furniture/boards/jungle_sidetable",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/jungle_sidetable.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:jungle_table",
+      "path": "data/minecraft/filament/decoration/jungle/jungle_table.json",
+      "model": "minecraft:custom/furniture/tables/jungle_table",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/jungle_table.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:jungle_table_center_post",
+      "path": "data/minecraft/filament/decoration/jungle/jungle_table_center_post.json",
+      "model": "minecraft:custom/furniture/tables/jungle_table_center_post",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/jungle_table_center_post.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:large_jungle_cabinet",
+      "path": "data/minecraft/filament/decoration/jungle/large_jungle_cabinet.json",
+      "model": "minecraft:custom/furniture/boards/large_jungle_cabinet",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/large_jungle_cabinet.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            3,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:slim_jungle_shelf",
+      "path": "data/minecraft/filament/decoration/jungle/slim_jungle_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/slim_jungle_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/slim_jungle_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "showcase"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:small_jungle_dresser",
+      "path": "data/minecraft/filament/decoration/jungle/small_jungle_dresser.json",
+      "model": "minecraft:custom/furniture/boards/small_jungle_dresser",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/small_jungle_dresser.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:small_jungle_table",
+      "path": "data/minecraft/filament/decoration/jungle/small_jungle_table.json",
+      "model": "minecraft:custom/furniture/tables/small_jungle_table",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/small_jungle_table.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:wooden_jungle_bench",
+      "path": "data/minecraft/filament/decoration/jungle/wooden_jungle_bench.json",
+      "model": "minecraft:custom/furniture/benches/wooden_jungle_bench",
+      "model_asset": "assets/minecraft/models/custom/furniture/benches/wooden_jungle_bench.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:wooden_jungle_picnic_table",
+      "path": "data/minecraft/filament/decoration/jungle/wooden_jungle_picnic_table.json",
+      "model": "minecraft:custom/furniture/tables/wooden_jungle_picnic_table",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/wooden_jungle_picnic_table.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            -1
+          ],
+          "size": [
+            2,
+            1,
+            2
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:wooden_jungle_wall_shelf",
+      "path": "data/minecraft/filament/decoration/jungle/wooden_jungle_wall_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/wooden_jungle_wall_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/wooden_jungle_wall_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "placement": {
+          "wall": true
+        },
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:cut_mangrove_planks",
+      "path": "data/minecraft/filament/decoration/mangrove/cut_mangrove_planks.json",
+      "model": "minecraft:custom/furniture/misc/cut_mangrove_planks",
+      "model_asset": "assets/minecraft/models/custom/furniture/misc/cut_mangrove_planks.json",
+      "model_exists": true,
+      "blocks": null,
+      "behaviour": [],
+      "category": "no_explicit_footprint",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true
+      }
+    },
+    {
+      "id": "tsa:iron_mangrove_wall_shelf",
+      "path": "data/minecraft/filament/decoration/mangrove/iron_mangrove_wall_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/iron_mangrove_wall_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/iron_mangrove_wall_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "placement": {
+          "wall": true
+        },
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:large_mangrove_cabinet",
+      "path": "data/minecraft/filament/decoration/mangrove/large_mangrove_cabinet.json",
+      "model": "minecraft:custom/furniture/boards/large_mangrove_cabinet",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/large_mangrove_cabinet.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            3,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:mangrove_bench",
+      "path": "data/minecraft/filament/decoration/mangrove/mangrove_bench.json",
+      "model": "minecraft:custom/furniture/benches/mangrove_bench",
+      "model_asset": "assets/minecraft/models/custom/furniture/benches/mangrove_bench.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:mangrove_cabinet",
+      "path": "data/minecraft/filament/decoration/mangrove/mangrove_cabinet.json",
+      "model": "minecraft:custom/furniture/boards/mangrove_cabinet",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/mangrove_cabinet.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:mangrove_chair",
+      "path": "data/minecraft/filament/decoration/mangrove/mangrove_chair.json",
+      "model": "minecraft:custom/furniture/chairs/mangrove_chair",
+      "model_asset": "assets/minecraft/models/custom/furniture/chairs/mangrove_chair.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:mangrove_chair_with_cushion",
+      "path": "data/minecraft/filament/decoration/mangrove/mangrove_chair_with_cushion.json",
+      "model": "minecraft:custom/furniture/chairs/mangrove_chair_with_cushion",
+      "model_asset": "assets/minecraft/models/custom/furniture/chairs/mangrove_chair_with_cushion.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:mangrove_dresser",
+      "path": "data/minecraft/filament/decoration/mangrove/mangrove_dresser.json",
+      "model": "minecraft:custom/furniture/boards/mangrove_dresser",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/mangrove_dresser.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:mangrove_end_table_cabinet",
+      "path": "data/minecraft/filament/decoration/mangrove/mangrove_end_table_cabinet.json",
+      "model": "minecraft:custom/furniture/boards/mangrove_end_table_cabinet",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/mangrove_end_table_cabinet.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:mangrove_park_bench",
+      "path": "data/minecraft/filament/decoration/mangrove/mangrove_park_bench.json",
+      "model": "minecraft:custom/furniture/benches/mangrove_park_bench",
+      "model_asset": "assets/minecraft/models/custom/furniture/benches/mangrove_park_bench.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:mangrove_shelf",
+      "path": "data/minecraft/filament/decoration/mangrove/mangrove_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/mangrove_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/mangrove_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "showcase"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:mangrove_sidetable",
+      "path": "data/minecraft/filament/decoration/mangrove/mangrove_sidetable.json",
+      "model": "minecraft:custom/furniture/boards/mangrove_sidetable",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/mangrove_sidetable.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:mangrove_table",
+      "path": "data/minecraft/filament/decoration/mangrove/mangrove_table.json",
+      "model": "minecraft:custom/furniture/tables/mangrove_table",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/mangrove_table.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:mangrove_table_center_post",
+      "path": "data/minecraft/filament/decoration/mangrove/mangrove_table_center_post.json",
+      "model": "minecraft:custom/furniture/tables/mangrove_table_center_post",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/mangrove_table_center_post.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:slim_mangrove_shelf",
+      "path": "data/minecraft/filament/decoration/mangrove/slim_mangrove_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/slim_mangrove_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/slim_mangrove_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "showcase"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:small_mangrove_dresser",
+      "path": "data/minecraft/filament/decoration/mangrove/small_mangrove_dresser.json",
+      "model": "minecraft:custom/furniture/boards/small_mangrove_dresser",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/small_mangrove_dresser.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:small_mangrove_table",
+      "path": "data/minecraft/filament/decoration/mangrove/small_mangrove_table.json",
+      "model": "minecraft:custom/furniture/tables/small_mangrove_table",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/small_mangrove_table.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:wooden_mangrove_bench",
+      "path": "data/minecraft/filament/decoration/mangrove/wooden_mangrove_bench.json",
+      "model": "minecraft:custom/furniture/benches/wooden_mangrove_bench",
+      "model_asset": "assets/minecraft/models/custom/furniture/benches/wooden_mangrove_bench.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:wooden_mangrove_picnic_table",
+      "path": "data/minecraft/filament/decoration/mangrove/wooden_mangrove_picnic_table.json",
+      "model": "minecraft:custom/furniture/tables/wooden_mangrove_picnic_table",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/wooden_mangrove_picnic_table.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            -1
+          ],
+          "size": [
+            2,
+            1,
+            2
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:wooden_mangrove_wall_shelf",
+      "path": "data/minecraft/filament/decoration/mangrove/wooden_mangrove_wall_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/wooden_mangrove_wall_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/wooden_mangrove_wall_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "placement": {
+          "wall": true
+        },
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:document_stack",
+      "path": "data/minecraft/filament/decoration/misc/document_stack.json",
+      "model": "minecraft:custom/furniture/misc/document_stack",
+      "model_asset": "assets/minecraft/models/custom/furniture/misc/document_stack.json",
+      "model_exists": true,
+      "blocks": null,
+      "behaviour": [],
+      "category": "no_explicit_footprint",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true
+      }
+    },
+    {
+      "id": "tsa:pile_of_gold_ingots",
+      "path": "data/minecraft/filament/decoration/misc/pile_of_gold_ingots.json",
+      "model": "minecraft:custom/furniture/misc/pile_of_gold_ingots",
+      "model_asset": "assets/minecraft/models/custom/furniture/misc/pile_of_gold_ingots.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:pile_of_iron_ingots",
+      "path": "data/minecraft/filament/decoration/misc/pile_of_iron_ingots.json",
+      "model": "minecraft:custom/furniture/misc/pile_of_iron_ingots",
+      "model_asset": "assets/minecraft/models/custom/furniture/misc/pile_of_iron_ingots.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:scattered_gold_coins",
+      "path": "data/minecraft/filament/decoration/misc/scattered_gold_coins.json",
+      "model": "minecraft:custom/furniture/misc/scattered_gold_coins",
+      "model_asset": "assets/minecraft/models/custom/furniture/misc/scattered_gold_coins.json",
+      "model_exists": true,
+      "blocks": null,
+      "behaviour": [],
+      "category": "no_explicit_footprint",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true
+      }
+    },
+    {
+      "id": "tsa:small_gold_coin_piles",
+      "path": "data/minecraft/filament/decoration/misc/small_gold_coin_piles.json",
+      "model": "minecraft:custom/furniture/misc/small_gold_coin_piles",
+      "model_asset": "assets/minecraft/models/custom/furniture/misc/small_gold_coin_piles.json",
+      "model_exists": true,
+      "blocks": null,
+      "behaviour": [],
+      "category": "no_explicit_footprint",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true
+      }
+    },
+    {
+      "id": "tsa:stone_brick_pile",
+      "path": "data/minecraft/filament/decoration/misc/stone_brick_pile.json",
+      "model": "minecraft:custom/furniture/misc/stone_brick_pile",
+      "model_asset": "assets/minecraft/models/custom/furniture/misc/stone_brick_pile.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:striped_towel",
+      "path": "data/minecraft/filament/decoration/misc/striped_towel.json",
+      "model": "minecraft:custom/furniture/misc/striped_towel",
+      "model_asset": "assets/minecraft/models/custom/furniture/misc/striped_towel.json",
+      "model_exists": true,
+      "blocks": null,
+      "behaviour": [],
+      "category": "review_unknown_fields",
+      "unknown_fields": [
+        "size"
+      ],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true
+      }
+    },
+    {
+      "id": "tsa:cut_oak_planks",
+      "path": "data/minecraft/filament/decoration/oak/cut_oak_planks.json",
+      "model": "minecraft:custom/furniture/misc/cut_oak_planks",
+      "model_asset": "assets/minecraft/models/custom/furniture/misc/cut_oak_planks.json",
+      "model_exists": true,
+      "blocks": null,
+      "behaviour": [],
+      "category": "no_explicit_footprint",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true
+      }
+    },
+    {
+      "id": "tsa:iron_oak_wall_shelf",
+      "path": "data/minecraft/filament/decoration/oak/iron_oak_wall_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/iron_oak_wall_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/iron_oak_wall_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "placement": {
+          "wall": true
+        },
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:large_oak_cabinet",
+      "path": "data/minecraft/filament/decoration/oak/large_oak_cabinet.json",
+      "model": "minecraft:custom/furniture/boards/large_oak_cabinet",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/large_oak_cabinet.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            3,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:oak_bench",
+      "path": "data/minecraft/filament/decoration/oak/oak_bench.json",
+      "model": "minecraft:custom/furniture/benches/oak_bench",
+      "model_asset": "assets/minecraft/models/custom/furniture/benches/oak_bench.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:oak_cabinet",
+      "path": "data/minecraft/filament/decoration/oak/oak_cabinet.json",
+      "model": "minecraft:custom/furniture/boards/oak_cabinet",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/oak_cabinet.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:oak_chair",
+      "path": "data/minecraft/filament/decoration/oak/oak_chair.json",
+      "model": "minecraft:custom/furniture/chairs/oak_chair",
+      "model_asset": "assets/minecraft/models/custom/furniture/chairs/oak_chair.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:oak_chair_with_cushion",
+      "path": "data/minecraft/filament/decoration/oak/oak_chair_with_cushion.json",
+      "model": "minecraft:custom/furniture/chairs/oak_chair_with_cushion",
+      "model_asset": "assets/minecraft/models/custom/furniture/chairs/oak_chair_with_cushion.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:oak_dresser",
+      "path": "data/minecraft/filament/decoration/oak/oak_dresser.json",
+      "model": "minecraft:custom/furniture/boards/oak_dresser",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/oak_dresser.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:oak_end_table_cabinet",
+      "path": "data/minecraft/filament/decoration/oak/oak_end_table_cabinet.json",
+      "model": "minecraft:custom/furniture/boards/oak_end_table_cabinet",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/oak_end_table_cabinet.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:oak_park_bench",
+      "path": "data/minecraft/filament/decoration/oak/oak_park_bench.json",
+      "model": "minecraft:custom/furniture/benches/oak_park_bench",
+      "model_asset": "assets/minecraft/models/custom/furniture/benches/oak_park_bench.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:oak_shelf",
+      "path": "data/minecraft/filament/decoration/oak/oak_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/oak_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/oak_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "showcase"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:oak_sidetable",
+      "path": "data/minecraft/filament/decoration/oak/oak_sidetable.json",
+      "model": "minecraft:custom/furniture/boards/oak_sidetable",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/oak_sidetable.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:oak_table",
+      "path": "data/minecraft/filament/decoration/oak/oak_table.json",
+      "model": "minecraft:custom/furniture/tables/oak_table",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/oak_table.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:oak_table_center_post",
+      "path": "data/minecraft/filament/decoration/oak/oak_table_center_post.json",
+      "model": "minecraft:custom/furniture/tables/oak_table_center_post",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/oak_table_center_post.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:slim_oak_shelf",
+      "path": "data/minecraft/filament/decoration/oak/slim_oak_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/slim_oak_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/slim_oak_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "showcase"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:small_oak_dresser",
+      "path": "data/minecraft/filament/decoration/oak/small_oak_dresser.json",
+      "model": "minecraft:custom/furniture/boards/small_oak_dresser",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/small_oak_dresser.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:small_oak_table",
+      "path": "data/minecraft/filament/decoration/oak/small_oak_table.json",
+      "model": "minecraft:custom/furniture/tables/small_oak_table",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/small_oak_table.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:wooden_oak_bench",
+      "path": "data/minecraft/filament/decoration/oak/wooden_oak_bench.json",
+      "model": "minecraft:custom/furniture/benches/wooden_oak_bench",
+      "model_asset": "assets/minecraft/models/custom/furniture/benches/wooden_oak_bench.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:wooden_oak_picnic_table",
+      "path": "data/minecraft/filament/decoration/oak/wooden_oak_picnic_table.json",
+      "model": "minecraft:custom/furniture/tables/wooden_oak_picnic_table",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/wooden_oak_picnic_table.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            -1
+          ],
+          "size": [
+            2,
+            1,
+            2
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:wooden_oak_wall_shelf",
+      "path": "data/minecraft/filament/decoration/oak/wooden_oak_wall_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/wooden_oak_wall_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/wooden_oak_wall_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "placement": {
+          "wall": true
+        },
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:cut_spruce_planks",
+      "path": "data/minecraft/filament/decoration/spruce/cut_spruce_planks.json",
+      "model": "minecraft:custom/furniture/misc/cut_spruce_planks",
+      "model_asset": "assets/minecraft/models/custom/furniture/misc/cut_spruce_planks.json",
+      "model_exists": true,
+      "blocks": null,
+      "behaviour": [],
+      "category": "no_explicit_footprint",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true
+      }
+    },
+    {
+      "id": "tsa:iron_spruce_wall_shelf",
+      "path": "data/minecraft/filament/decoration/spruce/iron_spruce_wall_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/iron_spruce_wall_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/iron_spruce_wall_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "placement": {
+          "wall": true
+        },
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:large_spruce_cabinet",
+      "path": "data/minecraft/filament/decoration/spruce/large_spruce_cabinet.json",
+      "model": "minecraft:custom/furniture/boards/large_spruce_cabinet",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/large_spruce_cabinet.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            3,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:slim_spruce_shelf",
+      "path": "data/minecraft/filament/decoration/spruce/slim_spruce_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/slim_spruce_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/slim_spruce_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "showcase"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:small_spruce_dresser",
+      "path": "data/minecraft/filament/decoration/spruce/small_spruce_dresser.json",
+      "model": "minecraft:custom/furniture/boards/small_spruce_dresser",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/small_spruce_dresser.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:small_spruce_table",
+      "path": "data/minecraft/filament/decoration/spruce/small_spruce_table.json",
+      "model": "minecraft:custom/furniture/tables/small_spruce_table",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/small_spruce_table.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:spruce_bench",
+      "path": "data/minecraft/filament/decoration/spruce/spruce_bench.json",
+      "model": "minecraft:custom/furniture/benches/spruce_bench",
+      "model_asset": "assets/minecraft/models/custom/furniture/benches/spruce_bench.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:spruce_cabinet",
+      "path": "data/minecraft/filament/decoration/spruce/spruce_cabinet.json",
+      "model": "minecraft:custom/furniture/boards/spruce_cabinet",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/spruce_cabinet.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:spruce_chair",
+      "path": "data/minecraft/filament/decoration/spruce/spruce_chair.json",
+      "model": "minecraft:custom/furniture/chairs/spruce_chair",
+      "model_asset": "assets/minecraft/models/custom/furniture/chairs/spruce_chair.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:spruce_chair_with_cushion",
+      "path": "data/minecraft/filament/decoration/spruce/spruce_chair_with_cushion.json",
+      "model": "minecraft:custom/furniture/chairs/spruce_chair_with_cushion",
+      "model_asset": "assets/minecraft/models/custom/furniture/chairs/spruce_chair_with_cushion.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:spruce_dresser",
+      "path": "data/minecraft/filament/decoration/spruce/spruce_dresser.json",
+      "model": "minecraft:custom/furniture/boards/spruce_dresser",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/spruce_dresser.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:spruce_end_table_cabinet",
+      "path": "data/minecraft/filament/decoration/spruce/spruce_end_table_cabinet.json",
+      "model": "minecraft:custom/furniture/boards/spruce_end_table_cabinet",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/spruce_end_table_cabinet.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:spruce_park_bench",
+      "path": "data/minecraft/filament/decoration/spruce/spruce_park_bench.json",
+      "model": "minecraft:custom/furniture/benches/spruce_park_bench",
+      "model_asset": "assets/minecraft/models/custom/furniture/benches/spruce_park_bench.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:spruce_shelf",
+      "path": "data/minecraft/filament/decoration/spruce/spruce_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/spruce_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/spruce_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "showcase"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:spruce_sidetable",
+      "path": "data/minecraft/filament/decoration/spruce/spruce_sidetable.json",
+      "model": "minecraft:custom/furniture/boards/spruce_sidetable",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/spruce_sidetable.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:spruce_table",
+      "path": "data/minecraft/filament/decoration/spruce/spruce_table.json",
+      "model": "minecraft:custom/furniture/tables/spruce_table",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/spruce_table.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:spruce_table_center_post",
+      "path": "data/minecraft/filament/decoration/spruce/spruce_table_center_post.json",
+      "model": "minecraft:custom/furniture/tables/spruce_table_center_post",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/spruce_table_center_post.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:wooden_spruce_bench",
+      "path": "data/minecraft/filament/decoration/spruce/wooden_spruce_bench.json",
+      "model": "minecraft:custom/furniture/benches/wooden_spruce_bench",
+      "model_asset": "assets/minecraft/models/custom/furniture/benches/wooden_spruce_bench.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:wooden_spruce_picnic_table",
+      "path": "data/minecraft/filament/decoration/spruce/wooden_spruce_picnic_table.json",
+      "model": "minecraft:custom/furniture/tables/wooden_spruce_picnic_table",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/wooden_spruce_picnic_table.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            -1
+          ],
+          "size": [
+            2,
+            1,
+            2
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:wooden_spruce_wall_shelf",
+      "path": "data/minecraft/filament/decoration/spruce/wooden_spruce_wall_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/wooden_spruce_wall_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/wooden_spruce_wall_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "placement": {
+          "wall": true
+        },
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:cut_warped_planks",
+      "path": "data/minecraft/filament/decoration/warped/cut_warped_planks.json",
+      "model": "minecraft:custom/furniture/misc/cut_warped_planks",
+      "model_asset": "assets/minecraft/models/custom/furniture/misc/cut_warped_planks.json",
+      "model_exists": true,
+      "blocks": null,
+      "behaviour": [],
+      "category": "no_explicit_footprint",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true
+      }
+    },
+    {
+      "id": "tsa:iron_warped_wall_shelf",
+      "path": "data/minecraft/filament/decoration/warped/iron_warped_wall_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/iron_warped_wall_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/iron_warped_wall_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "placement": {
+          "wall": true
+        },
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:large_warped_cabinet",
+      "path": "data/minecraft/filament/decoration/warped/large_warped_cabinet.json",
+      "model": "minecraft:custom/furniture/boards/large_warped_cabinet",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/large_warped_cabinet.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            3,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:slim_warped_shelf",
+      "path": "data/minecraft/filament/decoration/warped/slim_warped_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/slim_warped_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/slim_warped_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "showcase"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:small_warped_dresser",
+      "path": "data/minecraft/filament/decoration/warped/small_warped_dresser.json",
+      "model": "minecraft:custom/furniture/boards/small_warped_dresser",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/small_warped_dresser.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:small_warped_table",
+      "path": "data/minecraft/filament/decoration/warped/small_warped_table.json",
+      "model": "minecraft:custom/furniture/tables/small_warped_table",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/small_warped_table.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:warped_bench",
+      "path": "data/minecraft/filament/decoration/warped/warped_bench.json",
+      "model": "minecraft:custom/furniture/benches/warped_bench",
+      "model_asset": "assets/minecraft/models/custom/furniture/benches/warped_bench.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:warped_cabinet",
+      "path": "data/minecraft/filament/decoration/warped/warped_cabinet.json",
+      "model": "minecraft:custom/furniture/boards/warped_cabinet",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/warped_cabinet.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:warped_chair",
+      "path": "data/minecraft/filament/decoration/warped/warped_chair.json",
+      "model": "minecraft:custom/furniture/chairs/warped_chair",
+      "model_asset": "assets/minecraft/models/custom/furniture/chairs/warped_chair.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:warped_chair_with_cushion",
+      "path": "data/minecraft/filament/decoration/warped/warped_chair_with_cushion.json",
+      "model": "minecraft:custom/furniture/chairs/warped_chair_with_cushion",
+      "model_asset": "assets/minecraft/models/custom/furniture/chairs/warped_chair_with_cushion.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:warped_dresser",
+      "path": "data/minecraft/filament/decoration/warped/warped_dresser.json",
+      "model": "minecraft:custom/furniture/boards/warped_dresser",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/warped_dresser.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:warped_end_table_cabinet",
+      "path": "data/minecraft/filament/decoration/warped/warped_end_table_cabinet.json",
+      "model": "minecraft:custom/furniture/boards/warped_end_table_cabinet",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/warped_end_table_cabinet.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:warped_park_bench",
+      "path": "data/minecraft/filament/decoration/warped/warped_park_bench.json",
+      "model": "minecraft:custom/furniture/benches/warped_park_bench",
+      "model_asset": "assets/minecraft/models/custom/furniture/benches/warped_park_bench.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:warped_shelf",
+      "path": "data/minecraft/filament/decoration/warped/warped_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/warped_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/warped_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            2,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "showcase"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:warped_sidetable",
+      "path": "data/minecraft/filament/decoration/warped/warped_sidetable.json",
+      "model": "minecraft:custom/furniture/boards/warped_sidetable",
+      "model_asset": "assets/minecraft/models/custom/furniture/boards/warped_sidetable.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:warped_table",
+      "path": "data/minecraft/filament/decoration/warped/warped_table.json",
+      "model": "minecraft:custom/furniture/tables/warped_table",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/warped_table.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:warped_table_center_post",
+      "path": "data/minecraft/filament/decoration/warped/warped_table_center_post.json",
+      "model": "minecraft:custom/furniture/tables/warped_table_center_post",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/warped_table_center_post.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "compact_noninteractive_candidate",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:wooden_warped_bench",
+      "path": "data/minecraft/filament/decoration/warped/wooden_warped_bench.json",
+      "model": "minecraft:custom/furniture/benches/wooden_warped_bench",
+      "model_asset": "assets/minecraft/models/custom/furniture/benches/wooden_warped_bench.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:wooden_warped_picnic_table",
+      "path": "data/minecraft/filament/decoration/warped/wooden_warped_picnic_table.json",
+      "model": "minecraft:custom/furniture/tables/wooden_warped_picnic_table",
+      "model_asset": "assets/minecraft/models/custom/furniture/tables/wooden_warped_picnic_table.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            -1
+          ],
+          "size": [
+            2,
+            1,
+            2
+          ]
+        }
+      ],
+      "behaviour": [
+        "seat"
+      ],
+      "category": "interactive",
+      "unknown_fields": [],
+      "properties": {
+        "rotate": true,
+        "rotateSmooth": true,
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    },
+    {
+      "id": "tsa:wooden_warped_wall_shelf",
+      "path": "data/minecraft/filament/decoration/warped/wooden_warped_wall_shelf.json",
+      "model": "minecraft:custom/furniture/shelves/wooden_warped_wall_shelf",
+      "model_asset": "assets/minecraft/models/custom/furniture/shelves/wooden_warped_wall_shelf.json",
+      "model_exists": true,
+      "blocks": [
+        {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "behaviour": [],
+      "category": "noncompact_or_unverified",
+      "unknown_fields": [],
+      "properties": {
+        "placement": {
+          "wall": true
+        },
+        "destroyTime": 2,
+        "requiresTool": false
+      }
+    }
+  ]
+}

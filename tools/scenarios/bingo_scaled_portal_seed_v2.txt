@@ -1,0 +1,57 @@
+# Test-only normal world: invalid/empty seed class must not replace a valid setting.
+player Bot1 spawn
+player Bot2 spawn
+wait 2
+kapisma game BINGO
+kapisma origins off
+kapisma seedclass orman
+kapisma seedclass col_mesa
+capture empty (Seed sınıfı boş veya geçersiz: col_mesa. Ayar değiştirilmedi.)
+kapisma seedclass not_a_seed_class
+capture invalid (Seed sınıfı boş veya geçersiz: not_a_seed_class. Ayar değiştirilmedi.)
+kapisma status
+capture retained (Seed sınıfı: orman)
+kapisma rule BINGO tasks 2
+kapisma rule BINGO endTasks 1
+kapisma rule BINGO netherTasks 1
+kapisma rule BINGO netherRadius 300
+kapisma rule BINGO borderStart 500
+kapisma rule BINGO verifySec 60
+kapisma start
+await Maçın End portalı X 0, Z 0
+execute as Bot1 at @s positioned 0 0 0 positioned over world_surface run tp @s ~ ~-0.95 ~
+await Bot1 tamamladı: Görev: End'e geç
+execute as Bot1 at @s positioned 104 0 4 positioned over world_surface run tp @s ~ ~-0.95 ~
+wait 2
+execute at Bot2 if entity @a[name=Bot1,distance=..2000] run say SCALE_END_RETURN
+capture end_return (SCALE_END_RETURN)
+# Prepare a safe exact return column in the isolated arena, then release its test ticket.
+execute at Bot1 run forceload add 140 140
+wait 3
+execute at Bot1 positioned 140 0 140 positioned over world_surface run fill ~-1 ~-1 ~-1 ~1 ~-1 ~1 minecraft:stone
+execute at Bot1 positioned 140 0 140 positioned over world_surface run fill ~-1 ~ ~-1 ~1 ~2 ~1 minecraft:air
+execute at Bot1 run forceload remove 140 140
+attribute Bot1 minecraft:generic.gravity base set 0
+execute at Bot1 run tp Bot1 -200 310 -200
+execute as Bot2 at @s run gamerule playersNetherPortalDefaultDelay 1
+execute as Bot2 at @s positioned 8 0 10 positioned over world_surface run tp @s ~ ~-3 ~
+await Bot2 tamamladı: Görev: Nether'a geç
+attribute Bot2 minecraft:generic.gravity base set 0
+execute as Bot2 at @s run tp @s 17.5 105 16.5
+wait 3
+execute as Bot2 at @s run gamerule playersNetherPortalDefaultDelay 1
+execute as Bot2 at @s run fill 13 103 13 21 110 21 air
+execute as Bot2 at @s run fill 13 103 13 21 103 21 netherrack
+execute as Bot2 at @s run fill 16 104 17 19 108 17 obsidian
+execute as Bot2 at @s run fill 17 105 17 18 107 17 nether_portal[axis=x]
+execute as Bot2 at @s run tp @s 17.5 105 17.5
+tick sprint 320
+await_regex Tombala Nether ölçekli geçiş: hedef=\(140,140\), güvenli=true
+execute at Bot1 if entity @a[name=Bot2,x=140,y=-64,z=140,dx=1,dy=383,dz=1,distance=..2000] run say SCALE_EXACT_RETURN
+capture near_return (SCALE_EXACT_RETURN)
+data get entity Bot2 Pos
+capture exact_pos (\[140\.5d, [0-9.\-]+d, 140\.5d\])
+attribute Bot1 minecraft:generic.gravity base set 0.08
+attribute Bot2 minecraft:generic.gravity base set 0.08
+kapisma stop
+await_regex Arena depolama kapandı:

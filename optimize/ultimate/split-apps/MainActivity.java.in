@@ -1,0 +1,93 @@
+package PACKAGE_ID;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ActivityManager;
+import android.os.Bundle;
+import android.os.SystemClock;
+import android.text.InputType;
+import android.graphics.Color;
+import android.view.View;
+import android.widget.*;
+import java.io.*;
+import java.net.*;
+import java.nio.charset.StandardCharsets;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public final class MainActivity extends Activity {
+  static final boolean SERVER=SERVER_VALUE;
+  static final int PORT=39761;
+  final ExecutorService executor=Executors.newSingleThreadExecutor();
+  TextView status,details;
+  Button primary,close,refresh;
+  long armedUntil=0;
+  boolean busy=false;
+  int dp(int n){return (int)(n*getResources().getDisplayMetrics().density+.5f);}
+  @Override public void onCreate(Bundle b){
+    super.onCreate(b);
+    ScrollView scroll=new ScrollView(this);
+    LinearLayout root=new LinearLayout(this);root.setOrientation(1);root.setPadding(dp(24),dp(28),dp(24),dp(24));scroll.addView(root);setContentView(scroll);
+    TextView title=new TextView(this);title.setText(SERVER?"ULTRA Server":"ULTRA Cleaner");title.setTextSize(30);title.setTextColor(0xff9fe3ce);root.addView(title);
+    TextView desc=new TextView(this);desc.setText(SERVER?"Sunucuya uygun geçici uygulama izolasyonu.\nKapatmak için düğmeye iki kez bas.":"Günlük RAM temizliği. Uygulama verileri silinmez.");desc.setPadding(0,dp(8),0,dp(20));root.addView(desc);
+    status=new TextView(this);status.setTextSize(20);root.addView(status);
+    primary=button(root,SERVER?"SUNUCU MODUNU AÇ":"RAM TEMİZLE",()->{
+      disarm();
+      send(SERVER?"ENTER":"DAILY");
+    });
+    if(SERVER){
+      close=button(root,"SUNUCU MODUNU KAPAT",()->{
+        long now=SystemClock.elapsedRealtime();
+        if(armedUntil>now){disarm();send("LEAVE");}
+        else {armedUntil=now+8000;close.setText("ONAYLA — TEKRAR BAS");status.setText("Kapatma onayı: 8 saniye");close.postDelayed(()->{if(SystemClock.elapsedRealtime()>=armedUntil)disarm();},8100);}
+      });
+      refresh=button(root,"Durumu kontrol et",()->{disarm();send("STATUS");});
+    }
+    button(root,"Bağlantı ayarları",()->{disarm();settings();});
+    details=new TextView(this);details.setTextSize(13);details.setTextIsSelectable(true);details.setPadding(0,dp(18),0,0);root.addView(details);
+    updateMemory();
+    if(SERVER&&!token().isEmpty())send("STATUS");
+  }
+  Button button(LinearLayout r,String label,Runnable action){Button b=new Button(this);b.setAllCaps(false);b.setText(label);b.setMinHeight(dp(52));r.addView(b);b.setOnClickListener(v->action.run());return b;}
+  String token(){return getPreferences(MODE_PRIVATE).getString("token","");}
+  void settings(){
+    if(busy)return;
+    EditText input=new EditText(this);input.setSingleLine(true);input.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_VARIATION_PASSWORD);input.setHint("64 karakterli yerel bağlantı anahtarı");
+    new AlertDialog.Builder(this).setTitle("Yerel bağlantı").setMessage("USB ADB ile başlatılan ULTRA yardımcı süreci ve bağlantı anahtarı gerekir. Yardımcı yeniden başlatıldığında anahtar değişebilir. Ağ ayarları değişmez.").setView(input).setNegativeButton("Vazgeç",null).setPositiveButton("Kaydet",(d,w)->{
+      String t=input.getText().toString().trim();if(!t.matches("[a-f0-9]{64}")){status.setText("Geçersiz bağlantı anahtarı");return;}
+      getPreferences(MODE_PRIVATE).edit().putString("token",t).apply();send(SERVER?"STATUS":"PING");
+    }).show();
+  }
+  void disarm(){armedUntil=0;if(close!=null)close.setText("SUNUCU MODUNU KAPAT");}
+  void updateMemory(){
+    ActivityManager.MemoryInfo m=new ActivityManager.MemoryInfo();((ActivityManager)getSystemService(ACTIVITY_SERVICE)).getMemoryInfo(m);
+    status.setText("Android kullanılabilir RAM: "+(m.availMem/1048576)+" MiB");
+  }
+  void setBusy(boolean v){busy=v;primary.setEnabled(!v);if(close!=null)close.setEnabled(!v);if(refresh!=null)refresh.setEnabled(!v);}
+  void send(String operation){
+    if(busy)return;
+    String key=token();if(key.isEmpty()){settings();return;}
+    setBusy(true);status.setText("İşlem yürütülüyor…");details.setText("");
+    executor.execute(()->{
+      String reply;
+      try(Socket sock=new Socket()){
+        sock.connect(new InetSocketAddress("127.0.0.1",PORT),3000);sock.setSoTimeout(250000);
+        OutputStream out=sock.getOutputStream();out.write(("ULTRA1 "+key+" "+operation+"\n").getBytes(StandardCharsets.UTF_8));out.flush();
+        ByteArrayOutputStream b=new ByteArrayOutputStream();byte[] buf=new byte[4096];int n;
+        while((n=sock.getInputStream().read(buf))!=-1){if(b.size()+n>131072)throw new IOException("response too large");b.write(buf,0,n);}
+        reply=new String(b.toByteArray(),StandardCharsets.UTF_8);
+      }catch(Exception ex){reply="ERR\nYerel yardımcıya bağlanılamadı. USB üzerinden yardımcıyı başlat ve durumu kontrol et.";}
+      final String actual=reply;
+      runOnUiThread(()->{
+        if(isFinishing()||isDestroyed())return;
+        setBusy(false);details.setText(actual);
+        if(!actual.startsWith("OK\n"))status.setText("İşlem doğrulanmadı");
+        else if(actual.contains("server_mode=restored")||actual.contains("server_mode=inactive"))status.setText("Sunucu modu kapalı");
+        else if(actual.contains("server_mode=active_or_recovery_required"))status.setText("Sunucu modu açık / geri yükleme kaydı var");
+        else if(actual.contains("server_mode=active"))status.setText("Sunucu modu aktif");
+        else {updateMemory();if(operation.equals("DAILY"))status.setText("Temizlik tamamlandı — "+status.getText());}
+      });
+    });
+  }
+  @Override protected void onDestroy(){super.onDestroy();executor.shutdown();}
+}

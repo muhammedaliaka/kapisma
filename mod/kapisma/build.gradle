@@ -34,6 +34,120 @@ tasks.withType(JavaCompile).configureEach {
 	it.options.encoding = 'UTF-8'
 }
 
+// Pure Java regression: no Minecraft client/dev-launch runtime or network dependencies.
+def proofClasses = layout.buildDirectory.dir('classes/proofTest')
+def compileProof = tasks.register('compileResourceProofTest', JavaCompile) {
+	dependsOn tasks.named('compileJava')
+	source = fileTree('src/proofTest/java') { include '**/*.java' }
+	classpath = sourceSets.main.output.classesDirs
+	destinationDirectory = proofClasses
+}
+tasks.register('resourceProofTest', JavaExec) {
+	dependsOn compileProof
+	classpath = files(proofClasses, sourceSets.main.output.classesDirs)
+	mainClass = 'tr.kapisma.game.ResourceProofTest'
+}
+tasks.named('check') { dependsOn tasks.named('resourceProofTest') }
+tasks.register('voicePolicyTest', JavaExec) {
+	dependsOn compileProof
+	classpath = files(proofClasses, sourceSets.main.output.classesDirs)
+	mainClass = 'tr.kapisma.voice.VoicePolicyTest'
+}
+tasks.named('check') { dependsOn tasks.named('voicePolicyTest') }
+tasks.register('bingoDifficultyTest', JavaExec) {
+	dependsOn compileProof
+	classpath = files(proofClasses, sourceSets.main.output.classesDirs)
+	mainClass = 'tr.kapisma.game.BingoDifficultyTest'
+}
+tasks.named('check') { dependsOn tasks.named('bingoDifficultyTest') }
+tasks.register('mapPreviewWorkTest', JavaExec) {
+	dependsOn compileProof
+	classpath = files(proofClasses, sourceSets.main.output.classesDirs)
+	mainClass = 'tr.kapisma.game.MapPreviewWorkTest'
+}
+tasks.named('check') { dependsOn tasks.named('mapPreviewWorkTest') }
+tasks.register('spawnCandidateWorkTest', JavaExec) {
+	dependsOn compileProof
+	classpath = files(proofClasses, sourceSets.main.output.classesDirs)
+	mainClass = 'tr.kapisma.game.SpawnCandidateWorkTest'
+}
+tasks.named('check') { dependsOn tasks.named('spawnCandidateWorkTest') }
+tasks.register('chunkAdmissionTest', JavaExec) {
+	dependsOn compileProof
+	classpath = files(proofClasses, sourceSets.main.output.classesDirs)
+	mainClass = 'tr.kapisma.game.ChunkAdmissionTest'
+}
+tasks.named('check') { dependsOn tasks.named('chunkAdmissionTest') }
+tasks.register('hudSendGateTest', JavaExec) {
+	dependsOn compileProof
+	classpath = files(proofClasses, sourceSets.main.output.classesDirs)
+	mainClass = 'tr.kapisma.game.HudSendGateTest'
+}
+tasks.named('check') { dependsOn tasks.named('hudSendGateTest') }
+
+// Palette parity uses the real mapped Minecraft API, not a live world.
+def mapTestClasses = layout.buildDirectory.dir('classes/mapTest')
+def compileMapTest = tasks.register('compileBiomePreviewParityTest', JavaCompile) {
+	dependsOn tasks.named('compileJava')
+	source = fileTree('src/mapTest/java') { include '**/*.java' }
+	classpath = files(sourceSets.main.output.classesDirs, sourceSets.main.compileClasspath)
+	destinationDirectory = mapTestClasses
+}
+tasks.register('biomePreviewParityTest', JavaExec) {
+	dependsOn compileMapTest
+	// No Fabric dev launcher needed for this stand-alone palette proof.
+	classpath = files(mapTestClasses, sourceSets.main.output.classesDirs, sourceSets.main.compileClasspath)
+	mainClass = 'tr.kapisma.game.BiomePreviewParityTest'
+}
+tasks.named('check') { dependsOn tasks.named('biomePreviewParityTest') }
+tasks.register('xrayReplacementProof', JavaExec) {
+	dependsOn compileMapTest
+	classpath = files(mapTestClasses, sourceSets.main.output.classesDirs, sourceSets.main.compileClasspath)
+	mainClass = 'tr.kapisma.xray.XrayReplacementProof'
+}
+tasks.named('check') { dependsOn tasks.named('xrayReplacementProof') }
+
+// Explicit real-world proof, excluded from fast check. Reuses compiled classes, no JAR.
+tasks.register('realWorldMapPreviewTest', JavaExec) {
+	dependsOn compileMapTest
+	classpath = files(mapTestClasses, sourceSets.main.output.classesDirs, sourceSets.main.compileClasspath)
+	mainClass = 'tr.kapisma.game.RealWorldMapPreviewTest'
+	maxHeapSize = '2048m'
+	jvmArgs '-XX:ActiveProcessorCount=4'
+	environment 'KAPISMA_INCREMENTAL_MAPS', '1'
+	environment 'KAPISMA_MAP_PARITY_PROOF', project.hasProperty('mapProofShadow') ? '1' : '0'
+	environment 'KAPISMA_ULTRA_TIMING', '0'
+	environment 'KAPISMA_TREASURE_PROOF', project.hasProperty('treasureProof') ? '1' : '0'
+	environment 'KAPISMA_XRAY_WORLD_PROOF', project.hasProperty('xrayWorldProof') ? '1' : '0'
+	if (project.hasProperty('mapProofReuse')) args '--reuse'
+	def proofDir = layout.buildDirectory.dir('map-world-proof')
+	workingDir proofDir.get().asFile
+	doFirst {
+		if (!file('../../server/eula.txt').text.readLines().any { it.trim() == 'eula=true' })
+			throw new GradleException('Existing user-accepted server EULA required')
+		proofDir.get().asFile.mkdirs()
+	}
+	timeout = java.time.Duration.ofMinutes(5)
+}
+
+// Pre-launch filesystem tests use only the already-resolved Gson and loader API.
+def bootTestClasses = layout.buildDirectory.dir('classes/bootTest')
+def bootDeps = sourceSets.main.compileClasspath.filter {
+	it.name.startsWith('gson-') || it.name.startsWith('fabric-loader-')
+}
+def compileBootTest = tasks.register('compileBootRestartTest', JavaCompile) {
+	dependsOn tasks.named('compileJava')
+	source = fileTree('src/bootTest/java') { include '**/*.java' }
+	classpath = files(sourceSets.main.output.classesDirs, bootDeps)
+	destinationDirectory = bootTestClasses
+}
+tasks.register('bootRestartTest', JavaExec) {
+	dependsOn compileBootTest
+	classpath = files(bootTestClasses, sourceSets.main.output.classesDirs, bootDeps)
+	mainClass = 'tr.kapisma.boot.BootRestartTest'
+}
+tasks.named('check') { dependsOn tasks.named('bootRestartTest') }
+
 java {
 	withSourcesJar()
 	sourceCompatibility = JavaVersion.VERSION_21

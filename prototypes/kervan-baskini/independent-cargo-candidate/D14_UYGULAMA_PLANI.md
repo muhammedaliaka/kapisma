@@ -1,0 +1,4 @@
+# D14 — raund sonuçları ve sürücü giriş yaşam döngüsü
+- Raund sonucu her takım için bir kez, gerçek delivered/stolen ve ilerleme; sonuçlarda teslim öncelikli. Kazanan gerekçesi mevcut karşılaştırma ile uyumlu: teslim, daha az çalınan, ilerleme, kalan süre, eşitlik. Sonuç ve HUD kısa Türkçe; BREAK/paused ve taşıma durumları açık. Mevcut skorlama değiştirilmez, tie-break kullanıcı tarafından ayrıca belirlenmemiş geçici seçim.
+- Fork neutral latch ve forward durumunu driver death/invalidate/dismount/driver change/disconnected pause temizle. Aynı oyuncu yeniden oturduğunda eski seçim/forward geçerli olmamalı. Fresh observations offline oyuncuları içermemeli (respawn spectator bağlantısı korunur); komut ve callback pause koruması.
+- Pure sonuç metni/öncelik ve cargo sayımları; native iki raund gerçek sonuç chat; fork lifecycle regrese. KOD/live/RTS korunur, mevcut QA hedefi, yeni product build/download yok.

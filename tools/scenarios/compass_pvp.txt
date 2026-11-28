@@ -7,7 +7,7 @@ kapisma origins off
 kapisma rule BINGO tasks 0
 kapisma rule BINGO pvpGraceMin 1
 kapisma start
-wait 22
+await Tombala başladı!
 execute as Bot1 if data entity @s Inventory[{id:"minecraft:compass"}] run say COMPASS_OK
 expect COMPASS_OK
 wait 2
@@ -23,8 +23,7 @@ damage Bot2 4 minecraft:player_attack by Bot1
 wait 1
 execute as Bot2 if data entity @s {Health:20.0f} run say HP_PROTECTED
 expect HP_PROTECTED
-wait 44
-expect PvP AÇILDI
+await PvP AÇILDI
 damage Bot2 15 minecraft:player_attack by Bot1
 execute as Bot2 unless data entity @s {Health:20.0f} run say HP_HIT
 expect HP_HIT

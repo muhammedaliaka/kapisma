@@ -1,0 +1,34 @@
+{
+  "minecraft": "1.21.1",
+  "loader": "fabric",
+  "status": "candidate only",
+  "mods": [
+    {
+      "slug": "modernfix",
+      "versionId": "NnNX8LBn",
+      "name": "modernfix-fabric-5.25.1+mc1.21.1.jar",
+      "size": 471258,
+      "sha512": "dc67d6e023e1fcdeaf7837917c477cba212c611dfc2463c6ea021319c644087c79b477e0ea8194e113ddd7332fd5c6d82baa47c291eaac7f4a86252507b4e19f",
+      "url": "https://cdn.modrinth.com/data/nmDcB62a/versions/NnNX8LBn/modernfix-fabric-5.25.1%2Bmc1.21.1.jar",
+      "license": "LGPL-3.0-only"
+    },
+    {
+      "slug": "noisium",
+      "versionId": "4sGQgiu2",
+      "name": "noisium-fabric-2.3.0+mc1.21-1.21.1.jar",
+      "size": 216183,
+      "sha512": "606ba78cf7f30d99e417c96aa042f600c1b626ed9c783919496d139de650013f1434fcf93545782e3889660322837ce6e85530d9e1a5cc20f9ad161357ede43e",
+      "url": "https://cdn.modrinth.com/data/KuNKN7d2/versions/4sGQgiu2/noisium-fabric-2.3.0%2Bmc1.21-1.21.1.jar",
+      "license": "LGPL-3.0-only"
+    },
+    {
+      "slug": "servercore",
+      "versionId": "GQ2a51Rl",
+      "name": "servercore-fabric-1.5.19+1.21.1.jar",
+      "size": 897353,
+      "sha512": "d1c3dd6abb70ae89b125fac649503524bc179b551e352f34cbc43d7ef31b7d0decb170c99c8e7275fe18a1f208c826e4484a0d74fc16ef8d11fb1725fd64fbb5",
+      "url": "https://cdn.modrinth.com/data/4WWQxlQP/versions/GQ2a51Rl/servercore-fabric-1.5.19%2B1.21.1.jar",
+      "license": "MIT"
+    }
+  ]
+}

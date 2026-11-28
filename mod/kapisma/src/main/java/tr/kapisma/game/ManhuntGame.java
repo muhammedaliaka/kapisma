@@ -5,28 +5,22 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.GlobalPos;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.component.CustomData;
-import net.minecraft.world.item.component.LodestoneTracker;
-import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.storage.LevelResource;
 import net.minecraft.world.level.levelgen.Heightmap;
 import tr.kapisma.Kapisma;
@@ -43,6 +37,11 @@ import tr.kapisma.team.TeamService.GameTeam;
 public final class ManhuntGame extends WorldGame {
 	private GameTeam runnerTeam, hunterTeam;
 	private final List<UUID> runnerIds = new ArrayList<>();
+	private final Set<UUID> waitingHunters = new HashSet<>();
+	private int headStartTicks;
+	private Boolean originalKeepInventory;
+	private Boolean originalDeathMessages;
+	private final Map<ServerLevel, WorldBorder.Settings> originalBorders = new java.util.LinkedHashMap<>();
 
 	/** true: Katil Kim (gizli katil, ayni skin, masum oluyorsa elenir); false: klasik Manhunt. */
 	private final boolean katil;
@@ -67,10 +66,23 @@ public final class ManhuntGame extends WorldGame {
 		}
 	}
 
+	static boolean supportsDisguise(ServerPlayer p) {
+		return isBot(p) || net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.canSend(p, tr.kapisma.net.DisguisePayload.TYPE);
+	}
+
 	@Override
 	public void onJoin(ServerPlayer p) {
 		super.onJoin(p);
-		if (katil && contains(p.getUUID()) && phase != Phase.ENDED) sendDisguise(p, true);
+		if (katil) {
+			if (!supportsDisguise(p)) {
+				p.connection.disconnect(Component.literal("Katil Kim'e dönmek için Kapışma HUD modunu kur."));
+				return;
+			}
+			sendDisguise(p, true);
+		} else if (hunterTeam.members.contains(p.getUUID())) {
+			if (headStartActive()) holdHunter(p);
+			else releaseHunter(p);
+		}
 	}
 
 	private void buildKatilTeams(List<ServerPlayer> participants) {
@@ -80,7 +92,7 @@ public final class ManhuntGame extends WorldGame {
 		List<ServerPlayer> killers = new ArrayList<>(pool.subList(0, Math.min(n, pool.size())));
 		List<ServerPlayer> innocents = new ArrayList<>(pool);
 		innocents.removeAll(killers);
-		teams = TeamService.assignRolesHidden(server, innocents, killers, friendlyFire());
+		teams = TeamService.assignRolesHidden(server, innocents, killers);
 		runnerTeam = teams.get(0);
 		hunterTeam = teams.get(1);
 		for (ServerPlayer r : innocents) runnerIds.add(r.getUUID());
@@ -91,7 +103,7 @@ public final class ManhuntGame extends WorldGame {
 	protected GameWorld.Options worldOptions() { return null; }
 
 	@Override
-	protected double borderRadius() { return 0; }
+	protected double borderRadius() { return st.num(id(), "borderStart"); }
 
 	@Override
 	protected boolean eliminationMode() { return false; }
@@ -129,9 +141,23 @@ public final class ManhuntGame extends WorldGame {
 			Files.writeString(usedFlag(server), "used\n");
 		} catch (Exception e) {
 			Kapisma.LOG.warn("Manhunt bayragi yazilamadi", e);
+			return "Dünya kullanım kaydı yazılamadı; maç başlatılmadı.";
 		}
 		mgr.seeds.markUsed(server.overworld().getSeed());
 		Lobby.applyNormalRules(server);
+		var keep = server.getGameRules().getRule(net.minecraft.world.level.GameRules.RULE_KEEPINVENTORY);
+		originalKeepInventory = keep.get();
+		keep.set(st.flag(id(), "keepInventory"), server);
+		var overworld = server.overworld();
+		var nether = server.getLevel(Level.NETHER);
+		var end = server.getLevel(Level.END);
+		originalBorders.put(overworld, overworld.getWorldBorder().createSettings());
+		if (nether != null) originalBorders.put(nether, nether.getWorldBorder().createSettings());
+		if (end != null) originalBorders.put(end, end.getWorldBorder().createSettings());
+		BlockPos spawn = overworld.getSharedSpawnPos();
+		GameWorld.setBorder(overworld, spawn.getX(), spawn.getZ(), borderRadius());
+		if (nether != null) GameWorld.setBorder(nether, spawn.getX() / 8.0, spawn.getZ() / 8.0, borderRadius() / 8);
+		if (end != null) GameWorld.setBorder(end, 0, 0, borderRadius());
 		Kapisma.LOG.info("Manhunt ana dunyada: seed={}", server.overworld().getSeed());
 		return null;
 	}
@@ -171,6 +197,7 @@ public final class ManhuntGame extends WorldGame {
 		ServerLevel ow = server.overworld();
 		BlockPos sp = ow.getSharedSpawnPos();
 		if (katil) {
+			for (ServerPlayer p : onlinePlayers()) sendDisguise(p, true);
 			placeKatil(ow, sp);
 			return;
 		}
@@ -194,12 +221,12 @@ public final class ManhuntGame extends WorldGame {
 		if (katil) {
 			if (!st.flag("KATIL", "compass")) return List.of();
 			return List.of(
-				new Compass.Opt("near", "En yakın oyuncu", h -> { var o = othersNear(h); return o.isEmpty() ? null : spotOf(o.get(0)); }),
-				new Compass.Opt("far", "En uzak oyuncu", h -> { var o = othersNear(h); return o.isEmpty() ? null : spotOf(o.get(o.size() - 1)); }));
+				new Compass.Opt("near", "En yakın oyuncu", h -> anonymousSpot(h, false)),
+				new Compass.Opt("far", "En uzak oyuncu", h -> anonymousSpot(h, true)));
 		}
 		if (isRunner(p.getUUID())) return List.of();
 		List<Compass.Opt> r = new ArrayList<>();
-		r.add(new Compass.Opt("near", "En yakın runner", h -> { Trace tr = traceFor(h); return tr == null ? null : new Compass.Spot(tr.pos(), h.level().dimension()); }));
+		r.add(new Compass.Opt("near", "En yakın runner", this::nearestRunnerSpot));
 		r.add(new Compass.Opt("far", "En uzak runner", h -> spotOf(farthestRunner(h))));
 		for (UUID id : runnerIds) r.add(new Compass.Opt("run:" + id, "Runner: " + names.getOrDefault(id, "?"), h -> runnerSpot(id, h)));
 		r.addAll(mateOpts(p));
@@ -218,7 +245,7 @@ public final class ManhuntGame extends WorldGame {
 		if (r != null && !r.isSpectator() && r.level() == h.level()) return spotOf(r);
 		var m = lastSeen.get(id);
 		BlockPos b = m == null ? null : m.get(h.level().dimension());
-		return b == null ? null : new Compass.Spot(b, h.level().dimension());
+		return b == null ? null : new Compass.Spot(b, h.level().dimension(), names.getOrDefault(id, "Runner") + " · son iz");
 	}
 
 	@Override
@@ -226,17 +253,15 @@ public final class ManhuntGame extends WorldGame {
 		setupBoard();
 		if (katil) {
 			var rules = server.getGameRules();
+			originalDeathMessages = rules.getRule(net.minecraft.world.level.GameRules.RULE_SHOWDEATHMESSAGES).get();
 			rules.getRule(net.minecraft.world.level.GameRules.RULE_SHOWDEATHMESSAGES).set(false, server);   // olum mesaji katili ele verir
-			for (ServerPlayer p : onlinePlayers()) sendDisguise(p, true);
 		}
 		int hs = katil ? 0 : (int) st.num(id(), "headStartSec");        // Katil Kim'de kimse farkli davranmaz (ele verir)
-		if (hs > 0) {
+		headStartTicks = hs * 20;
+		if (headStartActive()) {
 			for (UUID id : hunterTeam.members) {
 				ServerPlayer p = player(id);
-				if (p == null) continue;
-				p.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, hs * 20, 255, false, false, false));
-				p.addEffect(new MobEffectInstance(MobEffects.JUMP, hs * 20, 128, false, false, false));
-				p.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, hs * 20, 0, false, false, false));
+				if (p != null) holdHunter(p);
 			}
 		}
 		if (katil) {
@@ -244,7 +269,7 @@ public final class ManhuntGame extends WorldGame {
 				ServerPlayer k = player(id);
 				if (k == null) continue;
 				Msg.title(k, "KATİLSİN", "Masumları öldür; Ejderha'yı koruma!", 5, 80, 20);
-				Msg.tell(k, "Sen KATİLSİN. Kimse bilmiyor. Masumlar Ejderha'yı öldürmeden hepsini avla. Ölürsen yeniden doğarsın." + killerNote(id) + (st.flag("KATIL", "compass") ? " Pusulan en yakın oyuncuyu gösterir (isim yok)." : ""));
+				Msg.tell(k, "Sen KATİLSİN. Masumlar Ejderha'yı öldürmeden hepsini avla. Koruma bitince P ile güç ve direnci açıp kapatabilirsin." + killerNote(id));
 				Msg.sound(k, net.minecraft.sounds.SoundEvents.WITHER_SPAWN, 0.5f, 0.8f);
 			}
 			for (UUID id : runnerTeam.members) {
@@ -269,6 +294,10 @@ public final class ManhuntGame extends WorldGame {
 	@Override
 	protected void onRunningTick() {
 		if (katil) katilTick();
+		if (headStartTicks > 0 && ticks == headStartTicks) {
+			for (ServerPlayer p : onlinePlayers()) releaseHunter(p);
+			Msg.broadcast(server, "Runner avantajı bitti. Av başladı!");
+		}
 		if (ticks % 10 == 0) trackRunners();
 		if (ticks % 20 == 0) offlineCheck();
 		if (ticks % 20 == 0) hud();
@@ -280,27 +309,33 @@ public final class ManhuntGame extends WorldGame {
 		for (UUID id : runnerIds) {
 			if (eliminated.contains(id)) continue;
 			ServerPlayer r = player(id);
-			if (r == null || r.level() != h.level()) continue;
+			if (r == null || r.isSpectator() || r.level() != h.level()) continue;
 			double d = r.distanceToSqr(h);
 			if (d > bd) { bd = d; best = r; }
 		}
 		return best;
 	}
 
-	private ServerPlayer nearestRunner(ServerPlayer h) {
-		ServerPlayer best = null;
+	private Compass.Spot nearestRunnerSpot(ServerPlayer h) {
+		Compass.Spot best = null;
 		double bd = Double.MAX_VALUE;
 		for (UUID id : runnerIds) {
-			if (eliminated.contains(id)) continue;
-			ServerPlayer r = player(id);
-			if (r == null || r.level() != h.level()) continue;
-			double d = r.distanceToSqr(h);
-			if (d < bd) { bd = d; best = r; }
+			var spot = runnerSpot(id, h);
+			if (spot == null) continue;
+			double d = spot.pos().distSqr(h.blockPosition());
+			if (d < bd) { bd = d; best = spot; }
 		}
 		return best;
 	}
 
-	/** p'ye gore ayni boyuttaki hayatta diger oyuncular (isim yok, sadece mesafe icin). */
+	private Compass.Spot anonymousSpot(ServerPlayer p, boolean farthest) {
+		var others = othersNear(p);
+		if (others.isEmpty()) return null;
+		ServerPlayer target = farthest ? others.getLast() : others.getFirst();
+		return new Compass.Spot(target.blockPosition(), target.level().dimension());
+	}
+
+	/** p'ye gore ayni boyuttaki hayatta diger oyuncular. */
 	private List<ServerPlayer> othersNear(ServerPlayer p) {
 		List<ServerPlayer> r = new ArrayList<>();
 		for (UUID id : players) {
@@ -382,15 +417,9 @@ public final class ManhuntGame extends WorldGame {
 		updateBoard();
 		if (katil) {
 			long alive = runnerIds.stream().filter(this::isAlive).count();
-			boolean cmp = st.flag("KATIL", "compass");
 			for (ServerPlayer p : onlinePlayers()) {
 				if (p.isSpectator()) continue;
 				String txt = "⏱ " + Msg.mmss(ticks / 20) + "   Hayatta masum: " + alive + "/" + runnerIds.size();
-				if (cmp) {
-					var near = othersNear(p);
-					txt += near.isEmpty() ? "   Yakında kimse yok"
-						: "   En yakın: " + (int) Math.sqrt(near.get(0).distanceToSqr(p)) + " blok · en uzak: " + (int) Math.sqrt(near.get(near.size() - 1).distanceToSqr(p)) + " blok";
-				}
 				Msg.actionbar(p, Component.literal(txt).withStyle(ChatFormatting.WHITE));
 			}
 			return;
@@ -398,13 +427,9 @@ public final class ManhuntGame extends WorldGame {
 		for (UUID id : hunterTeam.members) {
 			ServerPlayer h = player(id);
 			if (h == null || h.isSpectator()) continue;
-			ServerPlayer r = nearestRunner(h);
-			Trace tr = traceFor(h);
-			String txt = r != null ? "En yakın runner: " + (int) Math.sqrt(r.distanceToSqr(h)) + " blok"
-				: tr != null ? "Runner başka boyutta · son iz (portal): " + (int) Math.sqrt(tr.pos().distSqr(h.blockPosition())) + " blok"
-				: "Runner başka boyutta, iz yok";
-			ServerPlayer far = farthestRunner(h);
-			if (r != null && far != null && far != r) txt += " · en uzak: " + (int) Math.sqrt(far.distanceToSqr(h)) + " blok";
+			var spot = nearestRunnerSpot(h);
+			String txt = headStartActive() ? "Avın başlamasına " + Msg.mmss((headStartTicks - ticks + 19) / 20)
+				: spot != null ? "Hedef: " + spot.playerName() : "Runner izi yok";
 			Msg.actionbar(h, Component.literal("⏱ " + Msg.mmss(ticks / 20) + "   " + txt).withStyle(ChatFormatting.RED));
 		}
 		for (UUID id : runnerTeam.members) {
@@ -427,7 +452,7 @@ public final class ManhuntGame extends WorldGame {
 		eliminated.add(p.getUUID());
 		p.getInventory().dropAll();
 		p.setHealth(p.getMaxHealth());
-		p.setGameMode(GameType.SPECTATOR);
+		enterSpectator(p);
 		if (katil) {
 			Msg.broadcast(server, Component.literal("☠ " + p.getGameProfile().getName() + " öldü ve elendi. Kalan masum: "
 				+ runnerIds.stream().filter(this::isAlive).count()).withStyle(ChatFormatting.RED));
@@ -449,10 +474,13 @@ public final class ManhuntGame extends WorldGame {
 	public boolean allowDamage(LivingEntity e, DamageSource src, float amount) {
 		if (e instanceof ServerPlayer t && contains(t.getUUID())) {
 			if (phase == Phase.COUNTDOWN) return false;
-			if (katil && phase == Phase.RUNNING) {
-				if (ticks < graceTicks && src.getEntity() instanceof ServerPlayer a && a != t && contains(a.getUUID())) return false;
+			if (headStartActive() && hunterTeam.members.contains(t.getUUID())) return false;
+			if (src.getEntity() instanceof ServerPlayer a && a != t && contains(a.getUUID())) {
+				if (katil) {
+					return ticks >= graceTicks && (teamOf(a.getUUID()) != teamOf(t.getUUID()) || friendlyFire());
+				}
+				return !headStartActive() && st.flag("MANHUNT", "pvp");
 			}
-			if (!katil && src.getEntity() instanceof ServerPlayer a && a != t && contains(a.getUUID()) && !st.flag("MANHUNT", "pvp")) return false;
 		}
 		return true;
 	}
@@ -460,17 +488,35 @@ public final class ManhuntGame extends WorldGame {
 	@Override
 	public void onRespawn(ServerPlayer p) {
 		super.onRespawn(p);
+		if (contains(p.getUUID()) && headStartActive() && hunterTeam.members.contains(p.getUUID())) holdHunter(p);
+	}
+
+	private boolean headStartActive() {
+		return phase == Phase.RUNNING && ticks < headStartTicks;
+	}
+
+	private void holdHunter(ServerPlayer p) {
+		if (p.isSpectator()) return;
+		waitingHunters.add(p.getUUID());
+		freeze(p);
+	}
+
+	private void releaseHunter(ServerPlayer p) {
+		if (!waitingHunters.remove(p.getUUID())) return;
+		unfreeze(p);
 	}
 
 	@Override
 	protected void onClose() {
+		if (originalKeepInventory != null) server.getGameRules().getRule(net.minecraft.world.level.GameRules.RULE_KEEPINVENTORY).set(originalKeepInventory, server);
 		if (katil) {
-			server.getGameRules().getRule(net.minecraft.world.level.GameRules.RULE_SHOWDEATHMESSAGES).set(true, server);
+			if (originalDeathMessages != null)
+				server.getGameRules().getRule(net.minecraft.world.level.GameRules.RULE_SHOWDEATHMESSAGES).set(originalDeathMessages, server);
 			for (ServerPlayer p : onlinePlayers()) sendDisguise(p, false);
 		}
 		if (board != null) { server.getScoreboard().removeObjective(board); board = null; }
-		var wb = server.overworld().getWorldBorder();
-		wb.setCenter(0, 0);
+		originalBorders.forEach((level, settings) -> level.getWorldBorder().applySettings(settings));
+		originalBorders.clear();
 	}
 
 	// ================= Katil Kim ve ortak izleme =================
@@ -478,7 +524,7 @@ public final class ManhuntGame extends WorldGame {
 	private int killersGone, innocentsGone;                      // cevrimdisi saniye sayaclari
 	private final Map<UUID, Map<net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level>, BlockPos>> lastSeen = new HashMap<>();
 
-	private record Trace(BlockPos pos) {}
+	private final Set<UUID> boostedKillers = new HashSet<>();
 
 	/** Herkes 200x200'luk alanda (spawn merkezli) rastgele, birbirinden uzak dogar. */
 	private void placeKatil(ServerLevel ow, BlockPos sp) {
@@ -512,25 +558,39 @@ public final class ManhuntGame extends WorldGame {
 
 	private void katilBegin() {
 		graceTicks = (int) st.num("KATIL", "graceSec") * 20;
-		List<String> missing = new ArrayList<>();
-		for (ServerPlayer p : onlinePlayers()) {
-			if (!isBot(p) && !net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.canSend(p, tr.kapisma.net.DisguisePayload.TYPE)) missing.add(p.getGameProfile().getName());
-		}
 		Msg.broadcast(server, "Katil Kim başladı! Herkes 200x200 alanda rastgele doğdu." + (graceTicks > 0 ? " İlk " + graceTicks / 20 + " sn kimse kimseye vuramaz." : ""));
-		if (!missing.isEmpty()) {
-			Msg.broadcast(server, "⚠ kapisma-hud modu yok: " + String.join(", ", missing) + ". Bu oyuncuların skin'i gizlenmez, kim olduğu belli olur; modu kurmalarını söyle.");
-		}
 	}
 
 	private void katilTick() {
-		if (graceTicks > 0 && ticks == graceTicks) Msg.broadcast(server, "Başlangıç koruması bitti: artık PvP açık.");
+		if (graceTicks > 0 && ticks == graceTicks) {
+			Msg.broadcast(server, "Başlangıç koruması bitti: artık PvP açık.");
+		}
+	}
+
+	public void toggleKillerBoost(ServerPlayer p) {
+		if (!katil || phase != Phase.RUNNING || p.isSpectator() || !hunterTeam.members.contains(p.getUUID())) return;
+		if (ticks < graceTicks) { Msg.tell(p, "Gücü başlangıç koruması bitince açabilirsin."); return; }
+		boolean active = boostedKillers.add(p.getUUID());
+		if (!active) boostedKillers.remove(p.getUUID());
+		p.sendSystemMessage(Component.literal(active ? "Katil gücü açık" : "Katil gücü kapalı")
+			.withStyle(active ? ChatFormatting.GREEN : ChatFormatting.RED));
+	}
+
+	public float killerDamageFactor(ServerPlayer p) {
+		if (phase != Phase.RUNNING || !boostedKillers.contains(p.getUUID())) return 1;
+		return 1 - 0.2f * (float) st.num("KATIL", "killerResistance");
+	}
+
+	public float killerDamageBonus(ServerPlayer p) {
+		if (phase != Phase.RUNNING || !boostedKillers.contains(p.getUUID())) return 0;
+		return 3 * (float) st.num("KATIL", "killerStrength");
 	}
 
 	private void eliminateNow(ServerPlayer p) {
 		eliminated.add(p.getUUID());
 		p.getInventory().dropAll();
 		p.setHealth(p.getMaxHealth());
-		p.setGameMode(GameType.SPECTATOR);
+		enterSpectator(p);
 		Msg.title(p, "Elendin", "Seyirci olarak izleyebilirsin", 5, 50, 15);
 	}
 
@@ -557,23 +617,6 @@ public final class ManhuntGame extends WorldGame {
 			if (r == null || r.isSpectator() || eliminated.contains(id)) continue;
 			lastSeen.computeIfAbsent(id, k -> new HashMap<>()).put(r.level().dimension(), r.blockPosition());
 		}
-	}
-
-	/** Hunter icin en yakin iz: runner ayni boyutta ise canli konum, degilse o boyuttaki son konumu (portal). */
-	private Trace traceFor(ServerPlayer h) {
-		BlockPos best = null;
-		double bd = Double.MAX_VALUE;
-		for (UUID id : runnerIds) {
-			if (eliminated.contains(id)) continue;
-			ServerPlayer r = player(id);
-			BlockPos p;
-			if (r != null && !r.isSpectator() && r.level() == h.level()) p = r.blockPosition();
-			else { var m = lastSeen.get(id); p = m == null ? null : m.get(h.level().dimension()); }
-			if (p == null) continue;
-			double d = p.distSqr(h.blockPosition());
-			if (d < bd) { bd = d; best = p; }
-		}
-		return best == null ? null : new Trace(best);
 	}
 
 	/** Bir taraf 3 dakika boyunca tamamen cevrimdisi kalirsa oyun digerinin lehine biter. */

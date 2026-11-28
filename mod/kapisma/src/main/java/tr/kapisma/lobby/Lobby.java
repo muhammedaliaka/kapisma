@@ -90,6 +90,7 @@ public final class Lobby {
 	public static void applyNormalRules(MinecraftServer s) {
 		s.getGameRules().getRule(GameRules.RULE_DOMOBSPAWNING).set(true, s);
 		s.getGameRules().getRule(GameRules.RULE_DAYLIGHT).set(true, s);
+		s.getGameRules().getRule(GameRules.RULE_PLAYERS_SLEEPING_PERCENTAGE).set(0, s);
 		s.getGameRules().getRule(GameRules.RULE_WEATHER_CYCLE).set(true, s);
 		s.getGameRules().getRule(GameRules.RULE_SPAWN_CHUNK_RADIUS).set(0, s);
 	}
@@ -132,13 +133,25 @@ public final class Lobby {
 	}
 
 	public static void resetPlayer(ServerPlayer p) {
+		// Close the previous screen before clearing: its carried stack may be
+		// returned to the inventory during closeContainer().
+		p.closeContainer();
+		p.containerMenu.setCarried(ItemStack.EMPTY);
 		p.getInventory().clearContent();
+		p.getEnderChestInventory().clearContent();
+		p.stopRiding();
+		p.setCamera(p);
+		p.setDeltaMovement(net.minecraft.world.phys.Vec3.ZERO);
+		p.hurtMarked = true;
 		p.removeAllEffects();
 		p.setHealth(p.getMaxHealth());
 		p.getFoodData().setFoodLevel(20);
 		p.getFoodData().setSaturation(20f);
 		p.setExperienceLevels(0);
 		p.setExperiencePoints(0);
+		p.totalExperience = 0;
+		p.setTicksFrozen(0);
+		p.setAirSupply(p.getMaxAirSupply());
 		p.clearFire();
 		p.fallDistance = 0;
 		p.setInvulnerable(false);

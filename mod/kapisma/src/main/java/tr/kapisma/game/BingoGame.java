@@ -3,6 +3,7 @@ package tr.kapisma.game;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Collections;
 import java.util.HashMap;
@@ -15,6 +16,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -28,8 +30,8 @@ import tr.kapisma.Msg;
 import tr.kapisma.team.TeamService.GameTeam;
 
 /**
- * Tombala (Bingo, lockout): 5x5 esya karti, bir esyayi ILK alan takim o esyayi kazanir.
- * Hedefe (varsayilan 13) ulasan takim kazanir. Hedef kalan esyalarla da yakalanamiyorsa erken biter.
+ * Tombala: eşya ve görev kartında yeterli çizgiyi tamamlayan takım kazanır.
+ * Paylaşımlı kartta bir eşya her takım için ayrı ayrı sayılır.
  */
 public final class BingoGame extends WorldGame {
 	public static final String CARD_TAG = "kapisma_card";
@@ -62,6 +64,17 @@ public final class BingoGame extends WorldGame {
 
 	/** Bu oyunun dunyasinda bulunan biyom/yapi bilgisi (ipuclari ve biyom paneli icin). */
 	private Knowledge.Facts facts;
+	private BingoSurvey survey;
+	private BingoPortals portals;
+	private boolean cardReady;
+	private final Set<UUID> resetTasksFor = new HashSet<>();
+	private boolean allowNetherTasks, allowEndTasks;
+	private int surveySeconds, requestedTasks, cardDifficulty, netherSize;
+	private long preparationDeadline;
+	private int lastVerifiedCount;
+	private record CardDraft(Item[] cells, Map<Item, BingoTasks.Task> tasks, Map<Item, Double> costs,
+		Map<Item, String> hints, int[] wanted, int[] actual, int penalty, double mean) {}
+	private CardDraft bestDraft;
 
 	public Knowledge.Facts facts() { return facts; }
 
@@ -71,7 +84,8 @@ public final class BingoGame extends WorldGame {
 	/** Gorev kareleri: kart hucresi bir ikon esya ile temsil edilir (esya olarak sayilmaz). */
 	private final Map<Item, BingoTasks.Task> taskOf = new HashMap<>();
 	private List<BingoTasks.Task> taskList = new ArrayList<>();
-	private final Map<Item, GameTeam> claimed = new HashMap<>();
+	private final Map<Item, Set<GameTeam>> claimed = new HashMap<>();
+	private boolean sharedItems;
 	private int goal, limit, needLines, pvpTick;
 
 	/** Takim basina hedef secilen (isaretlenen) esyalar: kagittan secilir, yan panelde gorunur. */
@@ -103,7 +117,7 @@ public final class BingoGame extends WorldGame {
 		int n = 0;
 		for (int[] l : LINES) {
 			boolean all = true;
-			for (int i : l) if (claimed.get(card[i]) != t) { all = false; break; }
+			for (int i : l) if (ownerFor(card[i], t) != t) { all = false; break; }
 			if (all) n++;
 		}
 		return n;
@@ -115,7 +129,7 @@ public final class BingoGame extends WorldGame {
 		for (int[] l : LINES) {
 			boolean ok = true;
 			for (int i : l) {
-				GameTeam c = claimed.get(card[i]);
+				GameTeam c = ownerFor(card[i], t);
 				if (c != null && c != t) { ok = false; break; }
 			}
 			if (ok) n++;
@@ -140,11 +154,105 @@ public final class BingoGame extends WorldGame {
 
 	@Override
 	protected GameWorld.Options worldOptions() {
-		return new GameWorld.Options(true, true, true, true);
+		return new GameWorld.Options(true, true, true, st.flag(id(), "keepInventory"));
 	}
 
 	@Override
 	protected double borderRadius() { return st.num("BINGO", "borderStart"); }
+
+	@Override
+	protected boolean sharedSpawn() { return true; }
+
+	@Override
+	protected String openWorld() {
+		surveySeconds = (int) st.num(id(), "verifySec");
+		requestedTasks = (int) st.num(id(), "tasks");
+		cardDifficulty = (int) st.num(id(), "difficulty");
+		netherSize = (int) st.num(id(), "netherRadius");
+		allowNetherTasks = requestedTasks > 0 && st.flag(id(), "netherTasks");
+		allowEndTasks = requestedTasks > 0 && st.flag(id(), "endTasks");
+		sharedItems = st.flag(id(), "sharedItems");
+		needLines = (int) st.num(id(), "lines");
+		goal = (int) st.num(id(), "goal");
+		return super.openWorld();
+	}
+
+	@Override
+	protected net.minecraft.core.BlockPos arenaCenter(int x, int z) {
+		if (!allowEndTasks && !allowNetherTasks) return super.arenaCenter(x, z);
+		int cap = (int) borderRadius() - 24;
+		return super.arenaCenter(Math.clamp(x, -cap, cap), Math.clamp(z, -cap, cap));
+	}
+
+	@Override
+	protected boolean prepareArena() {
+		if (survey == null) {
+			preparationDeadline = System.nanoTime() + surveySeconds * 1_000_000_000L;
+			int portalReserve = allowNetherTasks || allowEndTasks ? Math.min(15, surveySeconds / 3) : 0;
+			survey = new BingoSurvey(world, surveySeconds - portalReserve, allowNetherTasks, allowEndTasks);
+		}
+		if (!cardReady) {
+			if (!survey.tick()) return false;
+			CardDraft draft = makeCard();
+			if (draft != null && (bestDraft == null || betterDraft(draft, bestDraft))) bestDraft = draft;
+			if (bestDraft == null || !allowNetherTasks && !allowEndTasks
+				&& (bestDraft.tasks().size() < requestedTasks || BingoDifficulty.error(bestDraft.wanted(), bestDraft.actual()) >= 4)) {
+				if (survey.expand()) {
+					Kapisma.LOG.info("Tombala ek tarama: ilk bütçe {}/25, taranan {} parça", lastVerifiedCount, survey.scanned);
+					Msg.broadcast(server, "Kaynak doğrulaması sürüyor; sınır içinde ek bölgeler kontrol ediliyor.");
+					return false;
+				}
+			}
+			if (bestDraft == null) {
+				logBudget();
+				stop("Bu seed ve sınırda 25 farklı hedef doğrulanamadı. Maç başlatılmadı.");
+				return false;
+			}
+			publishDraft(bestDraft);
+			bestDraft = null;
+			cardReady = true;
+			boolean nether = taskList.stream().anyMatch(t -> t.zone() == net.minecraft.world.level.Level.NETHER);
+			boolean end = taskList.stream().anyMatch(t -> t.zone() == net.minecraft.world.level.Level.END);
+			if (nether || end) {
+				try {
+					portals = new BingoPortals(server, world, worldOptions(), survey.landings(), nether, end, netherSize);
+				} catch (RuntimeException ex) {
+					Kapisma.LOG.warn("Tombala portal dünyaları hazırlanamadı", ex);
+					stop("Karttaki portal dünyası hazırlanamadı.");
+					return false;
+				}
+			}
+		}
+		if (portals == null || portals.prepare()) return true;
+		if (System.nanoTime() >= preparationDeadline) stop("Karttaki portal dünyası zamanında hazırlanamadı.");
+		return false;
+	}
+
+	@Override
+	protected void onArenaTimeout() { stop("Tombala dünyası zamanında doğrulanamadı."); }
+
+	@Override
+	protected boolean arenaLevel(net.minecraft.world.level.Level level) {
+		return super.arenaLevel(level) || portals != null && portals.contains(level);
+	}
+
+	public boolean permitsPortal(net.minecraft.world.level.Level level, net.minecraft.world.level.block.Portal portal, net.minecraft.world.entity.Entity entity) {
+		return phase == Phase.RUNNING && portals != null && entity instanceof ServerPlayer p && isAlive(p.getUUID())
+			&& !p.isSpectator() && portals.permits(level, portal instanceof net.minecraft.world.level.block.EndPortalBlock);
+	}
+
+	public boolean portalReady(ServerLevel source, ServerPlayer player, boolean end) {
+		return portals != null && portals.ready(source, player, end);
+	}
+
+	public net.minecraft.world.level.portal.DimensionTransition portalTransition(ServerLevel source, net.minecraft.world.entity.Entity entity, boolean end) {
+		if (phase != Phase.RUNNING || !(entity instanceof ServerPlayer p) || !isAlive(p.getUUID()) || p.isSpectator()) return null;
+		return portals == null ? null : portals.transition(source, entity, end);
+	}
+
+	public boolean protectedPortal(net.minecraft.world.level.Level level, net.minecraft.core.BlockPos pos) {
+		return portals != null && portals.protectedAt(level, pos);
+	}
 
 	@Override
 	protected boolean eliminationMode() { return false; }
@@ -201,7 +309,7 @@ public final class BingoGame extends WorldGame {
 		return null;
 	}
 
-	private int fillTier(List<Item> src, int want, List<Item> out, Set<String> fam, Map<String, Integer> types, boolean caps) {
+	private int fillTier(List<Item> src, int want, List<Item> out, Set<String> fam, Map<String, Integer> types, boolean caps, java.util.function.Predicate<Item> reserve) {
 		int got = 0;
 		for (Item it : new ArrayList<>(src)) {
 			if (got >= want) break;
@@ -213,6 +321,7 @@ public final class BingoGame extends WorldGame {
 				int cap = Integer.parseInt(tk.substring(tk.indexOf(':') + 1));
 				if (types.getOrDefault(tk, 0) >= cap) continue;
 			}
+			if (!reserve.test(it)) continue;
 			fam.add(fk);
 			if (tk != null) types.merge(tk, 1, Integer::sum);
 			out.add(it);
@@ -222,25 +331,65 @@ public final class BingoGame extends WorldGame {
 		return got;
 	}
 
-	private void makeCard() {
-		facts = Knowledge.scan(world.level, world.centerX, world.centerZ, (int) borderRadius());
-		costs = ItemCost.compute(server, facts);
-		int diff = Math.max(1, Math.min(3, (int) st.num("BINGO", "difficulty")));
+	private CardDraft makeCard() {
+		facts = survey.facts;
+		var plans = ItemCost.compute(server, survey);
+		Map<Item, Double> effort = new HashMap<>();
+		Map<Item, String> verifiedHints = new HashMap<>();
+		plans.forEach((item, plan) -> {
+			effort.put(item, plan.effort());
+			verifiedHints.put(item, plan.hint());
+		});
+		costs = effort;
+		int diff = cardDifficulty;
 		taskOf.clear();
-		for (BingoTasks.Task t : BingoTasks.pick(facts, costs, (int) st.num("BINGO", "tasks"), rnd)) taskOf.putIfAbsent(t.icon(), t);
+		int quantity = sharedItems ? Math.max(1, teams.size()) : 1;
+		var ledger = new ResourceProof.Ledger<Item>(ItemCost.rawCounts(survey));
+		java.util.function.Predicate<Item> reserve = item -> {
+			var plan = plans.get(item);
+			return plan != null && plan.count() >= quantity
+				&& ledger.observe(List.of(new ResourceProof.Input<>(plan.proof(), quantity)));
+		};
+		for (BingoTasks.Task t : BingoTasks.pick(server, survey, plans, requestedTasks,
+			allowNetherTasks, allowEndTasks, rnd)) {
+			if (taskOf.size() >= requestedTasks) break;
+			if (taskOf.containsKey(t.icon())) continue;
+			if (t.zone() != null) { taskOf.put(t.icon(), t); continue; }
+			List<ResourceProof.Input<Item>> demands = new ArrayList<>();
+			var plan = plans.get(t.icon());
+			if (plan == null || plan.count() < quantity) continue;
+			demands.add(new ResourceProof.Input<>(plan.proof(), quantity));
+			if ("minecraft:adventure/ol_betsy".equals(t.adv())) {
+				var arrow = plans.get(Items.ARROW);
+				if (arrow == null || arrow.count() < quantity) continue;
+				demands.add(new ResourceProof.Input<>(arrow.proof(), quantity));
+			}
+			if ("minecraft:husbandry/plant_seed".equals(t.adv())) {
+				var hoe = plans.get(Items.WOODEN_HOE);
+				var dirt = plans.get(Items.DIRT);
+				if (hoe == null || dirt == null) continue;
+				demands.add(new ResourceProof.Input<>(hoe.proof(), quantity));
+				demands.add(new ResourceProof.Input<>(dirt.proof(), quantity));
+			}
+			// Acquisition advancements leave the item available for later crafting.
+			// Planting and fishing/sleep tasks keep conservative separate resources.
+			boolean acquisition = t.adv().startsWith("minecraft:story/");
+			if (acquisition ? ledger.observe(demands) : ledger.reserve(demands)) taskOf.put(t.icon(), t);
+		}
 		taskList = new ArrayList<>(taskOf.values());
+		var taskBudget = ledger.fork();
 		int need = 25 - taskList.size();
-		double cap = diff == 3 ? 28 : 22;
 		List<Map.Entry<Item, Double>> cand = new ArrayList<>();
 		for (var en : costs.entrySet()) {
-			double cst = en.getValue();
-			if (cst < 2.0 || cst > cap || !cardworthy(en.getKey()) || taskOf.containsKey(en.getKey())) continue;
+			Item item = en.getKey();
+			if (!cardworthy(item) || taskOf.containsKey(item) || plans.get(item).count() < (sharedItems ? teams.size() : 1)) continue;
 			cand.add(en);
 		}
-		cand.sort((x, y) -> Double.compare(x.getValue(), y.getValue()));
-		// Zorluk dilimleri bu seed'in kendi dagilimina gore (yuzdelik): ne kadar uzak/zorsa o kadar yukari kayar
-		double q1 = diff == 1 ? 0.40 : diff == 3 ? 0.60 : 0.50, q2 = diff == 1 ? 0.75 : diff == 3 ? 0.88 : 0.82;
-		int i1 = (int) (cand.size() * q1), i2 = (int) (cand.size() * q2);
+		cand.sort(Comparator.<Map.Entry<Item, Double>, Double>comparing(Map.Entry::getValue)
+			.thenComparing(entry -> net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(entry.getKey())));
+		// One seed-relative tier definition for all three settings. Changing the
+		// thresholds with difficulty would make the requested quotas incomparable.
+		int i1 = (int) (cand.size() * 0.40), i2 = (int) (cand.size() * 0.75);
 		List<Item> e = new ArrayList<>(), m = new ArrayList<>(), h = new ArrayList<>();
 		for (int i = 0; i < cand.size(); i++) (i < i1 ? e : i < i2 ? m : h).add(cand.get(i).getKey());
 		Kapisma.LOG.info("Tombala havuzu (zorluk {}): kolay {} orta {} zor {} | gorev {} | biyom {} | yapilar {}", diff, e.size(), m.size(), h.size(),
@@ -248,30 +397,126 @@ public final class BingoGame extends WorldGame {
 		Comparator<Item> byId = Comparator.comparing(i -> net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(i).toString());
 		e.sort(byId); m.sort(byId); h.sort(byId);
 		Collections.shuffle(e, rnd); Collections.shuffle(m, rnd); Collections.shuffle(h, rnd);
-		int[] want = diff == 1 ? new int[] {12, 9, 4} : diff == 3 ? new int[] {5, 10, 10} : new int[] {8, 10, 7};
-		int tot = want[0] + want[1] + want[2];
-		for (int i = 0; i < 3; i++) want[i] = (int) Math.round(want[i] * need / (double) tot);
-		want[1] += need - (want[0] + want[1] + want[2]);
+		int[] want = BingoDifficulty.quotas(diff, need);
+		Map<Item, Integer> tierOf = new HashMap<>();
+		for (Item item : e) tierOf.put(item, 0);
+		for (Item item : m) tierOf.put(item, 1);
+		for (Item item : h) tierOf.put(item, 2);
 
 		List<Item> all = new ArrayList<>();
 		Set<String> fam = new HashSet<>();
 		Map<String, Integer> types = new HashMap<>();
 		List<List<Item>> tiers = List.of(e, m, h);
-		for (int i = 0; i < 3; i++) fillTier(tiers.get(i), want[i], all, fam, types, true);
+		for (int i : diff == 3 ? new int[]{2, 1, 0} : new int[]{0, 1, 2})
+			fillTier(tiers.get(i), want[i], all, fam, types, true, reserve);
 		// eksikse komsu zorluklardan, sonra sinirlari gevsetip tamamla
-		for (List<Item> t : List.of(m, e, h)) if (all.size() < need) fillTier(t, need - all.size(), all, fam, types, true);
-		for (List<Item> t : List.of(m, e, h)) if (all.size() < need) fillTier(t, need - all.size(), all, fam, types, false);
-		Collections.shuffle(all, rnd);
+		List<List<Item>> fallback = diff == 1 ? List.of(e, m, h) : diff == 3 ? List.of(h, m, e) : List.of(m, e, h);
+		for (List<Item> t : fallback) if (all.size() < need) fillTier(t, need - all.size(), all, fam, types, true, reserve);
+		for (List<Item> t : fallback) if (all.size() < need) fillTier(t, need - all.size(), all, fam, types, false, reserve);
+		for (var entry : cand) {
+			if (all.size() == need) break;
+			if (!all.contains(entry.getKey()) && reserve.test(entry.getKey())) all.add(entry.getKey());
+		}
+		// Preserve the requested difficulty mix first. If it cannot fill the card, retry
+		// from the untouched task budget instead of spending the scarce resources twice.
+		if (cand.size() >= need && (all.size() < need || BingoDifficulty.error(want, tierCounts(all, tierOf)) > 0)) {
+			int firstCount = all.size();
+			long retryDeadline = System.nanoTime() + 200_000_000L;
+			for (int attempt = 0; attempt < 5 && System.nanoTime() < retryDeadline; attempt++) {
+				var trial = taskBudget.fork();
+				List<Item> order = new ArrayList<>(cand.stream().map(Map.Entry::getKey).toList());
+				if (attempt == 1 || attempt == 3) {
+					Map<Item, Double> scarcity = new HashMap<>();
+					for (Item item : order) scarcity.put(item, trial.scarcity(List.of(new ResourceProof.Input<>(plans.get(item).proof(), quantity))));
+					order.sort(Comparator.comparingDouble((Item item) -> scarcity.get(item)).thenComparingDouble(costs::get));
+				} else if (attempt == 2 || attempt == 4) Collections.shuffle(order, rnd);
+				if (attempt == 0 && diff == 3) Collections.reverse(order);
+				List<Item> chosen = new ArrayList<>();
+				Set<String> families = new HashSet<>();
+				Map<String, Integer> kinds = new HashMap<>();
+				java.util.function.Predicate<Item> accept = item -> trial.observe(List.of(new ResourceProof.Input<>(plans.get(item).proof(), quantity)));
+				// Try the requested tiers with fresh resources first, then fill
+				// deficits without inventing resources. The last two attempts
+				// allow the older unrestricted feasibility fallback.
+				if (attempt < 3) {
+					List<Integer> priority = diff == 3 ? List.of(2, 1, 0) : diff == 1 ? List.of(0, 1, 2) : List.of(1, 0, 2);
+					for (int tier : priority) {
+						List<Item> subset = new ArrayList<>(order.stream().filter(i -> tierOf.get(i) == tier).toList());
+						fillTier(subset, want[tier], chosen, families, kinds, true, accept);
+					}
+					for (int tier : priority) {
+						List<Item> subset = new ArrayList<>(order.stream().filter(i -> tierOf.get(i) == tier).toList());
+						fillTier(subset, need - chosen.size(), chosen, families, kinds, true, accept);
+					}
+				}
+				for (Item item : order) {
+					if (chosen.size() == need || System.nanoTime() >= retryDeadline) break;
+					if (!chosen.contains(item) && accept.test(item)) chosen.add(item);
+				}
+				if (BingoDifficulty.better(need, want, tierCounts(chosen, tierOf), tierCounts(all, tierOf),
+					diversityPenalty(chosen), diversityPenalty(all))) { all.clear(); all.addAll(chosen); }
+				if (all.size() == need && BingoDifficulty.error(want, tierCounts(all, tierOf)) == 0 && diversityPenalty(all) == 0) break;
+			}
+			Kapisma.LOG.info("Tombala bütçe alternatifleri: {} -> {} eşya / {}", firstCount, all.size(), need);
+		}
+		Kapisma.LOG.info("Tombala doğrulama: {} parça, {} doğrulanmış eşya adayı", survey.scanned, cand.size());
+		lastVerifiedCount = all.size() + taskList.size();
+		if (all.size() < need) return null;
 		List<Item> cells = new ArrayList<>(all);
 		cells.addAll(taskOf.keySet());
 		Collections.shuffle(cells, rnd);
-		for (int i = 0; i < 25 && i < cells.size(); i++) card[i] = cells.get(i);
 		double sum = 0;
-		for (Item it : card) if (it != null) sum += taskOf.containsKey(it) ? taskOf.get(it).cost() : costs.getOrDefault(it, 8.0);
-		Kapisma.LOG.info("Tombala karti: {} eşya + {} görev, ortalama zorluk {}", all.size(), taskList.size(), String.format("%.1f", sum / 25.0));
+		for (Item it : cells) sum += taskOf.containsKey(it) ? taskOf.get(it).cost() : costs.getOrDefault(it, 8.0);
+		return new CardDraft(cells.toArray(Item[]::new), Map.copyOf(taskOf), Map.copyOf(costs),
+			st.flag(id(), "hints") ? Map.copyOf(verifiedHints) : Map.of(), want.clone(),
+			tierCounts(all, tierOf), diversityPenalty(all), sum / 25.0);
+	}
+
+	private boolean betterDraft(CardDraft next, CardDraft old) {
+		if (next.tasks().size() != old.tasks().size()) return next.tasks().size() > old.tasks().size();
+		int a = BingoDifficulty.error(next.wanted(), next.actual()), b = BingoDifficulty.error(old.wanted(), old.actual());
+		if (a != b) return a < b;
+		if (next.penalty() != old.penalty()) return next.penalty() < old.penalty();
+		return cardDifficulty == 3 ? next.mean() > old.mean() : cardDifficulty == 1 && next.mean() < old.mean();
+	}
+
+	private void publishDraft(CardDraft draft) {
+		System.arraycopy(draft.cells(), 0, card, 0, 25);
+		taskOf.clear(); taskOf.putAll(draft.tasks()); taskList = new ArrayList<>(taskOf.values());
+		costs = draft.costs(); hints = draft.hints();
+		lastVerifiedCount = 25;
+		logBudget();
+		Kapisma.LOG.info("Tombala zorluk dağılımı: seviye={} hedef={} gerçekleşen={} görev={}/{} çeşitlilikCeza={}",
+			cardDifficulty, Arrays.toString(draft.wanted()), Arrays.toString(draft.actual()), taskList.size(), requestedTasks, draft.penalty());
+		if (taskList.size() < requestedTasks)
+			Msg.broadcast(server, "Doğrulanan görev sayısı " + taskList.size() + "/" + requestedTasks + "; kalan kareler doğrulanmış eşyalardan oluşturuldu.");
+		Kapisma.LOG.info("Tombala karti: {} eşya + {} görev, ortalama zorluk {}", 25 - taskList.size(), taskList.size(), String.format("%.1f", draft.mean()));
 		StringBuilder cl = new StringBuilder();
-		for (Item it : card) if (it != null) cl.append(taskOf.containsKey(it) ? "GOREV:" + taskOf.get(it).title() : net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(it).getPath()).append('=').append(String.format("%.1f", taskOf.containsKey(it) ? taskOf.get(it).cost() : costs.getOrDefault(it, 0.0))).append(' ');
+		for (Item it : card) cl.append(taskOf.containsKey(it) ? "GOREV:" + taskOf.get(it).title() : net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(it).getPath()).append('=').append(String.format("%.1f", taskOf.containsKey(it) ? taskOf.get(it).cost() : costs.getOrDefault(it, 0.0))).append(' ');
 		Kapisma.LOG.info("Kart icerigi: {}", cl);
+	}
+
+	private static int[] tierCounts(List<Item> items, Map<Item, Integer> tierOf) {
+		int[] counts = new int[3];
+		for (Item item : items) counts[tierOf.get(item)]++;
+		return counts;
+	}
+
+	private static int diversityPenalty(List<Item> items) {
+		Set<String> families = new HashSet<>();
+		Map<String, Integer> kinds = new HashMap<>();
+		int penalty = 0;
+		for (Item item : items) {
+			if (!families.add(familyKey(item))) penalty++;
+			String key = typeKey(item);
+			if (key != null && kinds.merge(key, 1, Integer::sum) > Integer.parseInt(key.substring(key.indexOf(':') + 1))) penalty++;
+		}
+		return penalty;
+	}
+
+	private void logBudget() {
+		Kapisma.LOG.info("Tombala ortak kaynak bütçesi: {} / 25 hedef, hedef başına toplam miktar {}",
+			lastVerifiedCount, sharedItems ? Math.max(1, teams.size()) : 1);
 	}
 
 	/** Hucrenin gorunen adi: gorevse gorev basligi, degilse esya adi. */
@@ -303,6 +548,12 @@ public final class BingoGame extends WorldGame {
 	}
 
 	@Override
+	public void onRespawn(ServerPlayer p) {
+		super.onRespawn(p);
+		if (phase == Phase.RUNNING && contains(p.getUUID()) && !p.getInventory().contains(this::isCard)) p.getInventory().add(cardItem());
+	}
+
+	@Override
 	protected boolean minimapEnabled() { return st.flag("BINGO", "minimap"); }
 
 	@Override
@@ -310,7 +561,7 @@ public final class BingoGame extends WorldGame {
 		int lv = (int) st.num("BINGO", "compass");
 		if (lv <= 0) return java.util.List.of();
 		java.util.List<Compass.Opt> r = new java.util.ArrayList<>();
-		if (lv >= 2) r.addAll(rivalOpts());
+		if (lv >= 2) r.addAll(rivalOpts(p));
 		r.addAll(mateOpts(p));
 		r.add(spawnOpt("Başlangıç noktası"));
 		return r;
@@ -319,30 +570,38 @@ public final class BingoGame extends WorldGame {
 	@Override
 	protected void onStart() {
 		if (minimapEnabled()) giveWorldMap();
-		goal = (int) st.num("BINGO", "goal");
-		needLines = (int) st.num("BINGO", "lines");
 		limit = (int) st.num("BINGO", "timeLimitMin") * 1200;
 		pvpTick = (int) st.num("BINGO", "pvpGraceMin") * 1200;
-		makeCard();
-		Map<Item, String> hh = new HashMap<>(st.flag("BINGO", "hints") ? ItemHints.build(server, card, facts) : Map.of());
-		for (var en : taskOf.entrySet()) hh.remove(en.getKey());
-		hints = hh;
-		for (ServerPlayer p : onlinePlayers()) BingoTasks.reset(server, p, taskList);
+		for (ServerPlayer p : onlinePlayers()) resetTasks(p);
 		setupBoards();
 		for (ServerPlayer p : onlinePlayers()) {
 			p.getInventory().setItem(8, cardItem());
 		}
 		StringBuilder sb = new StringBuilder("Tombala başladı! Hedef: " + needLines + " çizgi (satır/sütun/çapraz)"
-			+ (goal > 0 ? " veya " + goal + " eşya" : "") + ". Lockout: eşyayı ilk alan takım sayar." + (taskList.isEmpty() ? "" : " Kartta " + taskList.size() + " görev karesi var (ilerleme tamamla).") + " Kart: kâğıda sağ tık veya /kart");
+			+ (goal > 0 ? " veya " + goal + " eşya" : "") + (sharedItems ? ". Aynı eşya her takıma puan kazandırır." : ". Eşyayı ilk alan takım puan kazanır.")
+			+ (taskList.isEmpty() ? "" : " Kartta " + taskList.size() + " görev karesi var (ilerleme tamamla).") + " Kart: kâğıda sağ tık veya /kart");
 		sb.append(" PvP: ").append(!st.flag("BINGO", "pvp") ? "kapalı" : pvpTick > 0 ? (pvpTick / 1200) + " dk sonra açılır." : "açık.");
 		Msg.broadcast(server, sb.toString());
+		if (portals != null) portals.announce();
+	}
+
+	private void resetTasks(ServerPlayer p) {
+		if (resetTasksFor.add(p.getUUID())) BingoTasks.reset(server, p, taskList);
+	}
+
+	@Override
+	public void onJoin(ServerPlayer p) {
+		super.onJoin(p);
+		if (phase == Phase.RUNNING) resetTasks(p);
 	}
 
 	private boolean pvpActive() { return st.flag("BINGO", "pvp") && ticks >= pvpTick; }
 
 	@Override
 	protected void onRunningTick() {
-		if (ticks % 20 != 0) return;
+		if (portals != null) portals.tick();
+		scan();
+		if (phase != Phase.RUNNING || ticks % 20 != 0) return;
 		if (st.flag("BINGO", "pvp") && pvpTick > 0) {
 			if (ticks == pvpTick) {
 				Msg.broadcast(server, "PvP AÇILDI! Artık takımlar birbirine vurabilir.");
@@ -352,7 +611,6 @@ public final class BingoGame extends WorldGame {
 				Msg.soundAll(server, net.minecraft.sounds.SoundEvents.BELL_BLOCK, 1f, 1f);
 			}
 		}
-		scan();
 		updateBoards();
 		if (phase != Phase.RUNNING) return;
 		if (limit > 0 && ticks >= limit) {
@@ -366,8 +624,23 @@ public final class BingoGame extends WorldGame {
 
 	private int score(GameTeam t) {
 		int n = 0;
-		for (GameTeam c : claimed.values()) if (c == t) n++;
+		for (Set<GameTeam> owners : claimed.values()) if (owners.contains(t)) n++;
 		return n;
+	}
+
+	/** Paylaşımlı kartta bir takım yalnızca kendi tamamlamasını görür. */
+	private GameTeam ownerFor(Item item, GameTeam viewer) {
+		Set<GameTeam> owners = claimed.get(item);
+		if (owners == null) return null;
+		if (sharedItems) return owners.contains(viewer) ? viewer : null;
+		return owners.iterator().next();
+	}
+
+	private boolean completed(ServerPlayer player, Item item, Set<Item> inventory) {
+		BingoTasks.Task task = taskOf.get(item);
+		if (task == null) return inventory.contains(item);
+		if (task.zone() != null) return portals != null && portals.visited(player, task.zone());
+		return BingoTasks.done(server, player, task.adv());
 	}
 
 	private GameTeam leader() {
@@ -376,37 +649,95 @@ public final class BingoGame extends WorldGame {
 		return best;
 	}
 
-	private void scan() {
-		for (ServerPlayer p : onlinePlayers()) {
-			if (p.isSpectator()) continue;
-			GameTeam t = teamOf(p.getUUID());
-			if (t == null) continue;
-			Set<Item> have = new HashSet<>();
-			var inv = p.getInventory();
-			for (int i = 0; i < inv.getContainerSize(); i++) {
-				ItemStack s = inv.getItem(i);
-				if (!s.isEmpty()) have.add(s.getItem());
-			}
-			for (Item it : card) {
-				if (!claimed.containsKey(it) && (taskOf.containsKey(it) ? BingoTasks.done(server, p, taskOf.get(it).adv()) : have.contains(it))) {
-					claimed.put(it, t);
-					Msg.broadcast(server, Msg.prefix().append(t.display()).append(Component.literal(taskOf.containsKey(it) ? " tamamladı: " : " aldı: ").withStyle(ChatFormatting.YELLOW))
-						.append(cellName(it)).append(Component.literal("  (" + score(t) + " eşya, " + lines(t) + "/" + needLines + " çizgi)").withStyle(ChatFormatting.GRAY)));
-					for (UUID id : t.members) {
-						ServerPlayer m = player(id);
-						if (m != null) {
-							Msg.title(m, "+1", cellName(it).getString(), 0, 25, 10);
-							Msg.sound(m, net.minecraft.sounds.SoundEvents.PLAYER_LEVELUP, 0.8f, 1.2f);
-						}
-					}
-					if (checkWin()) return;
-				}
+	/** Committed inventory mutations are observed before another player can claim. */
+	public void inventoryChanged(ServerPlayer p) {
+		if (server.isSameThread() && !isClosed() && phase == Phase.RUNNING) scanPlayer(p, false);
+	}
+
+	/** Completed advancement event; only the exact awarded task is considered. */
+	public void advancementCompleted(ServerPlayer p, net.minecraft.resources.ResourceLocation advancement) {
+		if (!server.isSameThread() || !resetTasksFor.contains(p.getUUID()) || !claimEligible(p)) return;
+		for (var entry : taskOf.entrySet()) {
+			if (advancement.toString().equals(entry.getValue().adv())
+				&& BingoTasks.done(server, p, entry.getValue().adv())) {
+				claim(p, entry.getKey());
+				return;
 			}
 		}
 	}
 
+	/** Successful dimension arrival, not merely portal touch. */
+	void portalCompleted(BingoPortals source, ServerPlayer p, net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level> zone) {
+		if (!server.isSameThread() || portals != source || !claimEligible(p)) return;
+		for (var entry : taskOf.entrySet()) {
+			if (zone.equals(entry.getValue().zone()) && source.visited(p, zone)) {
+				claim(p, entry.getKey());
+				return;
+			}
+		}
+	}
+
+	private boolean claimEligible(ServerPlayer p) {
+		return !isClosed() && phase == Phase.RUNNING && contains(p.getUUID()) && isAlive(p.getUUID())
+			&& !p.isSpectator() && p.isAlive() && arenaLevel(p.level());
+	}
+
+	private void scan() {
+		for (ServerPlayer p : onlinePlayers()) {
+			scanPlayer(p, true);
+			if (phase != Phase.RUNNING) return;
+		}
+		// Shared mode resolves winners only after all players in the tick have been processed.
+		if (sharedItems) checkWin();
+	}
+
+	private void scanPlayer(ServerPlayer p, boolean includeTasks) {
+		if (!claimEligible(p)) return;
+		Set<Item> have = new HashSet<>();
+		var inv = p.getInventory();
+		for (int i = 0; i < inv.getContainerSize(); i++) {
+			ItemStack s = inv.getItem(i);
+			if (!s.isEmpty() && !isCard(s) && !Compass.isCompass(s)) have.add(s.getItem());
+		}
+		for (Item it : card) {
+			if (it == null || (taskOf.containsKey(it) && (!includeTasks || !resetTasksFor.contains(p.getUUID())))) continue;
+			if (completed(p, it, have) && claim(p, it)) return;
+		}
+	}
+
+	/** All event paths share the same idempotent ownership transaction. */
+	private boolean claim(ServerPlayer p, Item it) {
+		if (!claimEligible(p)) return false;
+		GameTeam t = teamOf(p.getUUID());
+		if (t == null || ownerFor(it, t) != null) return false;
+		claimed.computeIfAbsent(it, key -> new HashSet<>()).add(t);
+		Msg.broadcast(server, Msg.prefix().append(t.display()).append(Component.literal(taskOf.containsKey(it) ? " tamamladı: " : " aldı: ").withStyle(ChatFormatting.YELLOW))
+			.append(cellName(it)).append(Component.literal("  (" + score(t) + " eşya, " + lines(t) + "/" + needLines + " çizgi)").withStyle(ChatFormatting.GRAY)));
+		for (UUID id : t.members) {
+			ServerPlayer m = player(id);
+			if (m != null) {
+				Msg.title(m, "+1", cellName(it).getString(), 0, 25, 10);
+				Msg.sound(m, net.minecraft.sounds.SoundEvents.PLAYER_LEVELUP, 0.8f, 1.2f);
+			}
+		}
+		// Shared mode deliberately resolves winners at end of tick.
+		return !sharedItems && checkWin();
+	}
+
 	/** Yeterli cizgiye / hedefe ulasan veya kimse cizgi tamamlayamaz hale gelmisse oyunu bitirir. */
 	private boolean checkWin() {
+		if (sharedItems) {
+			List<GameTeam> reached = teams.stream().filter(t -> lines(t) >= needLines || (goal > 0 && score(t) >= goal))
+				.sorted(Comparator.comparingInt(this::rankValue).reversed()).toList();
+			if (reached.isEmpty()) return false;
+			GameTeam leader = reached.getFirst();
+			if (reached.size() > 1 && rankValue(leader) == rankValue(reached.get(1))) {
+				finish(null, "Takımlar aynı anda aynı puanla hedefe ulaştı");
+			} else {
+				finish(leader, lines(leader) >= needLines ? lines(leader) + " tombala (çizgi) tamamladı" : score(leader) + " eşyaya ulaştı");
+			}
+			return true;
+		}
 		for (GameTeam t : teams) {
 			int l = lines(t);
 			if (l >= needLines) {
@@ -465,11 +796,11 @@ public final class BingoGame extends WorldGame {
 			for (String n : names) bio.addLoreLine(Component.literal("• " + n).withStyle(x -> x.withItalic(false).withColor(ChatFormatting.WHITE)));
 		}
 		gui.setSlot(11, bio);
-		GuiElementBuilder str = new GuiElementBuilder(Items.CHEST).setName(Component.literal("Bölgedeki yapılar").withStyle(x -> x.withItalic(false).withColor(ChatFormatting.GOLD).withBold(true)));
+		GuiElementBuilder str = new GuiElementBuilder(Items.CHEST).setName(Component.literal("Taramada doğrulanan yapılar").withStyle(x -> x.withItalic(false).withColor(ChatFormatting.GOLD).withBold(true)));
 		if (facts != null) {
 			Set<String> seen = new java.util.TreeSet<>();
 			for (String sId : facts.structures.keySet()) seen.add(Knowledge.structureName(sId));
-			if (seen.isEmpty()) str.addLoreLine(Component.literal("Hiç yapı yok").withStyle(x -> x.withItalic(false).withColor(ChatFormatting.GRAY)));
+			if (seen.isEmpty()) str.addLoreLine(Component.literal("Taranan parçalarda yapı doğrulanamadı.").withStyle(x -> x.withItalic(false).withColor(ChatFormatting.GRAY)));
 			for (String n : seen) str.addLoreLine(Component.literal("• " + n).withStyle(x -> x.withItalic(false).withColor(ChatFormatting.WHITE)));
 		}
 		gui.setSlot(15, str);
@@ -498,8 +829,12 @@ public final class BingoGame extends WorldGame {
 	@Override
 	public void onUseItem(ServerPlayer p, ItemStack stack) {
 		super.onUseItem(p, stack);
+		if (isCard(stack)) openCard(p);
+	}
+
+	private boolean isCard(ItemStack stack) {
 		CustomData d = stack.get(DataComponents.CUSTOM_DATA);
-		if (d != null && d.copyTag().getBoolean(CARD_TAG)) openCard(p);
+		return d != null && d.copyTag().getBoolean(CARD_TAG);
 	}
 
 	public void openCard(ServerPlayer p) {
@@ -522,7 +857,7 @@ public final class BingoGame extends WorldGame {
 		for (int r = 0; r < 5; r++) {
 			for (int c = 0; c < 5; c++) {
 				Item it = card[r * 5 + c];
-				GameTeam owner = claimed.get(it);
+				GameTeam owner = ownerFor(it, mine);
 				boolean target = owner == null && myTargets.contains(it);
 				String star = target ? "★ " : "";
 				GuiElementBuilder b = new GuiElementBuilder(it)
@@ -607,7 +942,7 @@ public final class BingoGame extends WorldGame {
 					.withStyle(x -> x.withItalic(false).withColor(impossible ? ChatFormatting.RED : done ? ChatFormatting.GREEN : ChatFormatting.YELLOW)));
 			for (int i : LINES[li]) {
 				Item it = card[i];
-				GameTeam owner = claimed.get(it);
+				GameTeam owner = ownerFor(it, mine);
 				String mark = owner == mine ? "✔ " : owner != null ? "✘ " : "○ ";
 				ChatFormatting col = owner == mine ? ChatFormatting.GREEN : owner != null ? ChatFormatting.RED : ChatFormatting.WHITE;
 				String extra = owner == null && hints.containsKey(it) ? " — " + hints.get(it) : owner != null && owner != mine ? " — " + owner.name : "";
@@ -617,7 +952,7 @@ public final class BingoGame extends WorldGame {
 				b.addLoreLine(Component.literal("Tıkla: eksikleri hedef yap").withStyle(x -> x.withItalic(false).withColor(ChatFormatting.DARK_GRAY)));
 				b.setCallback((idx, type, action) -> {
 					Set<Item> set = targets.computeIfAbsent(mine, k -> new java.util.LinkedHashSet<>());
-					for (int i : LINES[li]) if (claimed.get(card[i]) == null) set.add(card[i]);
+					for (int i : LINES[li]) if (ownerFor(card[i], mine) == null) set.add(card[i]);
 					Msg.tell(p, LINE_NAMES[li] + " için eksikler hedef yapıldı.");
 					updateBoards();
 					openCard(p);
@@ -634,7 +969,7 @@ public final class BingoGame extends WorldGame {
 	private int lineState(GameTeam t, int li) {
 		boolean miss = false;
 		for (int i : LINES[li]) {
-			GameTeam c = claimed.get(card[i]);
+			GameTeam c = ownerFor(card[i], t);
 			if (c != null && c != t) return 2;
 			if (c == null) miss = true;
 		}
@@ -643,7 +978,7 @@ public final class BingoGame extends WorldGame {
 
 	private int missing(GameTeam t, int li) {
 		int n = 0;
-		for (int i : LINES[li]) if (claimed.get(card[i]) != t) n++;
+		for (int i : LINES[li]) if (ownerFor(card[i], t) != t) n++;
 		return n;
 	}
 
@@ -699,7 +1034,7 @@ public final class BingoGame extends WorldGame {
 				int shown = 0;
 				for (Item it : mine) {
 					if (lines.size() >= 15) break;
-					GameTeam owner = claimed.get(it);
+					GameTeam owner = ownerFor(it, t);
 					String mark = owner == t ? "§a✔ " : owner != null ? "§c✘ §m" : "§f○ ";
 					lines.add(mark + itemName(it));
 					shown++;
@@ -741,7 +1076,7 @@ public final class BingoGame extends WorldGame {
 			p0.timeSec = limit > 0 ? Math.max(0, (limit - ticks) / 20) : ticks / 20;
 			Set<Item> tg = targets.getOrDefault(t, Set.of());
 			for (Item it : card) {
-				GameTeam o = claimed.get(it);
+				GameTeam o = ownerFor(it, t);
 				p0.card.add(new tr.kapisma.net.HudPayload.Cell(net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(it).toString(),
 					o != null ? rgb(o.color) : -1, o == t, tg.contains(it)));
 			}
@@ -760,6 +1095,8 @@ public final class BingoGame extends WorldGame {
 
 	@Override
 	protected void onClose() {
+		if (survey != null) survey.close();
+		if (portals != null) portals.close();
 		for (ServerPlayer m : onlinePlayers()) {
 			if (net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.canSend(m, tr.kapisma.net.HudPayload.TYPE)) {
 				net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.send(m, tr.kapisma.net.HudPayload.off());

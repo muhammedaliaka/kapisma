@@ -3,6 +3,6 @@
 	"minVersion": "0.8",
 	"package": "tr.kapisma.mixin",
 	"compatibilityLevel": "JAVA_21",
-	"mixins": ["EntityPortalMixin", "ChunkPacketDataMixin", "BEInfoAccessor", "PlayerChunkSenderMixin", "ServerChunkCacheMixin", "CommonPlayerSpawnInfoMixin", "ChunkMapAccessor", "TrackedEntityAccessor", "ServerPlayerVisMixin"],
+	"mixins": ["EntityPortalMixin", "ArenaPortalMixin", "PlayerListBorderMixin", "ChunkPacketDataMixin", "BEInfoAccessor", "PlayerChunkSenderMixin", "ServerChunkCacheMixin", "CommonPlayerSpawnInfoMixin", "ChunkMapAccessor", "TrackedEntityAccessor", "ServerPlayerVisMixin", "KillerCombatMixin", "BingoInventoryMixin", "BingoAdvancementMixin", "PrivateChatMixin", "TeamChatMixin"],
 	"injectors": { "defaultRequire": 1 }
 }

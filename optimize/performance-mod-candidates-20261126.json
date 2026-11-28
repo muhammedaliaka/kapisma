@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "minecraft": "1.21.1",
+  "loader": "fabric",
+  "note": "Publisher API metadata only; no compatibility or Android acceptance claim. Install and config owned by MOD agent.",
+  "candidates": [
+    {
+      "id": "lithium",
+      "version_id": "N08Z8wog",
+      "version": "mc1.21.1-0.15.4-fabric",
+      "filename": "lithium-fabric-0.15.4+mc1.21.1.jar",
+      "bytes": 797454,
+      "sha512": "182064b00e6315e2255b857eaab8eb759e6b042ebd4cc8b855ff0d93f875a5a7188fac49f878d7b29d4ef7e6b6341190ad7f6f6f39f4a6d2c62003468b08e4c6",
+      "source": "https://api.modrinth.com/v2/version/N08Z8wog"
+    },
+    {
+      "id": "ferritecore",
+      "version_id": "sOzRw3CG",
+      "version": "7.0.3-fabric",
+      "filename": "ferritecore-7.0.3-fabric.jar",
+      "bytes": 123450,
+      "sha512": "3ad31620fac4ff44327dc7dedbe162b2d978f3f246dc16255a6e400ce9592a0d326fe36a626f3c1bf30a11f813093cbb4dcc107af039cff724d0cdf648541fdf",
+      "source": "https://api.modrinth.com/v2/version/sOzRw3CG"
+    },
+    {
+      "id": "modernfix",
+      "version_id": "ARc7GQfp",
+      "version": "5.25.0+mc1.21.1",
+      "filename": "modernfix-fabric-5.25.0+mc1.21.1.jar",
+      "bytes": 473794,
+      "sha512": "ab858c8bce9444225d1e63692cdd24ec1689edfb3e0cccd811fe040ce968af2060d27a009ab8d281ea539a2737cb5a5fe6a8d7954ceb5bbdbecec6ad2398dc1d",
+      "source": "https://api.modrinth.com/v2/version/ARc7GQfp"
+    }
+  ]
+}

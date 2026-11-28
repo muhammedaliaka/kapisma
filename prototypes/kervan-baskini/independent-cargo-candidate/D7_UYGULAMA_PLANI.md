@@ -1,0 +1,4 @@
+# D7 — istemci harita teslimi ve oyuncu rehberi
+1. Gerçek Java istemcisinin aldığı map ID ve 128x128 piksel buffer'ını doğrula. Harita elde seçildiğinde sunucu->istemci eşitliği, farklı owner map ID, dinamik sürücü marker, iki rota. Test-only helper mevcut QA klasörü, kaynak hash ve log. İstemcinin piksel buffer'ı görsel ekran kabulü değildir.
+2. Rol bazlı kısa Türkçe oyun başlangıç talimatları ve elde harita lore'u; rota komutları ve tuşları, sandık teslimi, 10sn, kanca. Canlı kaynak merge gerekirse yeni hash ile KOD handoff. Önce source review; geçici değerler bağlayıcı ilan edilmez.
+3. At/harita etkileşim ve sınır kusurlarını incele; kanıtlı kusuru düzelt. Mevcut named QA target ve port25580, no download, live/RTS/KOD kaynakları korunur. KOD ile üretim merge ve Android fiziksel kabul ayrı kapı.

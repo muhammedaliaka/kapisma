@@ -1,0 +1,5 @@
+# Ultimate common engine plan
+1. Preserve live phone and legacy tablet scripts. Extract common audited shell core from phone mode and generate independent device-specific helpers using explicit allowlists and legacy recovery journals. Never use an unknown device or profile. Tablet USB serial is known from prior tests; physical verification pending.
+2. Reuse P1 safe background kill, extend only optional third-party/user-facing candidates; no system-package disable, root, radio changes, blanket kill-all, arbitrary process swap or downloads. Keep Gboard/wallpaper P1 and Play Services P2 as policy only. Default unknowns preserve.
+3. Build common host orchestration, inventory and dynamic heap planning; stage separate artifacts, don't deploy over active server. Test both fixture profiles and physical phone, compare baseline and final MemAvailable with repeated samples, restore/enter verification. Tablet offline acceptance remains explicitly pending.
+4. APK and Termux integration candidate; installation/authorized local ADB and Java workload verification remain separate gates. Record actual results and limits.

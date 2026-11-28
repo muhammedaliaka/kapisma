@@ -19,7 +19,17 @@ public abstract class EntityPortalMixin {
 		Entity self = (Entity) (Object) this;
 		if (self.level().isClientSide || Kapisma.GM == null || Kapisma.GM.current == null) return;
 		if (!Kapisma.GM.current.blocksPortals(self.level())) return;
+		if (Kapisma.GM.current instanceof tr.kapisma.game.BingoGame game
+			&& (portal instanceof net.minecraft.world.level.block.NetherPortalBlock || portal instanceof net.minecraft.world.level.block.EndPortalBlock)
+			&& game.permitsPortal(self.level(), portal, self)) {
+			if (self instanceof ServerPlayer player && self.level() instanceof net.minecraft.server.level.ServerLevel source
+					&& !game.portalReady(source, player, portal instanceof net.minecraft.world.level.block.EndPortalBlock)) {
+				ci.cancel();
+				if (player.tickCount % 20 == 0) Msg.actionbar(player, net.minecraft.network.chat.Component.literal("Portalın hedef bölgesi hazırlanıyor."));
+			}
+			return;
+		}
 		ci.cancel();
-		if (self instanceof ServerPlayer p && p.tickCount % 40 == 0) Msg.actionbar(p, net.minecraft.network.chat.Component.literal("Bu oyunda Nether ve End kapalı."));
+		if (self instanceof ServerPlayer p && p.tickCount % 40 == 0) Msg.actionbar(p, net.minecraft.network.chat.Component.literal("Bu portal maçta açık değil."));
 	}
 }

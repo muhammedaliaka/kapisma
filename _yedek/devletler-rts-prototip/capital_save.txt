@@ -1,0 +1,17 @@
+player Bot1 spawn
+player Bot2 spawn
+function krts:start
+await Hazırlık başladı.
+scoreboard players set #left krts_ctrl 1
+await Üç bölge açık.
+tp @e[tag=krts.unit,tag=krts.s2,type=hundred_years_war:militia,limit=1] 0 -60 -59
+wait 10
+execute store result score #tested_capital_hp krts_ctrl run data get entity @e[tag=krts.capital,tag=krts.s1,limit=1] Health 1000
+execute if score #tested_capital_hp krts_ctrl matches 1..59999 run say CAPITAL_HYW_AI_HIT
+expect CAPITAL_HYW_AI_HIT
+function krts:pause
+await Puan, süre ve satın alma durdu.
+execute store result score #saved_capital_hp krts_ctrl run data get entity @e[tag=krts.capital,tag=krts.s1,limit=1] Health 1000
+damage @e[tag=krts.capital,tag=krts.s1,limit=1] 500 minecraft:mob_attack by @e[tag=krts.unit,tag=krts.s2,limit=1]
+await Target is invulnerable
+save-all flush

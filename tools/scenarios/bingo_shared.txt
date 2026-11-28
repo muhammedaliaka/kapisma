@@ -1,0 +1,26 @@
+# İki farklı takım aynı eşyayı alır, ikisinin de kartında kendi puanı oluşur.
+player Bot1 spawn
+player Bot2 spawn
+kapisma game BINGO
+kapisma team solo
+kapisma origins off
+kapisma rule BINGO tasks 0
+kapisma rule BINGO startFood 0
+kapisma rule BINGO compass 0
+kapisma rule BINGO lines 12
+kapisma rule BINGO sharedItems 1
+kapisma start
+player Bot2 kill
+await Tombala başladı! Hedef: 12 çizgi
+player Bot2 spawn
+execute at Bot1 if entity @a[name=Bot2,distance=..1.5] run say BINGO_SPAWN_TOGETHER
+expect BINGO_SPAWN_TOGETHER
+kapisma debug givecard Bot1 1
+await Bot1 aldı:
+kapisma debug givecard Bot2 1
+await Bot2 aldı:
+expect (1 eşya, 0/12 çizgi)
+kapisma debug givecard Bot1 25
+await 12 tombala (çizgi) tamamladı
+expect Bot2: 0 çizgi, 1 eşya
+kapisma stop

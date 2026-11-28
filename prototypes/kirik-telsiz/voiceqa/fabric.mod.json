@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "kt_voiceqa",
+  "version": "0.1.0",
+  "name": "Kirik Telsiz isolated voice QA",
+  "environment": "*",
+  "entrypoints": {
+    "voicechat": [
+      "kt.voiceqa.KtVoiceQa"
+    ]
+  },
+  "depends": {
+    "minecraft": "1.21.1",
+    "java": ">=21",
+    "voicechat": "1.21.1-2.6.27"
+  }
+}

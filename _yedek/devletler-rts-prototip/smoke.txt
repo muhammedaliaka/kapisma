@@ -1,0 +1,38 @@
+function krts:start
+await Başlamak için 2–8 katılımcı gerekir.
+player Bot1 spawn
+player Bot2 spawn
+function krts:start
+await Hazırlık başladı.
+execute if entity @e[tag=krts.unit,tag=krts.s1,nbt={NoAI:1b}] run say PROTO_PREP_FROZEN
+await PROTO_PREP_FROZEN
+data get entity @a[scores={krts_slot=1},limit=1] UUID
+data get entity @e[tag=krts.unit,tag=krts.s1,type=hundred_years_war:archer,limit=1] OwnerUUID
+scoreboard players set #left krts_ctrl 1
+await Üç bölge açık.
+function krts:status
+execute as Bot1 run hyw relation get Bot2
+execute as @e[tag=krts.unit] run data merge entity @s {NoAI:1b}
+tp @e[tag=krts.unit,tag=krts.s1,type=hundred_years_war:militia] -24 -60 0
+await Teleported
+execute if score #p1 krts_ctrl matches 1.. run say PROTO_UNIT_CAPTURE
+await PROTO_UNIT_CAPTURE
+tp @e[tag=krts.unit,tag=krts.s2,type=hundred_years_war:militia] -24 -60 1
+wait 1
+scoreboard players operation #before krts_ctrl = #p1 krts_ctrl
+wait 3
+execute if score #before krts_ctrl = #p1 krts_ctrl run say PROTO_CONTESTED
+await PROTO_CONTESTED
+tp @e[tag=krts.unit,tag=krts.s1,type=hundred_years_war:militia] 0 -60 -64
+tp @e[tag=krts.unit,tag=krts.s2,type=hundred_years_war:militia] 0 -60 64
+scoreboard players set #g1 krts_ctrl 6
+execute as @a[scores={krts_slot=1},limit=1] run trigger krts_buy
+wait 2
+execute store result score #archers krts_ctrl if entity @e[tag=krts.s1,type=hundred_years_war:archer]
+execute if score #archers krts_ctrl matches 2 if score #g1 krts_ctrl matches 2 run say PROTO_PURCHASE
+await PROTO_PURCHASE
+scoreboard players set #p1 krts_ctrl 150
+await Maç bitti.
+await [RTS] Devlet 1
+function krts:reset
+await Prototip maçı sıfırlandı

@@ -1,0 +1,13 @@
+# Görev modu, tur ayarı, envanter kuralı ve turun sona ermesi.
+player Bot1 spawn
+player Bot2 spawn
+kapisma game ESYA
+kapisma rule ESYA roundSec 10
+kapisma rule ESYA roundLimit 1
+kapisma rule ESYA keepInventory 0
+kapisma start
+await Eşya Yarışı · Tur 1 başladı
+execute as Bot1 at @s run gamerule keepInventory
+expect keepInventory is currently set to: false
+await Tur limiti doldu
+kapisma stop

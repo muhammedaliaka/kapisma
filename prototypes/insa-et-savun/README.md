@@ -1,0 +1,5 @@
+# İnşa Et, Savun 0.1
+
+2–8 oyuncu, 30 oyun saniyesi inşa/90 saniye saldırı, iki tur aynı arena ve rol değişimi. İnşa eden her üye 128 tahta, adventure can_place_on sınırı, geçici barrier kabuğu; saldırgan beklerken spectator. Hücumda eşit savaş kiti, yalnız saldırganın tahtayı/hedefi kırabilen baltası. Hedef kırılırsa kalan süre+1, savunma başarılıysa 0; iki hücum sonucu karşılaştırılır. Bir takım koparsa zaman ve inşa/hücum spectator ile durur, dönüşte doğru roller. 32 vanilla işlev; ayrı düz QA dünya. `function is:start`, `function is:reset`.
+
+20 PASS / Exit 0. Gerçek Carpet yerleştirme ve baltayla hedef kırma, duvarların temizlenmesi, aynı malzeme, bağlantı ve 8/9 kapasite. İlk koşu saldırgan tekrar bağlanınca yanlış mod; gerçek hata düzeltildi. İkinci koşu bot adı Isqa7 büyük/küçük farkı; log bekleme düzeltilmiş. İlk günlükler korundu. acceptance.log SHA256 5D0EDF9A96D84B42718B8AB5B87A438835FA906DB34FB2D573EBDA414B615AE3. Eşik zamanları enjeksiyonla hızlandırıldı. Gerçek insan, doğal süreler, aktif restart, 3–7 kapasite ve denge açık. Geçici bariyer ve zemin değişiklikleri normal dünyada kullanılmamalı.

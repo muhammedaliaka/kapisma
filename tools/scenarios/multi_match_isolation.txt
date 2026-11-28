@@ -1,0 +1,123 @@
+# Same server process, distinct match objects. Real inventory and state checks at each transition.
+player Bot1 spawn
+player Bot2 spawn
+player Bot3 spawn
+wait 2
+kapisma game UHC
+kapisma origins off
+kapisma team solo
+kapisma seedclass qa_multi
+kapisma rule UHC borderStart 200
+kapisma rule UHC treasureChests 0
+kapisma rule UHC earlyBuffSec 0
+kapisma rule UHC pvp 0
+kapisma rule UHC minimap 0
+kapisma start
+await UHC başladı! PvP kapalı.
+scoreboard objectives add qa_multi dummy
+item replace entity Bot1 enderchest.0 with minecraft:diamond 7
+give Bot1 minecraft:diamond 3
+experience add Bot1 100 points
+data get entity Bot1 EnderItems
+capture before (minecraft:diamond)
+kapisma stop
+await Arena depolama kapandı:
+execute if entity @a[name=Bot1,gamemode=adventure,team=] if entity @a[name=Bot2,gamemode=adventure,team=] if entity @a[name=Bot3,gamemode=adventure,team=] run say QA_LOBBY_UHC
+capture lobby_UHC (QA_LOBBY_UHC)
+data get entity Bot1 EnderItems
+capture ender_UHC (Bot1 has the following entity data: \[\])
+data get entity Bot1 XpTotal
+capture xp_UHC (Bot1 has the following entity data: 0)
+execute store result score diamonds qa_multi run clear Bot1 minecraft:diamond 0
+scoreboard players get diamonds qa_multi
+capture inv_UHC diamonds has (0) \[qa_multi\]
+kapisma game ESYA
+kapisma origins off
+kapisma team solo
+kapisma rule ESYA borderStart 200
+kapisma rule ESYA roundSec 90
+kapisma rule ESYA roundLimit 3
+kapisma rule ESYA startFood 0
+kapisma rule ESYA minimap 0
+kapisma start
+await Eşya Yarışı · Tur 1 başladı
+kapisma debug race Bot1
+capture target race Bot1 round=1 target=(minecraft:[a-z0-9_]+) known=true baseline=0 count=0 score=0 lives=5 skips=0 resolved=false
+give Bot1 %{target} 1
+wait 1
+kapisma debug race Bot1
+capture scored race Bot1 round=1 target=%{target} known=true baseline=0 count=1 score=(1) lives=5 skips=0 resolved=true
+item replace entity Bot1 enderchest.0 with minecraft:diamond 7
+give Bot1 minecraft:diamond 3
+experience add Bot1 100 points
+data get entity Bot1 EnderItems
+capture before (minecraft:diamond)
+kapisma stop
+await Arena depolama kapandı:
+execute if entity @a[name=Bot1,gamemode=adventure,team=] if entity @a[name=Bot2,gamemode=adventure,team=] if entity @a[name=Bot3,gamemode=adventure,team=] run say QA_LOBBY_ESYA
+capture lobby_ESYA (QA_LOBBY_ESYA)
+data get entity Bot1 EnderItems
+capture ender_ESYA (Bot1 has the following entity data: \[\])
+data get entity Bot1 XpTotal
+capture xp_ESYA (Bot1 has the following entity data: 0)
+execute store result score diamonds qa_multi run clear Bot1 minecraft:diamond 0
+scoreboard players get diamonds qa_multi
+capture inv_ESYA diamonds has (0) \[qa_multi\]
+kapisma game BINGO
+kapisma origins off
+kapisma team solo
+kapisma rule BINGO borderStart 500
+kapisma rule BINGO verifySec 60
+kapisma rule BINGO difficulty 2
+kapisma rule BINGO tasks 3
+kapisma rule BINGO startFood 0
+kapisma rule BINGO minimap 0
+kapisma rule BINGO sharedItems 1
+kapisma rule BINGO lines 12
+kapisma start
+await Tombala başladı!
+kapisma debug givecard Bot1 1
+await Bot1 aldı:
+item replace entity Bot1 enderchest.0 with minecraft:diamond 7
+give Bot1 minecraft:diamond 3
+experience add Bot1 100 points
+data get entity Bot1 EnderItems
+capture before (minecraft:diamond)
+kapisma stop
+await Arena depolama kapandı:
+execute if entity @a[name=Bot1,gamemode=adventure,team=] if entity @a[name=Bot2,gamemode=adventure,team=] if entity @a[name=Bot3,gamemode=adventure,team=] run say QA_LOBBY_BINGO
+capture lobby_BINGO (QA_LOBBY_BINGO)
+data get entity Bot1 EnderItems
+capture ender_BINGO (Bot1 has the following entity data: \[\])
+data get entity Bot1 XpTotal
+capture xp_BINGO (Bot1 has the following entity data: 0)
+execute store result score diamonds qa_multi run clear Bot1 minecraft:diamond 0
+scoreboard players get diamonds qa_multi
+capture inv_BINGO diamonds has (0) \[qa_multi\]
+kapisma game KATIL
+kapisma origins off
+kapisma seedclass random
+kapisma rule KATIL graceSec 0
+gamerule showDeathMessages false
+kapisma start
+await Katil Kim başladı!
+item replace entity Bot1 enderchest.0 with minecraft:diamond 7
+give Bot1 minecraft:diamond 3
+experience add Bot1 100 points
+data get entity Bot1 EnderItems
+capture before (minecraft:diamond)
+kapisma stop
+wait 2
+execute if entity @a[name=Bot1,gamemode=adventure,team=] if entity @a[name=Bot2,gamemode=adventure,team=] if entity @a[name=Bot3,gamemode=adventure,team=] run say QA_LOBBY_KATIL
+capture lobby_KATIL (QA_LOBBY_KATIL)
+data get entity Bot1 EnderItems
+capture ender_KATIL (Bot1 has the following entity data: \[\])
+data get entity Bot1 XpTotal
+capture xp_KATIL (Bot1 has the following entity data: 0)
+execute store result score diamonds qa_multi run clear Bot1 minecraft:diamond 0
+scoreboard players get diamonds qa_multi
+capture inv_KATIL diamonds has (0) \[qa_multi\]
+gamerule showDeathMessages
+capture restored (Gamerule showDeathMessages is currently set to: false)
+gamerule showDeathMessages true
+scoreboard objectives remove qa_multi

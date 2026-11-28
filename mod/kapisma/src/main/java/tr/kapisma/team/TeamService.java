@@ -139,23 +139,22 @@ public final class TeamService {
 		return teams;
 	}
 
-	/** Katil Kim: iki gizli takim (masumlar / katil), ayni renk, isim etiketi gorunmez. */
-	public static List<GameTeam> assignRolesHidden(MinecraftServer s, List<ServerPlayer> innocents, List<ServerPlayer> killers, boolean friendlyFire) {
+	/** Katil Kim: roller sunucuda kalır; istemcilere herkes aynı takımda görünür. */
+	public static List<GameTeam> assignRolesHidden(MinecraftServer s, List<ServerPlayer> innocents, List<ServerPlayer> killers) {
 		clear(s);
 		Scoreboard sb = s.getScoreboard();
+		PlayerTeam visibleTeam = sb.addPlayerTeam(PREFIX + "gizli");
+		visibleTeam.setColor(ChatFormatting.WHITE);
+		visibleTeam.setNameTagVisibility(net.minecraft.world.scores.Team.Visibility.NEVER);
+		visibleTeam.setAllowFriendlyFire(true);
 		List<GameTeam> teams = new ArrayList<>();
 		String[] ids = {PREFIX + "masum", PREFIX + "katil"};
 		String[] names = {"Masumlar", "Katil"};
 		List<List<ServerPlayer>> groups = List.of(innocents, killers);
 		for (int i = 0; i < 2; i++) {
 			GameTeam gt = new GameTeam(i, ids[i], ChatFormatting.WHITE, names[i]);
-			PlayerTeam pt = sb.addPlayerTeam(ids[i]);
-			pt.setColor(ChatFormatting.WHITE);
-			pt.setDisplayName(Component.literal(names[i]));
-			pt.setAllowFriendlyFire(friendlyFire);
-			pt.setNameTagVisibility(net.minecraft.world.scores.Team.Visibility.NEVER);
 			for (ServerPlayer p : groups.get(i)) {
-				sb.addPlayerToTeam(p.getScoreboardName(), pt);
+				sb.addPlayerToTeam(p.getScoreboardName(), visibleTeam);
 				gt.members.add(p.getUUID());
 			}
 			teams.add(gt);

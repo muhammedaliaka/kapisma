@@ -1,0 +1,41 @@
+player Bot1 spawn
+player Bot2 spawn
+wait 2
+kapisma game BINGO
+kapisma origins off
+kapisma team solo
+kapisma seedclass qa_tier
+kapisma rule BINGO borderStart 1000
+kapisma rule BINGO verifySec 45
+kapisma rule BINGO sharedItems 1
+kapisma rule BINGO endTasks 0
+kapisma rule BINGO netherTasks 0
+kapisma rule BINGO minimap 0
+say QA_TIER_1_0
+kapisma rule BINGO difficulty 1
+kapisma rule BINGO tasks 0
+kapisma start
+await_regex Tombala başladı!|Bu seed ve sınırda 25 farklı hedef doğrulanamadı|Tombala dünyası zamanında doğrulanamadı
+kapisma stop
+await Arena depolama kapandı:
+say QA_TIER_2_0
+kapisma rule BINGO difficulty 2
+kapisma rule BINGO tasks 0
+kapisma start
+await_regex Tombala başladı!|Bu seed ve sınırda 25 farklı hedef doğrulanamadı|Tombala dünyası zamanında doğrulanamadı
+kapisma stop
+await Arena depolama kapandı:
+say QA_TIER_3_0
+kapisma rule BINGO difficulty 3
+kapisma rule BINGO tasks 0
+kapisma start
+await_regex Tombala başladı!|Bu seed ve sınırda 25 farklı hedef doğrulanamadı|Tombala dünyası zamanında doğrulanamadı
+kapisma stop
+await Arena depolama kapandı:
+say QA_TIER_3_8
+kapisma rule BINGO difficulty 3
+kapisma rule BINGO tasks 8
+kapisma start
+await_regex Tombala başladı!|Bu seed ve sınırda 25 farklı hedef doğrulanamadı|Tombala dünyası zamanında doğrulanamadı
+kapisma stop
+await Arena depolama kapandı:

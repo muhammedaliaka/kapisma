@@ -1,0 +1,120 @@
+player Bot1 spawn
+player Bot2 spawn
+wait 2
+kapisma game BINGO
+kapisma origins off
+kapisma team solo
+kapisma rule BINGO tasks 2
+kapisma rule BINGO endTasks 1
+kapisma rule BINGO netherTasks 1
+kapisma rule BINGO netherRadius 300
+kapisma rule BINGO borderStart 1000
+kapisma rule BINGO verifySec 60
+kapisma rule BINGO minimap 0
+kapisma rule BINGO lines 12
+kapisma rule BINGO sharedItems 1
+kapisma rule BINGO pvp 0
+say QA_PORTAL_CASE_forest
+kapisma seedclass qa_portal_forest
+kapisma start
+await Maçın End portalı X 0, Z 0
+execute as Bot1 at @s positioned 0 0 0 positioned over world_surface run tp @s ~ ~-0.95 ~
+await Bot1 tamamladı: Görev: End'e geç
+execute as Bot1 at @s positioned 104 0 4 positioned over world_surface run tp @s ~ ~-0.95 ~
+wait 2
+execute at Bot2 if entity @a[name=Bot1,distance=..2000] run say QA_END_forest
+capture end_forest (QA_END_forest)
+attribute Bot1 minecraft:generic.gravity base set 0
+execute at Bot1 run tp Bot1 -200 310 -200
+execute as Bot2 at @s run gamerule playersNetherPortalDefaultDelay 1
+execute as Bot2 at @s positioned 8 0 10 positioned over world_surface run tp @s ~ ~-3 ~
+await Bot2 tamamladı: Görev: Nether'a geç
+attribute Bot2 minecraft:generic.gravity base set 0
+execute as Bot2 at @s run tp @s 285 105 0
+wait 4
+execute as Bot2 at @s run gamerule playersNetherPortalDefaultDelay 1
+execute as Bot2 at @s run fill 281 103 -3 289 110 4 air
+execute as Bot2 at @s run fill 281 103 -3 289 103 4 netherrack
+execute as Bot2 at @s run fill 284 104 1 287 108 1 obsidian
+execute as Bot2 at @s run fill 285 105 1 286 107 1 nether_portal[axis=x]
+execute as Bot2 at @s run tp @s 285.5 105 1.5
+await_regex Tombala Nether uzak dönüş: -?\d+, -?\d+, -?\d+ aday=\d+ platform=(true|false)
+execute at Bot1 if entity @a[name=Bot2,x=-150,y=-64,z=-150,dx=299,dy=383,dz=299,distance=..2000] run say QA_FAR_forest_0
+capture far_forest_0 (QA_FAR_forest_0)
+data get entity Bot2 Pos
+capture pos_forest_0 (\[[-0-9.]+d, [-0-9.]+d, [-0-9.]+d\])
+execute as Bot2 at @s run gamerule playersNetherPortalDefaultDelay 1
+execute as Bot2 at @s positioned 8 0 10 positioned over world_surface run tp @s ~ ~-3 ~
+await_regex Tombala Nether ölçekli geçiş: hedef=\(1,1\)
+attribute Bot2 minecraft:generic.gravity base set 0
+execute as Bot2 at @s run tp @s 285 105 0
+wait 4
+execute as Bot2 at @s run gamerule playersNetherPortalDefaultDelay 1
+execute as Bot2 at @s run fill 281 103 -3 289 110 4 air
+execute as Bot2 at @s run fill 281 103 -3 289 103 4 netherrack
+execute as Bot2 at @s run fill 284 104 1 287 108 1 obsidian
+execute as Bot2 at @s run fill 285 105 1 286 107 1 nether_portal[axis=x]
+execute as Bot2 at @s run tp @s 285.5 105 1.5
+await_regex Tombala Nether uzak dönüş: -?\d+, -?\d+, -?\d+ aday=\d+ platform=(true|false)
+execute at Bot1 if entity @a[name=Bot2,x=-150,y=-64,z=-150,dx=299,dy=383,dz=299,distance=..2000] run say QA_FAR_forest_1
+capture far_forest_1 (QA_FAR_forest_1)
+data get entity Bot2 Pos
+capture pos_forest_1 (\[[-0-9.]+d, [-0-9.]+d, [-0-9.]+d\])
+attribute Bot1 minecraft:generic.gravity base set 0.08
+attribute Bot2 minecraft:generic.gravity base set 0.08
+kapisma stop
+await Arena depolama kapandı:
+await Arena depolama kapandı:
+await Arena depolama kapandı:
+say QA_PORTAL_CASE_desert
+kapisma seedclass qa_portal_desert
+kapisma start
+await Maçın End portalı X 0, Z 0
+execute as Bot1 at @s positioned 0 0 0 positioned over world_surface run tp @s ~ ~-0.95 ~
+await Bot1 tamamladı: Görev: End'e geç
+execute as Bot1 at @s positioned 104 0 4 positioned over world_surface run tp @s ~ ~-0.95 ~
+wait 2
+execute at Bot2 if entity @a[name=Bot1,distance=..2000] run say QA_END_desert
+capture end_desert (QA_END_desert)
+attribute Bot1 minecraft:generic.gravity base set 0
+execute at Bot1 run tp Bot1 -200 310 -200
+execute as Bot2 at @s run gamerule playersNetherPortalDefaultDelay 1
+execute as Bot2 at @s positioned 8 0 10 positioned over world_surface run tp @s ~ ~-3 ~
+await Bot2 tamamladı: Görev: Nether'a geç
+attribute Bot2 minecraft:generic.gravity base set 0
+execute as Bot2 at @s run tp @s 285 105 0
+wait 4
+execute as Bot2 at @s run gamerule playersNetherPortalDefaultDelay 1
+execute as Bot2 at @s run fill 281 103 -3 289 110 4 air
+execute as Bot2 at @s run fill 281 103 -3 289 103 4 netherrack
+execute as Bot2 at @s run fill 284 104 1 287 108 1 obsidian
+execute as Bot2 at @s run fill 285 105 1 286 107 1 nether_portal[axis=x]
+execute as Bot2 at @s run tp @s 285.5 105 1.5
+await_regex Tombala Nether uzak dönüş: -?\d+, -?\d+, -?\d+ aday=\d+ platform=(true|false)
+execute at Bot1 if entity @a[name=Bot2,x=-150,y=-64,z=-150,dx=299,dy=383,dz=299,distance=..2000] run say QA_FAR_desert_0
+capture far_desert_0 (QA_FAR_desert_0)
+data get entity Bot2 Pos
+capture pos_desert_0 (\[[-0-9.]+d, [-0-9.]+d, [-0-9.]+d\])
+execute as Bot2 at @s run gamerule playersNetherPortalDefaultDelay 1
+execute as Bot2 at @s positioned 8 0 10 positioned over world_surface run tp @s ~ ~-3 ~
+await_regex Tombala Nether ölçekli geçiş: hedef=\(1,1\)
+attribute Bot2 minecraft:generic.gravity base set 0
+execute as Bot2 at @s run tp @s 285 105 0
+wait 4
+execute as Bot2 at @s run gamerule playersNetherPortalDefaultDelay 1
+execute as Bot2 at @s run fill 281 103 -3 289 110 4 air
+execute as Bot2 at @s run fill 281 103 -3 289 103 4 netherrack
+execute as Bot2 at @s run fill 284 104 1 287 108 1 obsidian
+execute as Bot2 at @s run fill 285 105 1 286 107 1 nether_portal[axis=x]
+execute as Bot2 at @s run tp @s 285.5 105 1.5
+await_regex Tombala Nether uzak dönüş: -?\d+, -?\d+, -?\d+ aday=\d+ platform=(true|false)
+execute at Bot1 if entity @a[name=Bot2,x=-150,y=-64,z=-150,dx=299,dy=383,dz=299,distance=..2000] run say QA_FAR_desert_1
+capture far_desert_1 (QA_FAR_desert_1)
+data get entity Bot2 Pos
+capture pos_desert_1 (\[[-0-9.]+d, [-0-9.]+d, [-0-9.]+d\])
+attribute Bot1 minecraft:generic.gravity base set 0.08
+attribute Bot2 minecraft:generic.gravity base set 0.08
+kapisma stop
+await Arena depolama kapandı:
+await Arena depolama kapandı:
+await Arena depolama kapandı:

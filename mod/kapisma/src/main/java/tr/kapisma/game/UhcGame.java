@@ -35,8 +35,14 @@ public final class UhcGame extends WorldGame {
 
 	private int pvpTick, shrinkStart, shrinkEnd, limit;
 	private SideBoard board;
+	private UhcTreasure treasure;
+	private static final boolean ADAPTIVE_CHUNKS = "1".equals(System.getenv("KAPISMA_ADAPTIVE_CHUNKS"));
+	private final ChunkAdmission chunkAdmission = new ChunkAdmission();
+	private int lastChunkCap = -1;
+	private IncrementalBiomePreview regionPreview;
 	private static final String[] ARROWS = {"↑", "↗", "→", "↘", "↓", "↙", "←", "↖"};
 	private boolean shrinkAnnounced;
+	private double endRadius;
 
 	public UhcGame(GameManager mgr) {
 		super(mgr);
@@ -64,7 +70,7 @@ public final class UhcGame extends WorldGame {
 
 	private boolean glowApplied;
 
-	private boolean pvpActive() { return phase == Phase.RUNNING && ticks >= pvpTick; }
+	private boolean pvpActive() { return phase == Phase.RUNNING && ticks >= pvpTick && st.flag(id(), "pvp"); }
 
 	@Override
 	protected boolean minimapEnabled() { return st.flag("UHC", "minimap"); }
@@ -74,7 +80,7 @@ public final class UhcGame extends WorldGame {
 		int lv = (int) st.num("UHC", "compass");
 		if (lv <= 0) return java.util.List.of();
 		java.util.List<Compass.Opt> r = new java.util.ArrayList<>();
-		if (lv >= 2) r.addAll(rivalOpts());
+		if (lv >= 2) r.addAll(rivalOpts(p));
 		r.addAll(mateOpts(p));
 		r.add(new Compass.Opt("center", "Sınır merkezi", h -> {
 			var wb = world.level.getWorldBorder();
@@ -85,11 +91,102 @@ public final class UhcGame extends WorldGame {
 	}
 
 	@Override
-	protected double minimapEndRadius() { return st.num("UHC", "borderEnd"); }
+	protected double minimapEndRadius() { return endRadius; }
+
+	@Override
+	protected String openWorld() {
+		String error = super.openWorld();
+		if (error == null) {
+			endRadius = Math.min(world.borderRadius(), st.num(id(), "borderEnd"));
+			tr.kapisma.Kapisma.LOG.info("ULTRA_MAP_MODE incremental={}", IncrementalBiomePreview.ENABLED);
+		}
+		int count = (int) st.num("UHC", "treasureChests");
+		if (error == null && count > 0) {
+			treasure = new UhcTreasure(world, rnd, endRadius, count);
+		}
+		return error;
+	}
+
+	@Override
+	protected void advanceArenaWork() {
+		if (!IncrementalBiomePreview.ENABLED) return;
+		if (treasure != null && !treasure.isComplete()) {
+			treasure.advancePreview();
+			if (treasure.failed()) stop("Hazine haritası hazırlanamadı.");
+			return; // One shared preview budget per tick, never treasure + region.
+		}
+		if (regionPreview == null || regionPreview.complete()) return;
+		if (!minimapEnabled()) { regionPreview.cancel(); regionPreview = null; return; }
+		long timing = GameWorld.timingStart();
+		try {
+			regionPreview.step(IncrementalBiomePreview.MAX_OPERATIONS, IncrementalBiomePreview.BUDGET_NS);
+		} catch (RuntimeException ex) {
+			tr.kapisma.Kapisma.LOG.error("UHC region preview failed", ex);
+			stop("Bölge haritası hazırlanamadı.");
+		} finally {
+			GameWorld.timingEnd("map.preview_slice", timing, 8);
+		}
+	}
+
+	@Override
+	protected boolean prepareArena() {
+		if (treasure != null) {
+			int cap = UhcTreasure.LOAD_BATCH;
+			if (ADAPTIVE_CHUNKS) {
+				int pending = pendingSpawnChunks();
+				float mspt = server.getCurrentSmoothedTickTime();
+				cap = chunkAdmission.update(pending, mspt);
+				if (cap != lastChunkCap) {
+					tr.kapisma.Kapisma.LOG.info("ULTRA_CHUNK_ADMISSION cap={} pending_spawn={} mspt={}", cap, pending, mspt);
+					lastChunkCap = cap;
+				}
+			}
+			boolean ready = treasure.prepare(cap);
+			if (treasure.failed()) { stop("Seçilen hazine sandığı ve harita sayısı hazırlanamadı."); return false; }
+			if (!ready) return false;
+		}
+		if (!IncrementalBiomePreview.ENABLED || !minimapEnabled()) return true;
+		try {
+			if (regionPreview == null) {
+				var wb = world.level.getWorldBorder();
+				regionPreview = new IncrementalBiomePreview(world.level, GameWorld.createCenteredMap(world.level,
+					(int) wb.getCenterX(), (int) wb.getCenterZ(), (byte) 4, false));
+			}
+			return regionPreview.complete();
+		} catch (RuntimeException ex) {
+			tr.kapisma.Kapisma.LOG.error("UHC region preview setup failed", ex);
+			stop("Bölge haritası hazırlanamadı.");
+			return false;
+		}
+	}
+
+	@Override
+	protected void onArenaTimeout() {
+		if (treasure != null && !treasure.isComplete()) {
+			stop("Seçilen hazine sandığı ve harita sayısı zamanında hazırlanamadı.");
+			return;
+		}
+		if (IncrementalBiomePreview.ENABLED && minimapEnabled() && (regionPreview == null || !regionPreview.complete()))
+			stop("Bölge haritası zamanında hazırlanamadı.");
+	}
 
 	@Override
 	protected void onStart() {
-		if (minimapEnabled()) giveWorldMap();
+		if (minimapEnabled()) {
+			if (IncrementalBiomePreview.ENABLED) {
+				// Fail closed if settings changed during countdown or map identity was replaced.
+				try {
+					if (regionPreview == null) throw new IllegalStateException("region preview missing");
+					giveWorldMap(regionPreview.take());
+					tr.kapisma.Kapisma.LOG.info("ULTRA_MAP_COMPLETE kind=region");
+				} catch (RuntimeException ex) {
+					tr.kapisma.Kapisma.LOG.error("UHC region preview publication failed", ex);
+					stop("Bölge haritası doğrulanamadı.");
+					return;
+				}
+			} else giveWorldMap();
+		}
+		if (regionPreview != null) { regionPreview.cancel(); regionPreview = null; }
 		pvpTick = (int) st.num("UHC", "pvpGraceMin") * 1200;
 		shrinkStart = (int) st.num("UHC", "shrinkStartMin") * 1200;
 		shrinkEnd = Math.max(shrinkStart + 1200, (int) st.num("UHC", "shrinkEndMin") * 1200);
@@ -102,17 +199,18 @@ public final class UhcGame extends WorldGame {
 				p.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, buff * 20, 1, false, false, true));
 			}
 		}
-		Msg.broadcast(server, "UHC başladı! PvP " + (pvpTick > 0 ? (pvpTick / 1200) + " dk sonra açılır." : "açık.")
+		Msg.broadcast(server, "UHC başladı! PvP " + (!st.flag(id(), "pvp") ? "kapalı." : pvpTick > 0 ? (pvpTick / 1200) + " dk sonra açılır." : "açık.")
 			+ " Sınır ±" + (int) world.borderRadius() + " bloktan " + (int) st.num("UHC", "shrinkStartMin") + ". dakikada daralmaya başlar.");
+		if (treasure != null) Msg.broadcast(server, treasure.message());
 	}
 
 	@Override
 	protected void onRunningTick() {
-		if (pvpTick > 0 && ticks == pvpTick) {
+		if (pvpTick > 0 && ticks == pvpTick && pvpActive()) {
 			Msg.broadcast(server, "PvP AÇILDI! Kapışma başlasın.");
 			for (ServerPlayer p : onlinePlayers()) { Msg.title(p, "PvP AÇIK", "Kapışma başlasın!", 5, 40, 10); Msg.sound(p, net.minecraft.sounds.SoundEvents.ENDER_DRAGON_GROWL, 0.7f, 1f); }
 		}
-		if (pvpTick > 1200 && ticks == pvpTick - 1200) {
+		if (pvpTick > 1200 && ticks == pvpTick - 1200 && st.flag(id(), "pvp")) {
 			Msg.broadcast(server, "PvP 1 dakika sonra açılıyor.");
 			Msg.soundAll(server, net.minecraft.sounds.SoundEvents.BELL_BLOCK, 1f, 1f);
 		}
@@ -122,8 +220,8 @@ public final class UhcGame extends WorldGame {
 		}
 		if (!shrinkAnnounced && ticks >= shrinkStart) {
 			shrinkAnnounced = true;
-			world.shrinkBorder(st.num("UHC", "borderEnd"), (long) (shrinkEnd - shrinkStart) * 50L);
-			Msg.broadcast(server, "Sınır daralmaya başladı! Hedef: ±" + (int) st.num("UHC", "borderEnd") + " blok.");
+			world.shrinkBorder(minimapEndRadius(), (long) (shrinkEnd - shrinkStart) * 50L);
+			Msg.broadcast(server, "Sınır daralmaya başladı! Hedef: ±" + (int) minimapEndRadius() + " blok.");
 			for (ServerPlayer p : onlinePlayers()) Msg.title(p, "Sınır daralıyor", "Merkeze doğru ilerle!", 5, 50, 15);
 			Msg.soundAll(server, net.minecraft.sounds.SoundEvents.LIGHTNING_BOLT_THUNDER, 0.8f, 0.7f);
 		}
@@ -139,7 +237,7 @@ public final class UhcGame extends WorldGame {
 	private void hud() {
 		int sec = ticks / 20;
 		boolean pvpOn = pvpActive();
-		String pvp = pvpOn ? "AÇIK" : Msg.mmss((pvpTick - ticks) / 20);
+		String pvp = !st.flag(id(), "pvp") ? "KAPALI" : pvpOn ? "AÇIK" : Msg.mmss(Math.max(0, pvpTick - ticks) / 20);
 		int alivePlayers = (int) players.stream().filter(this::isAlive).count();
 		var wb = world.level.getWorldBorder();
 		int radius = (int) world.borderRadius();
@@ -147,7 +245,7 @@ public final class UhcGame extends WorldGame {
 			java.util.List<String> lines = new java.util.ArrayList<>();
 			lines.add("§7Süre §f" + Msg.mmss(sec));
 			lines.add("§7PvP " + (pvpOn ? "§c§lAÇIK" : "§e" + pvp));
-			lines.add("§7Sınır §f±" + radius + (shrinkAnnounced ? " §7→ ±" + (int) st.num("UHC", "borderEnd") : ""));
+			lines.add("§7Sınır §f±" + radius + (shrinkAnnounced ? " §7→ ±" + (int) minimapEndRadius() : ""));
 			lines.add("§7Takım §f" + aliveTeams().size() + "  §7Oyuncu §f" + alivePlayers);
 			var top = players.stream().filter(id -> kills.getOrDefault(id, 0) > 0)
 				.sorted((x, y) -> Integer.compare(kills.getOrDefault(y, 0), kills.getOrDefault(x, 0))).limit(3).toList();
@@ -160,11 +258,10 @@ public final class UhcGame extends WorldGame {
 			if (p.level() == world.level && !p.isSpectator()) {
 				sb.append("   Öldürme: ").append(kills.getOrDefault(p.getUUID(), 0));
 				double dx = wb.getCenterX() - p.getX(), dz = wb.getCenterZ() - p.getZ();
-				int dist = (int) Math.sqrt(dx * dx + dz * dz);
-				if (dist > 12) {
+				if (dx * dx + dz * dz > 144) {
 					double rel = Math.toDegrees(Math.atan2(-dx, dz)) - p.getYRot();
 					int idx = Math.floorMod(Math.round((float) (rel / 45.0)), 8);
-					sb.append("   Merkez: ").append(dist).append(' ').append(ARROWS[idx]);
+					sb.append("   Merkez: ").append(ARROWS[idx]);
 				}
 				if (Math.abs(p.getX() - wb.getCenterX()) > wb.getSize() / 2 || Math.abs(p.getZ() - wb.getCenterZ()) > wb.getSize() / 2) sb.append("   §c§lSINIR DIŞI!");
 			}
@@ -174,6 +271,8 @@ public final class UhcGame extends WorldGame {
 
 	@Override
 	protected void onClose() {
+		if (regionPreview != null) { regionPreview.cancel(); regionPreview = null; }
+		if (treasure != null) treasure.close();
 		if (board != null) board.close();
 		board = null;
 	}
@@ -197,7 +296,7 @@ public final class UhcGame extends WorldGame {
 		if (!(e instanceof ServerPlayer target) || !contains(target.getUUID())) return true;
 		if (phase == Phase.COUNTDOWN) return false;
 		if (src.getEntity() instanceof ServerPlayer attacker && attacker != target && contains(attacker.getUUID())) {
-			return pvpActive() && st.flag("UHC", "pvp");
+			return pvpActive();
 		}
 		return true;
 	}
@@ -237,10 +336,12 @@ public final class UhcGame extends WorldGame {
 
 	@Override
 	public void onEntityLoad(Entity e, ServerLevel level) {
-		if (world == null || level != world.level || !st.flag("UHC", "cutClean")) return;
+		if (world == null || level != world.level) return;
 		if (e instanceof ItemEntity ie) {
-			Item to = CUT_CLEAN.get(ie.getItem().getItem());
-			if (to != null) ie.setItem(new ItemStack(to, ie.getItem().getCount()));
+			ItemStack stack = ie.getItem();
+			Item to = stack.is(Items.APPLE) ? Items.GOLDEN_APPLE
+				: st.flag("UHC", "cutClean") ? CUT_CLEAN.get(stack.getItem()) : null;
+			if (to != null) ie.setItem(new ItemStack(to, stack.getCount()));
 		}
 	}
 }

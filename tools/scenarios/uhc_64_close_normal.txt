@@ -1,0 +1,21 @@
+player Bot1 spawn
+player Bot2 spawn
+wait 2
+kapisma game UHC
+kapisma team solo
+kapisma origins off
+kapisma seedclass uhc_natural
+kapisma rule UHC borderStart 200
+kapisma rule UHC borderEnd 50
+kapisma rule UHC treasureChests 64
+kapisma rule UHC minimap 0
+kapisma rule UHC pvp 0
+kapisma rule UHC earlyBuffSec 0
+kapisma start
+await UHC hazine fıçısı 0:
+await UHC hazine fıçısı 1:
+await UHC hazine fıçısı 2:
+await UHC başladı! PvP kapalı.
+await 64 hazine sandığı hazır.
+kapisma stop
+await Arena depolama kapandı:

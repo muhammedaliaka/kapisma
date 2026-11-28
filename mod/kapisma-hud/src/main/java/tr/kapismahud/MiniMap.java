@@ -38,9 +38,11 @@ final class MiniMap {
 		int x0 = px0 + (pw - SIZE) / 2, y0 = 6;
 		TargetPayload tg = KapismaHudClient.target;
 		boolean hasTarget = tg != null && tg.has;
+		var team = mc.player.getTeam();
+		boolean hasTeam = team != null && team.getName().startsWith("kp_");
 		int rows = 0;
 		if (legend) rows = 2 + (m.endRadius > 0 ? 1 : 0) + (m.mates.isEmpty() ? 0 : 1) + (hasTarget ? 1 : 0);
-		int bottom = y0 + SIZE + 12 + (hasTarget ? 10 : 0) + (legend ? rows * 9 + 3 : 0);
+		int bottom = y0 + SIZE + 12 + (hasTeam ? 10 : 0) + (hasTarget ? 10 : 0) + (legend ? rows * 9 + 3 : 0);
 		g.fill(px0, y0 - 2, px0 + pw, bottom, 0xA0101010);
 		g.fill(x0, y0, x0 + SIZE, y0 + SIZE, 0xC0202820);
 
@@ -92,6 +94,12 @@ final class MiniMap {
 		String info = String.format("X %d  Z %d  ±%d", m.selfX, m.selfZ, Math.round(m.curRadius));
 		g.drawString(mc.font, info, px0 + (pw - mc.font.width(info)) / 2, ty, 0xFFE0E0E0, true);
 		ty += 10;
+		if (hasTeam) {
+			String name = mc.font.plainSubstrByWidth(team.getDisplayName().getString(), pw - 6);
+			Integer rgb = team.getColor().getColor();
+			g.drawString(mc.font, name, px0 + (pw - mc.font.width(name)) / 2, ty, rgb == null ? 0xFFFFFFFF : argb(rgb, 0xFF), true);
+			ty += 10;
+		}
 		if (hasTarget) {
 			String t = "◆ " + tg.label;
 			if (mc.font.width(t) > pw - 6) t = mc.font.plainSubstrByWidth(t, pw - 6);
@@ -101,7 +109,7 @@ final class MiniMap {
 		if (legend) {
 			int lx = px0 + 5;
 			ty += 1;
-			legendRow(g, mc, lx, ty, 0xFFFF4040, true, "sınır (daralır)");
+			legendRow(g, mc, lx, ty, 0xFFFF4040, true, m.endRadius > 0 ? "sınır (daralır)" : "dünya sınırı");
 			ty += 9;
 			if (m.endRadius > 0) { legendRow(g, mc, lx, ty, 0xFF50E070, true, "son sınır"); ty += 9; }
 			legendRow(g, mc, lx, ty, 0xFFFFFFFF, false, "sen (sarı çizgi: yön)");

@@ -1,0 +1,22 @@
+# Runner liderken, takım ateşi açık olsa da hunter'lar birbirine zarar veremez.
+player Bot1 spawn
+player Bot2 spawn
+player Bot3 spawn
+kapisma game MANHUNT
+kapisma origins off
+kapisma runner Bot1
+kapisma rule MANHUNT headStartSec 30
+kapisma rule MANHUNT friendlyFire 1
+kapisma start
+await Manhunt başladı!
+attribute Bot2 minecraft:generic.jump_strength get
+expect is 0.0
+damage Bot2 1000 minecraft:fall
+damage Bot3 4 minecraft:player_attack by Bot2
+execute as Bot3 if data entity @s {Health:20.0f} run say HEADSTART_PROTECTED
+expect HEADSTART_PROTECTED
+await Runner avantajı bitti
+damage Bot3 4 minecraft:player_attack by Bot2
+execute as Bot3 unless data entity @s {Health:20.0f} run say HEADSTART_RELEASED
+expect HEADSTART_RELEASED
+kapisma stop

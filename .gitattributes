@@ -5,3 +5,4 @@ gradlew text eol=lf
 *.cmd text eol=crlf
 *.jar binary
 *.zip binary
+prototypes/java-integration/integration.patch whitespace=-blank-at-eol,-space-before-tab

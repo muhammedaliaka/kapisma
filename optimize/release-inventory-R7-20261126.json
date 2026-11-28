@@ -1,0 +1,200 @@
+﻿[
+    {
+        "name":  "kapisma-oyuncu-2026-11-25.zip",
+        "bytes":  7170352,
+        "zip_sha256":  "F90967F6350F6A0A7C14E67812A76C91C7BA459F5D0A7C6BEB50B25370720D6F",
+        "kapisma_jar_sha256":  [
+
+                               ],
+        "entries":  12
+    },
+    {
+        "name":  "kapisma-oyuncu-v0.1.0.zip",
+        "bytes":  7165547,
+        "zip_sha256":  "883CB287A242425FBE12027A334A8F1F695CF36ED234B4445882CBF9542865F6",
+        "kapisma_jar_sha256":  [
+
+                               ],
+        "entries":  12
+    },
+    {
+        "name":  "kapisma-oyuncu-v0.1.0-tam.zip",
+        "bytes":  12554725,
+        "zip_sha256":  "52332B14F763A704955BA1231EAEA8218EA1F6975573F056F08995FE19901EA5",
+        "kapisma_jar_sha256":  [
+
+                               ],
+        "entries":  13
+    },
+    {
+        "name":  "kapisma-sunucu-2026-11-25.zip",
+        "bytes":  7868385,
+        "zip_sha256":  "C87884DE78522D88AE752C19010FEA46A9BD7E3BDCEAA99F268E812D4649366C",
+        "kapisma_jar_sha256":  [
+                                   "4D4AFB318F47DB4DD4C6AD01F1B619250CD162D93D64FD05AC64A7A251B9CECA"
+                               ],
+        "entries":  18
+    },
+    {
+        "name":  "kapisma-sunucu-2026-11-25-bingo-adaptive-fast-aday.zip",
+        "bytes":  7934181,
+        "zip_sha256":  "3F71919B062146710F2B1BA53C367CD83190375275FFFE1E8BA9D3927CC59C15",
+        "kapisma_jar_sha256":  [
+                                   "949FD1F16F6AFFFCCD342F7F01AB2AC18D1350031C85526380C44008F2A314A7"
+                               ],
+        "entries":  18
+    },
+    {
+        "name":  "kapisma-sunucu-2026-11-25-bingo-cluster-survey-aday.zip",
+        "bytes":  7935081,
+        "zip_sha256":  "8E4B3532BBC9CB28529770B602D78D1D202A6158822DDEFEB75534A1665C84B9",
+        "kapisma_jar_sha256":  [
+                                   "CFBE793C790D1F92DDB8BCD848764C3808E9B3B5E1AD92C897F648014D4A460A"
+                               ],
+        "entries":  18
+    },
+    {
+        "name":  "kapisma-sunucu-2026-11-25-bingo-quality-survey-aday.zip",
+        "bytes":  7940300,
+        "zip_sha256":  "5B63963F16464AB39D015D85E877417A09AB92556A55FED92C470064B6911A7B",
+        "kapisma_jar_sha256":  [
+                                   "1CEADCB14DB4065BE811898D93052CE466F469755FA4B3459E52AF8D93C82924"
+                               ],
+        "entries":  18
+    },
+    {
+        "name":  "kapisma-sunucu-2026-11-25-bingo-tier-policy-aday.zip",
+        "bytes":  7937617,
+        "zip_sha256":  "1E8C8BCC666B4438982AF6062CBDC9B40FC40C661E7F9092B0112E84DE2260A5",
+        "kapisma_jar_sha256":  [
+                                   "A3279877AA2EF2F81F3E087FAF170A2DFB607052107E5FCE31CCC5E96BB8F079"
+                               ],
+        "entries":  18
+    },
+    {
+        "name":  "kapisma-sunucu-2026-11-25-cave-return-aday.zip",
+        "bytes":  7899749,
+        "zip_sha256":  "362EC19C4195697E80635269D56D391200D2E52EBC751AF9CE6E25818B485DD9",
+        "kapisma_jar_sha256":  [
+                                   "C34F8774226EB480D6F3C3EFE1F2CEBE724AE65A27AE90E7A1C208E055AA9B13"
+                               ],
+        "entries":  18
+    },
+    {
+        "name":  "kapisma-sunucu-2026-11-25-chat-isolation-aday.zip",
+        "bytes":  7931054,
+        "zip_sha256":  "96BD899B3C62B3EF9C7DBED4CC9DEE4472CBAE4462DEA00182D1D8ED6175A805",
+        "kapisma_jar_sha256":  [
+                                   "BD053E95F94A9FC2C11BC177666D694EFE5A5AC99BFC60EF4E35611EAD892EAB"
+                               ],
+        "entries":  18
+    },
+    {
+        "name":  "kapisma-sunucu-2026-11-25-inventory-order-aday.zip",
+        "bytes":  7909670,
+        "zip_sha256":  "4B6F2CDD2A8CB6A6E99277C9EA455E53E129ED0D03D221D4928652609D225F36",
+        "kapisma_jar_sha256":  [
+                                   "DF0436B9B7C38FD4510DA4C8430BDB8373775F744C49BF4ECFCBFDA046BBE972"
+                               ],
+        "entries":  18
+    },
+    {
+        "name":  "kapisma-sunucu-2026-11-25-match-isolation-aday.zip",
+        "bytes":  7933225,
+        "zip_sha256":  "853385D9E25C598E497C2ACD5ED06676AE6EBF0D3227B39C60E99CB478BB088B",
+        "kapisma_jar_sha256":  [
+                                   "CD4DCAF8466CDD0411C282A7DA4EC884D2742F6FE53D7C77116BF20D91806BB4"
+                               ],
+        "entries":  18
+    },
+    {
+        "name":  "kapisma-sunucu-2026-11-25-race-death-aday.zip",
+        "bytes":  7910055,
+        "zip_sha256":  "B589FA1F145D2ACE2406E9D68CF62CC02DF2743E14A90816C2E27436C4884786",
+        "kapisma_jar_sha256":  [
+                                   "2344A61F0796AE41D9A6BF3B5906928B879127DBA1398EF98448832AA62032E3"
+                               ],
+        "entries":  18
+    },
+    {
+        "name":  "kapisma-sunucu-2026-11-25-race-death-corner-aday.zip",
+        "bytes":  7910520,
+        "zip_sha256":  "86DB20FE3450CBE36B96B06C2405B410B83848910739AC721E2894E169BF7B91",
+        "kapisma_jar_sha256":  [
+                                   "043F3FF8D0CB54E31F8591139845830F3E98194D96CBC2E2961CEE515E1A93C8"
+                               ],
+        "entries":  18
+    },
+    {
+        "name":  "kapisma-sunucu-2026-11-25-resource-proof-io-aday.zip",
+        "bytes":  7908191,
+        "zip_sha256":  "08DB9FE42ADBA928E9BA2F8A5F6C9E97351EC2D7BC377C17E30AD93764D89100",
+        "kapisma_jar_sha256":  [
+                                   "956A37956AC64B68DA29B88DC486B450272F3FB19E25679ECE6EBB4399BA641B"
+                               ],
+        "entries":  18
+    },
+    {
+        "name":  "kapisma-sunucu-2026-11-25-restart-treasure-aday.zip",
+        "bytes":  7925775,
+        "zip_sha256":  "E70A83E274ABF95BC515773B2483D7D05DB98E5337D5647089E23471DF20A3E6",
+        "kapisma_jar_sha256":  [
+                                   "13D578D1A6756905E945FB35372B46302C33B21C481EEDBDCE01D19165F50EAA"
+                               ],
+        "entries":  18
+    },
+    {
+        "name":  "kapisma-sunucu-2026-11-25-seed.zip",
+        "bytes":  7892607,
+        "zip_sha256":  "BA5E04B84A49B18A311F0011A7134AA5343BDDC6CEE774B3DC2B31285F9E03CC",
+        "kapisma_jar_sha256":  [
+                                   "BB92690DE52DCA8BD5369BD53E8D18E4A5F58417534187895028016EB49B532E"
+                               ],
+        "entries":  18
+    },
+    {
+        "name":  "kapisma-sunucu-2026-11-25-seed-portal-uhc-aday.zip",
+        "bytes":  7923913,
+        "zip_sha256":  "0267E6E2ED7E2B0FE0573AAE3D3DE20FB871BE944698456DFE4C4DEA61F497CB",
+        "kapisma_jar_sha256":  [
+                                   "507FBEC9484F3D3003B0ADED8568255BBCFDCC4F01EC6FC9D358CC5E850E79A3"
+                               ],
+        "entries":  18
+    },
+    {
+        "name":  "kapisma-sunucu-2026-11-25-spectator-last-seen-aday.zip",
+        "bytes":  7932942,
+        "zip_sha256":  "AF3141A96BDD0D88B4034AC48B7E583BBDDA37D07F70F7897337B653E9B22C54",
+        "kapisma_jar_sha256":  [
+                                   "1775F0C8631E4C8F8110682D12E435232E555535BBE5E77CE1D98F05A1D8B905"
+                               ],
+        "entries":  18
+    },
+    {
+        "name":  "kapisma-sunucu-2026-11-25-task-order-aday.zip",
+        "bytes":  7943801,
+        "zip_sha256":  "817EDCCCD75E1C0040D7E8DDC67FD3B3DA6B610E087CBA1825C6F54BECEA3451",
+        "kapisma_jar_sha256":  [
+                                   "036C95AF4796283FF46A2CE5026980863B50B6310F45C2A8E92E3673F40F4341"
+                               ],
+        "entries":  18
+    },
+    {
+        "name":  "kapisma-sunucu-v0.1.0.zip",
+        "bytes":  7840905,
+        "zip_sha256":  "B71DC7995C07C4ADAF8AC4DAC6D352B9C0B1F70F65D5FBC9CDCB26A72C2258C6",
+        "kapisma_jar_sha256":  [
+                                   "603871642B46F10EDC38376074A94229BB5247CFE82F06DFCA173F15D35A79B3"
+                               ],
+        "entries":  18
+    },
+    {
+        "name":  "kapisma-sunucu-v0.1.0-tam.zip",
+        "bytes":  13230081,
+        "zip_sha256":  "ECC929DCFC87382528C26C2B2EC12E749477FE244319B9D7F146D6DE3645FB41",
+        "kapisma_jar_sha256":  [
+                                   "603871642B46F10EDC38376074A94229BB5247CFE82F06DFCA173F15D35A79B3"
+                               ],
+        "entries":  19
+    }
+]

@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 
 /** Katil Kim: istemci modu (kapisma-hud) tum oyuncu skin'lerini ayni skin ile degistirir. Istemcideki tr.kapismahud.DisguisePayload ile ayni bayt duzeni. */
 public final class DisguisePayload implements CustomPacketPayload {
-	public static final Type<DisguisePayload> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath("kapisma", "disguise"));
+	public static final Type<DisguisePayload> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath("kapisma", "disguise_v2"));
 	public static final StreamCodec<RegistryFriendlyByteBuf, DisguisePayload> CODEC = CustomPacketPayload.codec(DisguisePayload::write, DisguisePayload::read);
 
 	public final boolean on;

@@ -1,0 +1,24 @@
+# Flat test world has dirt, sand, gravel, stone; no diamond, logs or reachable diamond block.
+player Bot1 spawn
+player Bot2 spawn
+wait 2
+datapack list enabled
+capture pack (file/kapisma_race_recipe)
+kapisma game ESYA
+kapisma origins off
+kapisma rule ESYA borderStart 200
+kapisma rule ESYA roundSec 90
+kapisma rule ESYA roundLimit 3
+kapisma rule ESYA keepInventory 1
+kapisma start
+capture pool Eşya Yarışı kaynak kanıtı: \d+ parça, (3) hedef, \d+ ms
+await Eşya Yarışı · Tur 1 başladı
+kapisma debug race Bot1
+capture a race Bot1 round=1 target=(minecraft:(?:dirt|sand|gravel)) known=true baseline=0 count=0 score=0 lives=5
+kapisma debug race Bot2
+capture b race Bot2 round=1 target=((?!%{a} )minecraft:(?:dirt|sand|gravel)) known=true baseline=0 count=0 score=0 lives=5
+give Bot1 %{a} 1
+give Bot2 %{b} 1
+await Eşya Yarışı · Tur 2 başladı
+kapisma stop
+await Arena depolama kapandı:

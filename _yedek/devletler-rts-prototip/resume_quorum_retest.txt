@@ -1,0 +1,21 @@
+function krts:reset
+player Bot1 spawn
+player Bot2 spawn
+function krts:start
+await Hazırlık başladı.
+scoreboard players set #left krts_ctrl 1
+await Üç bölge açık.
+player Bot2 kill
+await Puan, süre ve satın alma durdu.
+player Bot3 spawn
+function krts:resume
+await Devam etmek için en az iki kayıtlı oyuncu gerekir.
+execute if score #phase krts_ctrl matches 4 unless entity @e[tag=krts.unit,nbt=!{NoAI:1b}] run say PROTO_QUORUM_FREEZE
+await PROTO_QUORUM_FREEZE
+player Bot2 spawn
+function krts:resume
+await Maç devam ediyor.
+execute if score #phase krts_ctrl matches 2 if entity @e[tag=krts.unit,nbt=!{NoAI:1b}] run say PROTO_QUORUM_RESTORED
+await PROTO_QUORUM_RESTORED
+function krts:reset
+await Prototip maçı sıfırlandı

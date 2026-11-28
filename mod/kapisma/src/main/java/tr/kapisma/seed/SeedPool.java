@@ -46,12 +46,17 @@ public final class SeedPool {
 			JsonObject nm = root.getAsJsonObject("class_names");
 			if (nm != null) for (var e : nm.entrySet()) p.names.put(e.getKey(), e.getValue().getAsString());
 			for (var e : root.getAsJsonObject("classes").entrySet()) {
+				if (!e.getValue().isJsonArray()) continue;
 				List<Entry> list = new ArrayList<>();
 				for (JsonElement el : e.getValue().getAsJsonArray()) {
-					JsonObject o = el.getAsJsonObject();
-					JsonArray sp = o.getAsJsonArray("spawn");
-					list.add(new Entry(Long.parseLong(o.get("seed").getAsString()), sp.get(0).getAsInt(), sp.get(1).getAsInt(),
-						o.get("biome").getAsString(), e.getKey()));
+					try {
+						JsonObject o = el.getAsJsonObject();
+						JsonArray sp = o.getAsJsonArray("spawn");
+						list.add(new Entry(Long.parseLong(o.get("seed").getAsString()), sp.get(0).getAsInt(), sp.get(1).getAsInt(),
+							o.get("biome").getAsString(), e.getKey()));
+					} catch (RuntimeException ex) {
+						Kapisma.LOG.warn("Bozuk seed kaydı atlandı (sınıf {})", e.getKey());
+					}
 				}
 				p.byClass.put(e.getKey(), list);
 			}
@@ -84,11 +89,17 @@ public final class SeedPool {
 		return byClass.getOrDefault(cls, List.of()).size();
 	}
 
-	/** cls = "random" ise tum siniflardan; kullanilmamis seed oncelikli. Havuz bossa null. */
+	public boolean selectable(String cls) { return "random".equals(cls) || size(cls) > 0; }
+
+	public boolean matches(String cls, long seed) {
+		return "random".equals(cls) || byClass.getOrDefault(cls, List.of()).stream().anyMatch(e -> e.seed() == seed);
+	}
+
+	/** cls = "random" ise tum siniflardan; bos bir belirli sinif baska sinifa dusmez. */
 	public Entry pick(String cls, Random rnd) {
 		List<Entry> all = new ArrayList<>();
-		if ("random".equals(cls) || !byClass.containsKey(cls)) byClass.values().forEach(all::addAll);
-		else all.addAll(byClass.get(cls));
+		if ("random".equals(cls)) byClass.values().forEach(all::addAll);
+		else all.addAll(byClass.getOrDefault(cls, List.of()));
 		if (all.isEmpty()) return null;
 		List<Entry> fresh = all.stream().filter(e -> !used.contains(e.seed())).toList();
 		if (fresh.isEmpty()) {            // hepsi kullanildi: bu siniflari yeniden ac

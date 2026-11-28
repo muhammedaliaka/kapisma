@@ -1,0 +1,24 @@
+features:
+  prevent-moving-into-unloaded-chunks: false
+  autosave-interval-seconds: 300
+  xp-merge-fraction: 40
+  xp-merge-radius: 0.5
+  item-merge-radius: 0.5
+  lobotomize-villagers:
+    enabled: false
+    tick-interval: 20
+dynamic:
+  enabled: false
+breeding-cap:
+  enabled: false
+activation-range:
+  enabled: false
+mob-spawning:
+  zombie-reinforcements:
+    enforce-mobcap: false
+  nether-portal-randomticks:
+    enforce-mobcap: false
+  monster-spawners:
+    enforce-mobcap: false
+  infested:
+    enforce-mobcap: false

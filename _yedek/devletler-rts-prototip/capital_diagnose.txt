@@ -1,0 +1,21 @@
+function krts:reset
+player Bot1 spawn
+player Bot2 spawn
+function krts:start
+await Hazırlık başladı.
+scoreboard players get #capital_mode krts_ctrl
+data get entity @e[tag=krts.capital,tag=krts.s1,limit=1] Health
+data get entity @e[tag=krts.capital,tag=krts.s1,limit=1] Invulnerable
+data get entity @e[tag=krts.capital,tag=krts.s1,limit=1] NoAI
+attribute @e[tag=krts.capital,tag=krts.s1,limit=1] minecraft:generic.max_health get
+data get entity @e[tag=krts.capital,tag=krts.s1,limit=1] OwnerUUID
+scoreboard players set #left krts_ctrl 1
+await Üç bölge açık.
+data get entity @e[tag=krts.capital,tag=krts.s1,limit=1] Health
+tp @e[tag=krts.unit,tag=krts.s2,type=hundred_years_war:militia,limit=1] 0 -60 -59
+data merge entity @e[tag=krts.unit,tag=krts.s2,type=hundred_years_war:militia,limit=1] {AttackStrategy:"free_fight"}
+wait 8
+data get entity @e[tag=krts.capital,tag=krts.s1,limit=1] Health
+damage @e[tag=krts.capital,tag=krts.s1,limit=1] 500 minecraft:mob_attack by @e[tag=krts.unit,tag=krts.s2,limit=1]
+await Devlet 2 kazandı. Son başkent ayakta.
+function krts:reset

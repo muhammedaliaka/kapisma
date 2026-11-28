@@ -1,6 +1,6 @@
 # Kapışma — Kullanım Rehberi
 
-UHC, Tombala (Bingo), Manhunt, Katil Kim. En fazla 8 oyuncu. Minecraft 1.21.1 + Fabric. **Herkes sunucu kurabilir**: Windows, Linux, Mac ve Android tablet (Termux).
+UHC, Tombala (Bingo), Eşya Yarışı, Manhunt ve Katil Kim. En fazla 8 oyuncu. Minecraft 1.21.1 + Fabric. **Herkes sunucu kurabilir**: Windows, Linux, Mac ve Android tablet (Termux).
 
 ## 0. En kolay yol (Windows): tek düğmeli pencereler
 İki paket var ([`dist/`](dist) klasörü):
@@ -51,7 +51,7 @@ New-NetFirewallRule -DisplayName "Kapisma Ses" -Direction Inbound -Protocol UDP 
 ## 3. Oyun nasıl başlar
 - Sunucuya **ilk giren** oyuncu host olur (kuralları o ayarlar). Oyuncular lobide (boş bir dünyada yüzen aydınlık platform; altında dünya yoktur) toplanır.
 - Menü: envanterdeki **Nether Yıldızı**'na sağ tık, ya da `/kapisma menu`.
-- Ana menü sade: oyun modu (UHC / Tombala / Manhunt / Katil Kim), takım (Solo / Duo), **Ayarlar**, **Başlat**. Irk modu, yasaklı ırklar, kurallar, seed sınıfı ve host devri **Ayarlar** alt menüsündedir.
+- Ana menü sade: oyun modu (UHC / Tombala / Eşya Yarışı / Manhunt / Katil Kim), takım (Solo / Duo), **Ayarlar**, **Başlat**. Irk modu, yasaklı ırklar, kurallar, seed sınıfı ve host devri **Ayarlar** alt menüsündedir.
 - Manhunt'ta menüde **Runner seç** düğmesi çıkar (`/kapisma runner <oyuncu|temizle>`). **Host devret** düğmesi hostluğu başkasına verir; host çıkarsa en eski oyuncu otomatik host olur.
 - Oyun içi sohbet: normal yazı sadece takıma gider. `/tc <mesaj>` takım, `/herkes <mesaj>` herkes, `/takim <takım> <mesaj>` seçilen takım, `/ozel <oyuncu> <mesaj>` tek kişi. `/koord` koordinatını takıma gönderir. Elenenler sadece diğer seyircilere yazabilir. Lobide yazılan herkese gider.
 - Takım rengi/adı: `/takimim renk <renk>`, `/takimim isim <ad>`, `/takimim sifirla` (menüde "Takımım").
@@ -59,7 +59,7 @@ New-NetFirewallRule -DisplayName "Kapisma Ses" -Direction Inbound -Protocol UDP 
 - Oyun bitince sonuç ekranı (sıralama, öldürme/ölüm, ırklar) sohbete yazılır.
 - Oyunlarda **PvP** kuralı vardır (UHC, Tombala, Manhunt): kapatılırsa oyuncular birbirine vuramaz. Menü → Ayarlar → Kurallar ya da `/kapisma rule <oyun> pvp 0`.
 - Komutlar: `/pusula [sonraki|onceki]` (pusula hedefi), `/kart` (Tombala kartı), `/koord`, `/istatistik [oyuncu]`, `/puan`, `/parkur`, `/kapisma status|start|stop`, `/kapisma rules`, `/kapisma rule <oyun> <kural> <değer>`, `/kapisma ban|unban <ırk>`; istemci (HUD modu) komutu `/hud`.
-- **Pusula** (UHC, Tombala, Manhunt hunter'ları, Katil Kim): oyun başında çantaya verilir. **Sağ tık** hedefi sırayla değiştirir (Shift + sağ tık: geri, ya da `/pusula`). Elinde tutarken eylem çubuğunda hedef adı, yön oku ve mesafe canlı yazar; ibre saniyede 4 kez yenilenir. Hedefler moda göre: UHC = en yakın/en uzak rakip, takım arkadaşların, sınır merkezi, başlangıç noktan; Tombala = rakipler, takım arkadaşların, başlangıç noktası; Manhunt hunter = en yakın/en uzak runner, belirli runner, takım arkadaşı (Nether/End'de portal izi); Katil Kim = en yakın/en uzak oyuncu (isimsiz). Harita üzerindeki pusula hedefi (altın baklava) yeni HUD modu ister; eski HUD modunda harita çalışır, baklava görünmez. Kural `compass` (UHC/Tombala: 0 kapalı, 1 takım+merkez, 2 + rakipler; varsayılan 2). Manhunt'ta `compassIntervalSec` (0 = canlı) gecikme ekler.
+- **Pusula** (UHC, Tombala, Manhunt hunter'ları, Katil Kim): oyun başında çantaya verilir. **Sağ tık** hedefi sırayla değiştirir (Shift + sağ tık: geri, ya da `/pusula`). Elinde tutarken eylem çubuğunda hedef adı ve yön oku canlı yazar; ibre saniyede 4 kez yenilenir. Hedefler moda göre: UHC = en yakın/en uzak rakip, takım arkadaşların, sınır merkezi, başlangıç noktan; Tombala = rakipler, takım arkadaşların, başlangıç noktası; Manhunt hunter = en yakın/en uzak runner, belirli runner, takım arkadaşı (Nether/End'de portal izi); Katil Kim = en yakın/en uzak oyuncu (isimsiz). Harita üzerindeki pusula hedefi (altın baklava) yeni HUD modu ister; eski HUD modunda harita çalışır, baklava görünmez. Kural `compass` (UHC/Tombala: 0 kapalı, 1 takım+merkez, 2 + rakipler; varsayılan 2). Manhunt'ta `compassIntervalSec` (0 = canlı) gecikme ekler.
 
 ### Lobi: parkur ve puan
 - Meydanın doğusundaki kemerden geçip yeşil platforma çıkınca **parkur** başlar: tek rota, 4 bölüm (KOLAY, ORTA, ZOR, ÇOK ZOR), altın platformlar checkpoint, bölüm sonları 5x5 beyaz platform. Rotadaki her zıplama fizik simülasyonuyla geçilebilir doğrulanmıştır (`tools/parkour_gen.py --check`).
@@ -73,17 +73,31 @@ New-NetFirewallRule -DisplayName "Kapisma Ses" -Direction Inbound -Protocol UDP 
 |---|---|---|
 | UHC | ±1000 (kural: 200–1000), zamanla daralır, Nether kapalı | Son takım ayakta. Başlangıçta takımlar merkezden `scatterRadius` (varsayılan 500, en çok 700) içinde rastgele ve birbirinden uzak doğar |
 | Tombala | ±1000 | **Herkes aynı noktada başlar (kıyak yok).** 5x5 kartta 3 çizgi (satır/sütun/çapraz) tamamlayan takım; lockout: eşyayı ilk alan takım sayar. Kartta eşya + başarı görevi karesi bulunur |
-| Manhunt | Sınırsız, ana dünya (Nether/End açık) | **Herkes aynı noktada, aynı anda başlar.** Runner ejderhayı öldürürse runner, runner ölürse hunter'lar kazanır. Runner'ı host menüden seçer (seçmezse rastgele). Pusula Nether/End geçişinde de runner'ın son bilinen izini gösterir |
-| Katil Kim | Sınırsız, ana dünya (Nether/End açık) | Masumlar **katil hepsini öldürmeden Ender Ejderhası'nı** öldürürse kazanır; katil tüm masumları elerse kazanır. 1 gizli katil (6+ oyuncuda 2'ye kadar), herkes aynı skin'de, isim etiketi yok. Herkes başta 200x200'lük alanda rastgele doğar |
+| Manhunt | Varsayılan ±10.000, Nether/End açık | **Herkes aynı noktada, aynı anda başlar.** Runner ejderhayı öldürürse runner, runner ölürse hunter'lar kazanır. Runner'ı host menüden seçer (seçmezse rastgele). Pusula Nether/End geçişinde de runner'ın son bilinen izini gösterir |
+| Katil Kim | Varsayılan ±10.000, Nether/End açık | Masumlar **katil hepsini öldürmeden Ender Ejderhası'nı** öldürürse kazanır; katil tüm masumları elerse kazanır. 1 gizli katil (6+ oyuncuda 2'ye kadar), herkes aynı skin'de, isim etiketi yok. Herkes başta 200x200'lük alanda rastgele doğar |
 
-### Tombala: ulaşılabilir eşya ve konum bilgisi
-- Kart rastgele değil "bu 1000 blokluk alanda gerçekten bulunabilir" eşyalardan çıkar. Oyun başlarken dünya üreteci taranır (biyomlar + yapılar), resmî oyun verisinden (`tools/mcknow.py` → `knowledge.json`) hangi biyom/yapıda hangi blok, yaratık düşüşü, sandık eşyası olduğu bilinir; tarif zinciriyle üretilebilen eşyalar da dahil edilir. Alanda olmayan eşya (ör. kaktüs için çöl yoksa) karta girmez. End ve Nether eşyaları kart dışıdır.
-- **Zorluk puanlaması (yıldız):** her eşya için bu seed'de "ne kadar uğraşla elde edilir" hesaplanır (`ItemCost`): kaynağın (blok/yaratık/sandık/balık tutma) en yakın biyom ya da yapıya **uzaklığı** (220 blok ≈ 1 dk), kazma seviyesi ve derinlik, yaratığın avlanma zorluğu, nadir düşüş/sandık şansı ve tarif zincirinin eklediği zorluk toplanır. Yapı malzemesi kolay olsa bile en yakın kaynağı uzaksa pahalı sayılır; demir/elmas gibi cevherler kazılarak elde edilir (ipeksi dokunuşla cevher bloğu almak sayılmaz). Kartta eşyanın açıklamasında ★ sayısı ve tahmini süre görünür. Kural `difficulty` (1 kolay, 2 normal, 3 zor) kolay/orta/zor eşya oranını belirler; kart aynı ailenin (renk/ağaç türü) tekrarını ve fazla alet/zırh/yemek yığılmasını engeller.
-- **Görev kareleri** (kural `tasks`, 0–8, varsayılan 3): kartta eşya yerine başarı görevi çıkabilir (ok at, hayvan üret/evcilleştir, balık tut, köylüyle ticaret, lav kovası, obsidyen, büyüleme, uyku, kalkanla ok savurma, toz karda yürüme...). Sadece bu seed'de yapılabilir olanlar seçilir; oyun başında herkesin bu ilerlemeleri sıfırlanır; tamamlayan takım kareyi alır.
-- Konum bilgisi (hile değil): altta bulunduğun **biyom** yazar; karttaki ipuçlarında "şu biyomlarda / sandıkta: …" bilgisi çıkar; kartta **Bölge biyomları** düğmesi bu alandaki biyom ve yapı türlerini listeler. Koordinat verilmez. Kural: `biomeInfo`.
+### Eşya Yarışı
+
+Her tur oyunculara birbirinden farklı birer gizli eşya atanır. Görevler, oyun sınırı içinde yüklü arazide doğrulanan malzemelerden seçilir. `/gorev` kendi görevini gösterir.
+
+Herkes beş canla başlar. Eşyayı süre içinde alan bir puan kazanır. Süre dolduğunda görev tamamlanmadıysa bir can gider ve puan sıfırlanır. Her beş puanda bir atlama hakkı eklenir. `/atla` mevcut turu can ve puan kaybı olmadan geçirir.
+
+Host kurallardan tur süresini (`roundSec`), tur limitini (`roundLimit`), kazanma puanını (`scoreGoal`) ve envanter korumasını (`keepInventory`) ayarlayabilir. Başlangıçta alan 1000×1000 bloktur.
+
+### UHC hazineleri
+
+Yere düşen normal elmalar altın elmaya dönüşür. `treasureChests` varsayılan olarak dört hazine sandığı açar ve 0–64 arası ayarlanabilir. Sandıklar yüzeyde ve daralma tamamlandığında bile sınır içinde kalır. Köydeki fıçılarda sandık başına kırmızı X işaretli bir harita bulunur. Sınır içinde köy bulunamazsa haritalar merkeze yerleştirilir.
+
+### Tombala doğrulaması ve boyut kuralları
+
+Host, kazanmak için gereken çizgi sayısını `lines` ile 1–12 arasında ayarlayabilir. **Eşyalar herkese sayılsın** (`sharedItems`) açıkken aynı eşyayı alan her takım kendi kartında bir puan kazanır.
+
+Kart, maçın kendi seed ve sınırında üretilmiş parçalardan hazırlanır. Hedef seçimi, görülen kaynağa, gereken alet ve istasyona, tarif miktarına ve geçilebilir bir kazma noktasına dayanır. Mağaradaki hedefler için yüksekliği ve aydınlığı da dikkate alır. Harita kontrolünün üst süresi `verifySec` ile 10–60 saniye arasında ayarlanabilir. Tam kart doğrulanamazsa maç başlamaz ve host başka seed seçebilir.
+
+`netherTasks` ve `endTasks` ayrı host kurallarıdır. İlgili görev kartta seçilirse maçın geçici boyutu kullanılır. End portalı X 0, Z 0 konumundadır. Nether'ın varsayılan keşif alanı 600×600 bloktur. Girişte yatay koordinat ölçeği 8:1 uygulanır. Uzak portaldan çıkış oyuncuyu maçın Overworld'ündeki güvenli 300×300 dönüş bölgesine getirir.
 
 ### UHC / Tombala mini harita
-- `kapisma-hud` modu olanlara sağ üstte arazisiz harita: beyaz = başlangıç sınırı, kırmızı = şimdiki sınır, yeşil = son sınır (UHC), sarı çizgili nokta = sen, renkli noktalar = takım arkadaşların, altın baklava = pusulanın hedefi. Altında koordinatın ve renk açıklaması (kapatılabilir). **Boyutlar ekrana göre otomatik** küçülür; elle: `/hud boyut <0.4-1.5|otomatik>`, `/hud kart ...`, `/hud harita ...` (boyut/aç/kapat), `/hud aciklama kapat`, `/hud sifirla` (ayar `config/kapisma-hud.properties`'te saklanır). `H` tuşu HUD'u gizler. Mod olmayanlara oyun başında 2048 blokluk biyom önizlemeli harita verilir. Kural: `minimap`.
+- `kapisma-hud` modu olanlara sağ üstte arazisiz harita: beyaz = başlangıç sınırı, kırmızı = şimdiki sınır, yeşil = son sınır (UHC), sarı çizgili nokta = sen, renkli noktalar = takım arkadaşların, altın baklava = pusulanın hedefi. Altında koordinatın, takım adın ve renk açıklaması görünür. Dünya sınırını geçersen başlık ve sohbet uyarısı alırsın. **Boyutlar ekrana göre otomatik** küçülür; elle: `/hud boyut <0.4-1.5|otomatik>`, `/hud kart ...`, `/hud harita ...` (boyut/aç/kapat), `/hud aciklama kapat`, `/hud sifirla` (ayar `config/kapisma-hud.properties`'te saklanır). `H` tuşu HUD'u gizler. Başlangıçta biyomları ve sınır çizgisini gösteren 2048 blokluk bölge haritası verilir. Kural: `minimap`.
 
 ### Katil Kim kuralları (oyun akışı)
 - **Amaç:** masumlar katil(ler) hepsini öldürmeden Ender Ejderhası'nı öldürürse kazanır. Katil(ler) tüm masumları elerse kazanır. Oylama/toplantı yoktur: kimin katil olduğunu davranıştan, ses ve pusuladan çıkarırsın.
@@ -91,7 +105,7 @@ New-NetFirewallRule -DisplayName "Kapisma Ses" -Direction Inbound -Protocol UDP 
 - **Başlangıç koruması** (`graceSec`, 60 sn): kimse kimseye vuramaz; katile özel donma/etki yoktur, böylece kimse ele verilmez. Katil, diğer katilin adını sadece kendisine söylenen mesajdan öğrenir.
 - **Ölüm:** katil bir oyuncu tarafından öldürülürse yeniden doğar (sınırsız). Masum öldürülürse elenir; "☠ X öldü. Kalan masum: n" yazılır, kimin yaptığı yazılmaz. Düşme/canavar/lav gibi doğal ölümde de masum elenir (kural `natureEliminates`; kapalıysa yeniden doğar).
 - **Dürüst hasar:** masumlar birbirine vurabilir (varsayılan açık); kapatılırsa vuran kişi "hasar yok" görüp katili bulabilir (önerilmez). Oyuncu çıkarsa: tüm katiller 3 dk yoksa masumlar, tüm masumlar yoksa katil kazanır.
-- **Mod uyarısı:** `kapisma-hud` modu olmayan oyuncunun skin'i gizlenmez; oyun başında herkese bu oyuncular uyarı olarak yazılır. En az 3 oyuncu gerekir, 5-6 önerilir.
+- **Güncel Kapışma HUD zorunludur.** Başlangıç koruması bitince katil P ile gizli güç ve direnci açıp kapatır. Durum bildirimi yalnızca katile görünür.
 
 ### Başlangıç yerleri (özet)
 | Mod | Nasıl doğulur |
@@ -101,25 +115,25 @@ New-NetFirewallRule -DisplayName "Kapisma Ses" -Direction Inbound -Protocol UDP 
 | Tombala, Manhunt | Hepsi aynı noktada, aynı anda (kıyak yok) |
 
 ### UHC oyun içi ekran
-Sağ ortada **yan panel** (kural `sidebar`): süre, PvP durumu/geri sayım, sınır yarıçapı (daralıyorsa hedefi de), kalan takım/oyuncu, **en çok öldürenler**. Altta eylem çubuğunda **merkez yönü oku + mesafe** (`Merkez: 340 ↗`; sınır dışındaysan kırmızı uyarı) ve kendi öldürme sayın. **Can göstergesi** (kural `showHealth`, UHC/Manhunt açık, Tombala kapalı): Tab listesinde ve isim etiketinin altında kalpler — doğal yenilenme kapalı UHC'de rakibin canını görmek için. Takım arkadaşın ölünce sana **ölüm konumu** yazılır (eşyaları orada). Katil Kim'de kimlik gizli olduğu için can gösterimi yoktur.
+Sağ ortada **yan panel** (kural `sidebar`): süre, PvP durumu/geri sayım, sınır yarıçapı (daralıyorsa hedefi de), kalan takım/oyuncu, **en çok öldürenler**. Altta eylem çubuğunda **merkez yönü oku** (`Merkez: ↗`) ve kendi öldürme sayın. **Can göstergesi** (kural `showHealth`, UHC/Manhunt açık, Tombala kapalı): Tab listesinde ve isim etiketinin altında kalpler — doğal yenilenme kapalı UHC'de rakibin canını görmek için. Takım arkadaşın ölünce sana **ölüm konumu** yazılır (eşyaları orada). Katil Kim'de kimlik gizli olduğu için can gösterimi yoktur.
 
-### Hile koruması ("halüsinasyon")
-Kural `antiXray` (UHC, Tombala, Manhunt, Katil Kim; 0 kapalı, 1 cevher koruması, 2 tam koruma — varsayılan 2). Sunucu, istemciye giden dünya verisini değiştirir; oyun mantığı gerçek dünyayla çalışır:
-- **Gömülü cevherler gizlenir:** havaya açık olmayan kömür, demir, bakır, altın, kızıltaş, lapis, elmas, zümrüt (ve Nether'de altın, kuvars, antik kalıntı) yerine taş görünür; gerçek yeri istemciye hiç gönderilmez.
-- **Sahte cevherler (halüsinasyon):** gerçek cevherin yerine aynı bölümde başka, tamamen taşla çevrili yerlere sahte cevher konur. Sahte yerler her chunk için sabittir (iki kez istenip karşılaştırılarak ayıklanamaz). Sahteyi kırarsan taş çıkar.
-- **Boşluk düzleştirme (mod 2, sadece Overworld):** yüzeyin 6 blok altındaki mağara/tünel boşlukları, yapı blokları (tuğla, tahta, ray, sandık, spawner...) düz taş gösterilir; sandık/spawner verisi pakete konmaz. X-ray ile mağara ya da gizli yapı görülemez.
-- **Yaklaşınca açılır:** bağlı havada yürürken (~10 blok), blok kırınca ya da patlayınca gerçek hâli blok güncellemesiyle gönderilir. Normal oyuncu hiçbir fark görmez; mağaralar yürüdükçe açılır.
-- Nether ve End'de boşluk gizleme yoktur (ufuk görüşü oyunun parçası); Nether'de sadece cevher koruması çalışır.
-- Test: `/kapisma debug xray audit` (op): chunk paketini istemci gibi çözer, sızıntı/belirsizlik/açılma doğrular; `... status`, `... simulate`, `... tpcave`.
-- Bilinen sınır: yaratıklar (ESP) ve ışık verisi korunmaz; yapı sandığı gibi şeyler yalnızca "yeraltında ve açığa çıkmamışsa" saklanır.
+### X-ray koruması
+
+`antiXray` açıkken taşla çevrili cevherlerin yeri gizlenir. Açık cevherler, mağara havası, tüneller ve sandıklar gerçek hâlleriyle gönderilir. Dünya değişince yakındaki açığa çıkan cevherler güncellenir.
 
 ### Oyuncu hile koruması (`antiCheat`, UHC / Tombala / Manhunt / Katil Kim; varsayılan açık)
 Oyun **başlayınca** devreye girer (lobide kapalı), sunucu tarafında çalışır:
-- **ESP / wallhack / oyuncu radarı:** duvar, zemin ya da dağ gibi **tam opak blok** arkasındaki oyuncu, bakan oyuncunun istemcisine **hiç gönderilmez** (paket seviyesinde; istemci o oyuncunun var olduğunu bilmez). Köşeyi dönerken göz kırpma olmasın diye görüş hattı geniş payla (köşeden ~1 blok önce) ve 0,8 sn bekletmeyle hesaplanır; cam/yaprak/yarım blok/çit görüşü engellemez. Muaf: 8 blok yakın, takım arkadaşı, parlayan (final) oyuncu, seyirci. 144 bloktan uzaktakiler hiç gönderilmez. Maliyet: oyuncu çifti başına 4 tikte bir birkaç ışın; LITE profilde 8 tikte bir.
+- **ESP / wallhack / oyuncu radarı:** duvar, zemin ya da dağ gibi **tam opak blok** arkasındaki oyuncu, bakan oyuncunun istemcisine **hiç gönderilmez** (paket seviyesinde; istemci o oyuncunun var olduğunu bilmez). Köşeyi dönerken göz kırpma olmasın diye görüş hattı geniş payla (köşeden ~1 blok önce) ve 0,8 sn bekletmeyle hesaplanır; cam/yaprak/yarım blok/çit görüşü engellemez. Muaf: 8 blok yakın, takım arkadaşı, parlayan (final) oyuncu, seyirci. 144 bloktan uzakta oyuncu takibini vanilla yürütür. Maliyet: oyuncu çifti başına 4 tikte bir birkaç ışın; LITE profilde 8 tikte bir.
 - **Vuruş denetimi:** menzil aşımı (normal erişim + 1,3 blok; vanilla sunucu +3 payı verir), katı blok arkasından vuruş ve aşırı tıklama (1 sn'de 18'den fazla) engellenir; olaylar sunucu günlüğüne `[koruma]` olarak yazılır.
 - **Seed gizleme:** istemciye giden "hashed seed" uydurma bir değerle değiştirilir; hile istemcisi seed'i doğrulayamaz. Gerçek seed'i (ve bununla yapı/biyom konumlarını) istemci hiçbir yoldan öğrenemez.
 - Komutlar (op): `/kapisma debug guard status|force 0/1/-1|probe <bakan> <hedef>|hit <bakan> <hedef> <adet>`.
 - **Bu yapılamaz (dürüst sınırlar):** istemcide çalışan hileler sunucudan engellenemez — fullbright/gece görüşü, kendi ekranında freecam, damage/FPS göstergesi, otomatik totem/pot, yardımcı nişan (aimbot), Baritone gibi yol botları. Vanilla sunucu zaten uçmayı, aşırı hızı ve blok erişim menzilini denetler (`allow-flight=false`). Birine güvenmiyorsan oynatma ya da beyaz listeyi kullan; hile istemcisi bulunduğunda `ban` komutu var.
+
+### İzleyiciler
+
+Elenen oyuncunun izleyici pusulası sağ tıkla bir menü açar. `/izle` komutu da aynı menüyü açar. Canlı oyuncunun yanına veya elenenin son konumuna gidebilirsin. İzleyiciler kendi aralarında yazılı ve sesli sohbet edebilir.
+
+Lobide **Oyuncular ve takımlar** ile **Irklar ve özellikleri** menüleri bulunur. Maç başlamadan takımlar sohbette ilan edilir. Katil Kim'de roller maç sonuna kadar gizli kalır.
 
 ### Ses (sesli sohbet) her modda açık
 - Sesli sohbet için sunucuya ve herkesin istemcisine **Simple Voice Chat 2.6.27 (Fabric 1.21.1)** kurulur (sunucu ve oyuncu paketinde hazır). Ses UDP **24454** portundan gider.
@@ -130,7 +144,7 @@ Oyun **başlayınca** devreye girer (lobide kapalı), sunucu tarafında çalış
 - Windows güvenlik duvarı (yönetici PowerShell): `New-NetFirewallRule -DisplayName "Kapisma Voice" -Direction Inbound -Protocol UDP -LocalPort 24454 -Action Allow`
 
 ## 4b. Testler
-`bash tools/run_all.sh` canlı sunucuya dokunmadan `server_test\` kopyasında (port 25570) 19 senaryoyu çalıştırır (UHC, Tombala, Manhunt, Katil Kim, ırklar, parkur, hile koruması, ses grupları) ve ayrıca 3 senaryoyu zayıf cihaz (LITE) profilinde yeniden koşar; sonuç `tools\run_all.out`. Canlı sunucu açıkken test çalıştırma. Yeni jar kopyalama, test kopyası ve parkur senaryosu üretimi script içindedir.
+`bash tools/run_all.sh` canlı sunucuya dokunmadan `server_test\` kopyasında (port 25570) oyun senaryolarını çalıştırır (UHC, Tombala, Manhunt, Katil Kim, ırklar, parkur, hile koruması, ses grupları) ve ayrıca 3 senaryoyu zayıf cihaz (LITE) profilinde yeniden koşar; sonuç `tools\run_all.out`. Canlı sunucu açıkken test çalıştırma. Yeni jar kopyalama, test kopyası ve parkur senaryosu üretimi script içindedir.
 
 Manhunt "temiz" ana dünya ister. Dünya daha önce Manhunt'ta kullanıldıysa **Başlat**'a basınca sunucu otomatik kapanıp yeni seed'le açılır (~40 sn sonra tekrar bağlanılır). Bunun için sunucu mutlaka `start.bat` / `start.sh` ile açılmış olmalı (yeniden açma döngüsü onlarda). Elle de istenebilir: `/kapisma newworld`.
 
@@ -141,7 +155,8 @@ Manhunt "temiz" ana dünya ister. Dünya daha önce Manhunt'ta kullanıldıysa *
 - `python tools/test_wizard.py [--boot]` iki pencerenin düğmelerine gerçekten tıklayıp (tek kurulum, ikinci açılışta kapalı), kurulumun doğru klasöre yazdığını ve ayarlanan sunucunun beyaz listeyi uyguladığını doğrular.
 - `python tools/test_pack.py` sunucu paketini temiz klasöre açıp gerçek `start.bat` ile açar, seed seçimini, ses modunu, yeni dünya döngüsünü ve temiz kapanışı doğrular (`--sh` start.sh, `--lite` zayıf cihaz).
 - `tools\` test/paket/seed araçları (bkz. `tools\README.md`). Doğrulanmış seed havuzu `pack\server\seeds.json`.
-- Yerel çalışma kopyaları (git dışı): `server\` canlı sunucu, `server_test\` test kopyası, `release\` üretilen paketler, `_yedek\` eski/gereksiz dosyaların yedeği (silmeden önce buraya taşınır).
+- [Devletler RTS](prototypes/devletler-rts/README.md), 2–8 oyuncuyla ayrı Fabric 1.21.1 profilinde açılır. [Diğer prototiplerin araştırma notları](docs/OYUN_MODU_ARASTIRMASI.md) ve [Android performans araçları](optimize/README.md) kendi klasörlerindedir.
+- Yerel sunucu ve dünya kayıtları `server\`, test kopyaları `server_test\`, üretilen paketler `release\` altındadır. RTS’nin Git’teki test betikleri `_yedek/devletler-rts-prototip` içindeki yerel laboratuvarı kullanır.
 
 ## 6. Sorun giderme
 - Arkadaş bağlanamıyor: Tailscale açık mı, paylaşım kabul edildi mi, güvenlik duvarı kuralı eklendi mi (`guvenlik_duvari_ac.bat`), host sunucusu `Done` yazdı mı?

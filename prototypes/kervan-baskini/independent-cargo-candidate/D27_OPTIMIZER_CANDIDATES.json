@@ -1,0 +1,25 @@
+{
+  "minecraft": "1.21.1",
+  "loader": "fabric",
+  "status": "candidate only",
+  "mods": [
+    {
+      "slug": "lithium",
+      "versionId": "N08Z8wog",
+      "name": "lithium-fabric-0.15.4+mc1.21.1.jar",
+      "size": 797454,
+      "sha512": "182064b00e6315e2255b857eaab8eb759e6b042ebd4cc8b855ff0d93f875a5a7188fac49f878d7b29d4ef7e6b6341190ad7f6f6f39f4a6d2c62003468b08e4c6",
+      "url": "https://cdn.modrinth.com/data/gvQqBUqZ/versions/N08Z8wog/lithium-fabric-0.15.4%2Bmc1.21.1.jar",
+      "license": "LGPL-3.0-only"
+    },
+    {
+      "slug": "ferrite-core",
+      "versionId": "sOzRw3CG",
+      "name": "ferritecore-7.0.3-fabric.jar",
+      "size": 123450,
+      "sha512": "3ad31620fac4ff44327dc7dedbe162b2d978f3f246dc16255a6e400ce9592a0d326fe36a626f3c1bf30a11f813093cbb4dcc107af039cff724d0cdf648541fdf",
+      "url": "https://cdn.modrinth.com/data/uXXizFIs/versions/sOzRw3CG/ferritecore-7.0.3-fabric.jar",
+      "license": "MIT"
+    }
+  ]
+}

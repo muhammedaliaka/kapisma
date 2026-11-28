@@ -1,0 +1,10 @@
+player Bot1 spawn
+player Bot2 spawn
+execute store result score #restored_capital_hp krts_ctrl run data get entity @e[tag=krts.capital,tag=krts.s1,limit=1] Health 1000
+execute if score #phase krts_ctrl matches 4 if score #restored_capital_hp krts_ctrl = #saved_capital_hp krts_ctrl if entity @e[tag=krts.capital,tag=krts.s1,nbt={Invulnerable:1b,NoAI:1b}] run say CAPITAL_HP_PERSISTED
+await CAPITAL_HP_PERSISTED
+function krts:resume
+await Maç devam ediyor.
+damage @e[tag=krts.capital,tag=krts.s1,limit=1] 500 minecraft:mob_attack by @e[tag=krts.unit,tag=krts.s2,limit=1]
+await Devlet 2 kazandı. Son başkent ayakta.
+function krts:reset

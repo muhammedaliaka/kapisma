@@ -1,0 +1,16 @@
+# Flat test fixture: adaptive scan cannot invent unavailable resources.
+player Bot1 spawn
+player Bot2 spawn
+wait 2
+kapisma game BINGO
+kapisma origins off
+kapisma team solo
+kapisma seedclass random
+kapisma rule BINGO borderStart 200
+kapisma rule BINGO tasks 0
+kapisma rule BINGO sharedItems 1
+kapisma rule BINGO verifySec 45
+kapisma start
+await Tombala ek tarama:
+await Bu seed ve sınırda 25 farklı hedef doğrulanamadı. Maç başlatılmadı.
+await Arena depolama kapandı:

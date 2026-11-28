@@ -1,0 +1,45 @@
+# A grant/revoke/grant sequence is executed within one server tick.
+# Verify the card actually contains the chosen advancement from the raw log.
+player Bot1 spawn
+player Bot2 spawn
+wait 2
+kapisma game BINGO
+kapisma origins off
+kapisma team solo
+kapisma seedclass qa_task_order
+kapisma rule BINGO borderStart 1000
+kapisma rule BINGO verifySec 45
+kapisma rule BINGO tasks 8
+kapisma rule BINGO endTasks 0
+kapisma rule BINGO netherTasks 0
+kapisma rule BINGO lines 12
+kapisma rule BINGO goal 0
+kapisma rule BINGO minimap 0
+kapisma rule BINGO sharedItems 0
+say QA_TASK_CASE_EXCLUSIVE
+kapisma start
+await Tombala başladı!
+function kapisma_task_order:order
+await QA_TASK_ORDER_DONE
+wait 2
+kapisma stop
+await Arena depolama kapandı:
+kapisma rule BINGO sharedItems 1
+say QA_TASK_CASE_SHARED
+kapisma start
+await Tombala başladı!
+function kapisma_task_order:order
+await QA_TASK_ORDER_DONE
+wait 2
+kapisma stop
+await Arena depolama kapandı:
+# Same tick: both reach the goal; duplicate grants must not double-score.
+kapisma rule BINGO goal 1
+say QA_TASK_CASE_TIE
+kapisma start
+await Tombala başladı!
+function kapisma_task_order:simultaneous
+await QA_TASK_ORDER_DONE
+await BINGO bitti: kazanan yok
+kapisma stop
+await Arena depolama kapandı:

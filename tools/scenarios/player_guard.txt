@@ -64,10 +64,11 @@ fill -2 98 1 2 103 1 minecraft:stone
 kapisma debug guard hit Bot1 Bot2 1
 expect engellenen=1 gecen=0
 fill -2 98 1 2 103 1 minecraft:air
-# 8) asiri tiklama: ayni tikte 30 vurus -> ilk 18 gecer, kalani engellenir
+# 8) Aynı tikte biriken vuruşlar tıklama gözlemine girer. Vanilla vuruş süresi uygulanır.
 kapisma debug guard hit Bot1 Bot2 30
-expect engellenen=12 gecen=18
+expect engellenen=0 gecen=30
 kapisma debug guard status
+expect tiklama_gozlem=
 # 9) koruma kapaliyken hicbir sey engellenmez
 kapisma debug guard force 0
 wait 1

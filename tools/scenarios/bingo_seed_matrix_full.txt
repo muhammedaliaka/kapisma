@@ -1,0 +1,139 @@
+# Altı seed sınıfı, iki sınır büyüklüğü, üç zorluk ve iki puanlama kuralı.
+player Bot1 spawn
+player Bot2 spawn
+wait 2
+kapisma game BINGO
+kapisma origins off
+kapisma rule BINGO minimap 0
+say MATRIS ova 200 1 0 0
+kapisma seedclass ova
+kapisma rule BINGO borderStart 200
+kapisma rule BINGO difficulty 1
+kapisma rule BINGO tasks 0
+kapisma rule BINGO sharedItems 0
+kapisma start
+await Tombala doğrulama:
+capture card Tombala karti: (?:25 eşya \+ 0|24 eşya \+ 1|23 eşya \+ 2|22 eşya \+ 3|21 eşya \+ 4|20 eşya \+ 5|19 eşya \+ 6|18 eşya \+ 7|17 eşya \+ 8) görev, ortalama zorluk ([\d,.]+)
+await Tombala başladı!
+kapisma stop
+say MATRIS orman 200 2 3 1
+kapisma seedclass orman
+kapisma rule BINGO borderStart 200
+kapisma rule BINGO difficulty 2
+kapisma rule BINGO tasks 3
+kapisma rule BINGO sharedItems 1
+kapisma start
+await Tombala doğrulama:
+capture card Tombala karti: (?:25 eşya \+ 0|24 eşya \+ 1|23 eşya \+ 2|22 eşya \+ 3|21 eşya \+ 4|20 eşya \+ 5|19 eşya \+ 6|18 eşya \+ 7|17 eşya \+ 8) görev, ortalama zorluk ([\d,.]+)
+await Tombala başladı!
+kapisma stop
+say MATRIS taiga_kar 200 3 8 0
+kapisma seedclass taiga_kar
+kapisma rule BINGO borderStart 200
+kapisma rule BINGO difficulty 3
+kapisma rule BINGO tasks 8
+kapisma rule BINGO sharedItems 0
+kapisma start
+await Tombala doğrulama:
+capture card Tombala karti: (?:25 eşya \+ 0|24 eşya \+ 1|23 eşya \+ 2|22 eşya \+ 3|21 eşya \+ 4|20 eşya \+ 5|19 eşya \+ 6|18 eşya \+ 7|17 eşya \+ 8) görev, ortalama zorluk ([\d,.]+)
+await Tombala başladı!
+kapisma stop
+say MATRIS col_mesa 200 2 3 1
+kapisma seedclass col_mesa
+kapisma rule BINGO borderStart 200
+kapisma rule BINGO difficulty 2
+kapisma rule BINGO tasks 3
+kapisma rule BINGO sharedItems 1
+kapisma start
+await Tombala doğrulama:
+capture card Tombala karti: (?:25 eşya \+ 0|24 eşya \+ 1|23 eşya \+ 2|22 eşya \+ 3|21 eşya \+ 4|20 eşya \+ 5|19 eşya \+ 6|18 eşya \+ 7|17 eşya \+ 8) görev, ortalama zorluk ([\d,.]+)
+await Tombala başladı!
+kapisma stop
+say MATRIS savan_cangil 200 3 8 1
+kapisma seedclass savan_cangil
+kapisma rule BINGO borderStart 200
+kapisma rule BINGO difficulty 3
+kapisma rule BINGO tasks 8
+kapisma rule BINGO sharedItems 1
+kapisma start
+await Tombala doğrulama:
+capture card Tombala karti: (?:25 eşya \+ 0|24 eşya \+ 1|23 eşya \+ 2|22 eşya \+ 3|21 eşya \+ 4|20 eşya \+ 5|19 eşya \+ 6|18 eşya \+ 7|17 eşya \+ 8) görev, ortalama zorluk ([\d,.]+)
+await Tombala başladı!
+kapisma stop
+say MATRIS dag 200 1 0 0
+kapisma seedclass dag
+kapisma rule BINGO borderStart 200
+kapisma rule BINGO difficulty 1
+kapisma rule BINGO tasks 0
+kapisma rule BINGO sharedItems 0
+kapisma start
+await Tombala doğrulama:
+capture card Tombala karti: (?:25 eşya \+ 0|24 eşya \+ 1|23 eşya \+ 2|22 eşya \+ 3|21 eşya \+ 4|20 eşya \+ 5|19 eşya \+ 6|18 eşya \+ 7|17 eşya \+ 8) görev, ortalama zorluk ([\d,.]+)
+await Tombala başladı!
+kapisma stop
+say MATRIS ova 1000 3 8 1
+kapisma seedclass ova
+kapisma rule BINGO borderStart 1000
+kapisma rule BINGO difficulty 3
+kapisma rule BINGO tasks 8
+kapisma rule BINGO sharedItems 1
+kapisma start
+await Tombala doğrulama:
+capture card Tombala karti: (?:25 eşya \+ 0|24 eşya \+ 1|23 eşya \+ 2|22 eşya \+ 3|21 eşya \+ 4|20 eşya \+ 5|19 eşya \+ 6|18 eşya \+ 7|17 eşya \+ 8) görev, ortalama zorluk ([\d,.]+)
+await Tombala başladı!
+kapisma stop
+say MATRIS orman 1000 1 0 0
+kapisma seedclass orman
+kapisma rule BINGO borderStart 1000
+kapisma rule BINGO difficulty 1
+kapisma rule BINGO tasks 0
+kapisma rule BINGO sharedItems 0
+kapisma start
+await Tombala doğrulama:
+capture card Tombala karti: (?:25 eşya \+ 0|24 eşya \+ 1|23 eşya \+ 2|22 eşya \+ 3|21 eşya \+ 4|20 eşya \+ 5|19 eşya \+ 6|18 eşya \+ 7|17 eşya \+ 8) görev, ortalama zorluk ([\d,.]+)
+await Tombala başladı!
+kapisma stop
+say MATRIS taiga_kar 1000 2 3 1
+kapisma seedclass taiga_kar
+kapisma rule BINGO borderStart 1000
+kapisma rule BINGO difficulty 2
+kapisma rule BINGO tasks 3
+kapisma rule BINGO sharedItems 1
+kapisma start
+await Tombala doğrulama:
+capture card Tombala karti: (?:25 eşya \+ 0|24 eşya \+ 1|23 eşya \+ 2|22 eşya \+ 3|21 eşya \+ 4|20 eşya \+ 5|19 eşya \+ 6|18 eşya \+ 7|17 eşya \+ 8) görev, ortalama zorluk ([\d,.]+)
+await Tombala başladı!
+kapisma stop
+say MATRIS col_mesa 1000 3 8 0
+kapisma seedclass col_mesa
+kapisma rule BINGO borderStart 1000
+kapisma rule BINGO difficulty 3
+kapisma rule BINGO tasks 8
+kapisma rule BINGO sharedItems 0
+kapisma start
+await Tombala doğrulama:
+capture card Tombala karti: (?:25 eşya \+ 0|24 eşya \+ 1|23 eşya \+ 2|22 eşya \+ 3|21 eşya \+ 4|20 eşya \+ 5|19 eşya \+ 6|18 eşya \+ 7|17 eşya \+ 8) görev, ortalama zorluk ([\d,.]+)
+await Tombala başladı!
+kapisma stop
+say MATRIS savan_cangil 1000 2 3 0
+kapisma seedclass savan_cangil
+kapisma rule BINGO borderStart 1000
+kapisma rule BINGO difficulty 2
+kapisma rule BINGO tasks 3
+kapisma rule BINGO sharedItems 0
+kapisma start
+await Tombala doğrulama:
+capture card Tombala karti: (?:25 eşya \+ 0|24 eşya \+ 1|23 eşya \+ 2|22 eşya \+ 3|21 eşya \+ 4|20 eşya \+ 5|19 eşya \+ 6|18 eşya \+ 7|17 eşya \+ 8) görev, ortalama zorluk ([\d,.]+)
+await Tombala başladı!
+kapisma stop
+say MATRIS dag 1000 1 8 1
+kapisma seedclass dag
+kapisma rule BINGO borderStart 1000
+kapisma rule BINGO difficulty 1
+kapisma rule BINGO tasks 8
+kapisma rule BINGO sharedItems 1
+kapisma start
+await Tombala doğrulama:
+capture card Tombala karti: (?:25 eşya \+ 0|24 eşya \+ 1|23 eşya \+ 2|22 eşya \+ 3|21 eşya \+ 4|20 eşya \+ 5|19 eşya \+ 6|18 eşya \+ 7|17 eşya \+ 8) görev, ortalama zorluk ([\d,.]+)
+await Tombala başladı!
+kapisma stop

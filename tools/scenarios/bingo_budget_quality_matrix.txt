@@ -1,0 +1,139 @@
+player Bot1 spawn
+player Bot2 spawn
+wait 2
+kapisma game BINGO
+kapisma origins off
+kapisma team solo
+kapisma rule BINGO minimap 0
+say MATRIS ova 200 1 0 0
+say EXPECTED_SEED 4913888426629928278
+kapisma seedclass matrix_0
+kapisma rule BINGO borderStart 200
+kapisma rule BINGO difficulty 1
+kapisma rule BINGO tasks 0
+kapisma rule BINGO sharedItems 0
+kapisma start
+await_regex Tombala başladı!|Bu seed ve sınırda 25 farklı hedef doğrulanamadı|Tombala dünyası zamanında doğrulanamadı
+kapisma stop
+await_regex Arena depolama kapandı:
+say MATRIS orman 200 2 3 1
+say EXPECTED_SEED -1250613006204744322
+kapisma seedclass matrix_1
+kapisma rule BINGO borderStart 200
+kapisma rule BINGO difficulty 2
+kapisma rule BINGO tasks 3
+kapisma rule BINGO sharedItems 1
+kapisma start
+await_regex Tombala başladı!|Bu seed ve sınırda 25 farklı hedef doğrulanamadı|Tombala dünyası zamanında doğrulanamadı
+kapisma stop
+await_regex Arena depolama kapandı:
+say MATRIS taiga_kar 200 3 8 0
+say EXPECTED_SEED -5137069084408921871
+kapisma seedclass matrix_2
+kapisma rule BINGO borderStart 200
+kapisma rule BINGO difficulty 3
+kapisma rule BINGO tasks 8
+kapisma rule BINGO sharedItems 0
+kapisma start
+await_regex Tombala başladı!|Bu seed ve sınırda 25 farklı hedef doğrulanamadı|Tombala dünyası zamanında doğrulanamadı
+kapisma stop
+await_regex Arena depolama kapandı:
+say MATRIS col_mesa 200 2 3 1
+say EXPECTED_SEED -335906671735727005
+kapisma seedclass matrix_3
+kapisma rule BINGO borderStart 200
+kapisma rule BINGO difficulty 2
+kapisma rule BINGO tasks 3
+kapisma rule BINGO sharedItems 1
+kapisma start
+await_regex Tombala başladı!|Bu seed ve sınırda 25 farklı hedef doğrulanamadı|Tombala dünyası zamanında doğrulanamadı
+kapisma stop
+await_regex Arena depolama kapandı:
+say MATRIS savan_cangil 200 3 8 1
+say EXPECTED_SEED -3916441912049109776
+kapisma seedclass matrix_4
+kapisma rule BINGO borderStart 200
+kapisma rule BINGO difficulty 3
+kapisma rule BINGO tasks 8
+kapisma rule BINGO sharedItems 1
+kapisma start
+await_regex Tombala başladı!|Bu seed ve sınırda 25 farklı hedef doğrulanamadı|Tombala dünyası zamanında doğrulanamadı
+kapisma stop
+await_regex Arena depolama kapandı:
+say MATRIS dag 200 1 0 0
+say EXPECTED_SEED -2073690826351143770
+kapisma seedclass matrix_5
+kapisma rule BINGO borderStart 200
+kapisma rule BINGO difficulty 1
+kapisma rule BINGO tasks 0
+kapisma rule BINGO sharedItems 0
+kapisma start
+await_regex Tombala başladı!|Bu seed ve sınırda 25 farklı hedef doğrulanamadı|Tombala dünyası zamanında doğrulanamadı
+kapisma stop
+await_regex Arena depolama kapandı:
+say MATRIS ova 1000 3 8 1
+say EXPECTED_SEED -2564433333985252572
+kapisma seedclass matrix_6
+kapisma rule BINGO borderStart 1000
+kapisma rule BINGO difficulty 3
+kapisma rule BINGO tasks 8
+kapisma rule BINGO sharedItems 1
+kapisma start
+await_regex Tombala başladı!|Bu seed ve sınırda 25 farklı hedef doğrulanamadı|Tombala dünyası zamanında doğrulanamadı
+kapisma stop
+await_regex Arena depolama kapandı:
+say MATRIS orman 1000 1 0 0
+say EXPECTED_SEED 1471295598395368035
+kapisma seedclass matrix_7
+kapisma rule BINGO borderStart 1000
+kapisma rule BINGO difficulty 1
+kapisma rule BINGO tasks 0
+kapisma rule BINGO sharedItems 0
+kapisma start
+await_regex Tombala başladı!|Bu seed ve sınırda 25 farklı hedef doğrulanamadı|Tombala dünyası zamanında doğrulanamadı
+kapisma stop
+await_regex Arena depolama kapandı:
+say MATRIS taiga_kar 1000 2 3 1
+say EXPECTED_SEED -2462433212117075415
+kapisma seedclass matrix_8
+kapisma rule BINGO borderStart 1000
+kapisma rule BINGO difficulty 2
+kapisma rule BINGO tasks 3
+kapisma rule BINGO sharedItems 1
+kapisma start
+await_regex Tombala başladı!|Bu seed ve sınırda 25 farklı hedef doğrulanamadı|Tombala dünyası zamanında doğrulanamadı
+kapisma stop
+await_regex Arena depolama kapandı:
+say MATRIS col_mesa 1000 3 8 0
+say EXPECTED_SEED -8433405828127185514
+kapisma seedclass matrix_9
+kapisma rule BINGO borderStart 1000
+kapisma rule BINGO difficulty 3
+kapisma rule BINGO tasks 8
+kapisma rule BINGO sharedItems 0
+kapisma start
+await_regex Tombala başladı!|Bu seed ve sınırda 25 farklı hedef doğrulanamadı|Tombala dünyası zamanında doğrulanamadı
+kapisma stop
+await_regex Arena depolama kapandı:
+say MATRIS savan_cangil 1000 2 3 0
+say EXPECTED_SEED -4417597306178274628
+kapisma seedclass matrix_10
+kapisma rule BINGO borderStart 1000
+kapisma rule BINGO difficulty 2
+kapisma rule BINGO tasks 3
+kapisma rule BINGO sharedItems 0
+kapisma start
+await_regex Tombala başladı!|Bu seed ve sınırda 25 farklı hedef doğrulanamadı|Tombala dünyası zamanında doğrulanamadı
+kapisma stop
+await_regex Arena depolama kapandı:
+say MATRIS dag 1000 1 8 1
+say EXPECTED_SEED -2509361731934950329
+kapisma seedclass matrix_11
+kapisma rule BINGO borderStart 1000
+kapisma rule BINGO difficulty 1
+kapisma rule BINGO tasks 8
+kapisma rule BINGO sharedItems 1
+kapisma start
+await_regex Tombala başladı!|Bu seed ve sınırda 25 farklı hedef doğrulanamadı|Tombala dünyası zamanında doğrulanamadı
+kapisma stop
+await_regex Arena depolama kapandı:

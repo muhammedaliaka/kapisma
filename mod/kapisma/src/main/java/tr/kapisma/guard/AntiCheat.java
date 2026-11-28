@@ -30,7 +30,7 @@ import tr.kapisma.mixin.TrackedEntityAccessor;
 /**
  * Oyuncu hilelerine karsi sunucu tarafi koruma (oyun kuralinda "antiCheat" aciksa, sadece oyun BASLAYINCA):
  *  1) Gorus hatti (ESP / wallhack / oyuncu radari): duvar/kati blok arkasindaki oyuncu istemciye HIC gonderilmez.
- *  2) Dovus: menzil asimi, katı blok arkasindan vurma, asiri tiklama (autoclicker) engellenir.
+ *  2) Dövüş: menzil ve katı duvar kontrolleri sunucuda yapılır. Tıklama hızı tek başına yaptırım oluşturmaz.
  *  3) Seed: istemciye giden "hashed seed" uydurma (her zaman).
  * Istemcide calisan hileler (fullbright, freecam gorsel, Baritone ...) sunucudan engellenemez; docs/DENEY_PLANI.md bunu acikca yazar.
  */
@@ -77,10 +77,10 @@ public final class AntiCheat {
 		if (viewer.isSpectator() || target.isSpectator()) return false;
 		double d2 = viewer.distanceToSqr(target);
 		if (d2 < NEAR * NEAR) return false;
-		if (d2 > FAR * FAR) { hiddenDecisions++; return true; }
 		if (target.hasEffect(MobEffects.GLOWING)) return false;          // parlayan oyuncu (final) duvardan da gorunur olmali
 		if (sameTeam(viewer, target)) return false;
-		int now = (int) lvl.getGameTime();
+		if (d2 > FAR * FAR) return false; // Menzilin geri kalanını vanilla takibi yönetir.
+		int now = viewer.getServer().getTickCount();
 		long key = ((long) viewer.getId() << 32) | (target.getId() & 0xFFFFFFFFL);
 		int[] e = cache.get(key);
 		if (e != null && now - e[1] >= 0 && now - e[1] < interval) return e[0] == 0;
@@ -97,7 +97,7 @@ public final class AntiCheat {
 
 	private static boolean sameTeam(ServerPlayer a, ServerPlayer b) {
 		var g = Kapisma.GM != null ? Kapisma.GM.current : null;
-		if (g == null) return false;
+		if (g == null || "KATIL".equals(g.id())) return false;
 		var ta = g.teamOf(a.getUUID());
 		return ta != null && ta == g.teamOf(b.getUUID());
 	}
@@ -136,9 +136,10 @@ public final class AntiCheat {
 		int minY = lvl.getMinBuildHeight(), maxY = lvl.getMaxBuildHeight();
 		int guard = 0;
 		while ((x != ex || y != ey || z != ez) && guard++ < 400) {
-			if (tx < ty && tx < tz) { x += sx; tx += ddx; }
-			else if (ty < tz) { y += sy; ty += ddy; }
-			else { z += sz; tz += ddz; }
+			double next = Math.min(tx, Math.min(ty, tz));
+			if (tx <= next + 1e-9) { x += sx; tx += ddx; }
+			if (ty <= next + 1e-9) { y += sy; ty += ddy; }
+			if (tz <= next + 1e-9) { z += sz; tz += ddz; }
 			if (x == ex && y == ey && z == ez) break;
 			if (y < minY || y >= maxY) continue;
 			int ck = x >> 4, cz2 = z >> 4;
@@ -155,6 +156,7 @@ public final class AntiCheat {
 	public static void tick(MinecraftServer server) {
 		if (Kapisma.GM == null) return;
 		long t = server.getTickCount();
+		wasActive.removeIf(level -> server.getLevel(level.dimension()) != level);
 		for (ServerLevel lvl : server.getAllLevels()) {
 			boolean act = active(lvl);
 			boolean was = wasActive.contains(lvl);
@@ -164,7 +166,7 @@ public final class AntiCheat {
 			refresh(lvl);
 		}
 		if (t % 1200 == 0) {
-			int now = (int) server.overworld().getGameTime();
+			int now = server.getTickCount();
 			cache.entrySet().removeIf(en -> Math.abs(now - en.getValue()[1]) > 600);
 			swings.keySet().removeIf(u -> server.getPlayerList().getPlayer(u) == null);
 		}
@@ -194,27 +196,51 @@ public final class AntiCheat {
 	public static InteractionResult onAttack(Player player, Level level, InteractionHand hand, Entity target, EntityHitResult hit) {
 		if (level.isClientSide || !(player instanceof ServerPlayer sp) || sp.isCreative() || sp.isSpectator()) return InteractionResult.PASS;
 		if (!active(level) || target instanceof EnderDragonPart) return InteractionResult.PASS;
-		// asiri tiklama: 20 tikte 18'den fazla saldiri
-		int now = (int) level.getGameTime();
-		var q = swings.computeIfAbsent(sp.getUUID(), k -> new ArrayDeque<>());
-		while (!q.isEmpty() && now - q.peekFirst() > 20) q.pollFirst();
-		if (q.size() >= 18) return flag(sp, "tiklama", "saniyede çok fazla vuruş");
-		q.addLast(now);
+		if (target.level() != level || target.isRemoved()) return flag("hedef", "geçersiz saldırı hedefi");
 		// menzil
 		Vec3 eye = sp.getEyePosition();
 		AABB b = target.getBoundingBox().inflate(target.getPickRadius());
 		Vec3 near = new Vec3(Mth.clamp(eye.x, b.minX, b.maxX), Mth.clamp(eye.y, b.minY, b.maxY), Mth.clamp(eye.z, b.minZ, b.maxZ));
 		double reach = sp.getAttributeValue(Attributes.ENTITY_INTERACTION_RANGE) + 1.3;     // vanilla sunucu +3 payi verir; gecikme icin 1.3 yeter
-		if (eye.distanceTo(near) > reach) return flag(sp, "menzil", "menzil dışı vuruş (" + String.format("%.1f", eye.distanceTo(near)) + " blok)");
+		if (eye.distanceToSqr(near) > reach * reach) return flag("menzil", "menzil dışı vuruş");
 		// duvar arkasi
-		if (level instanceof ServerLevel sl && blocked(sl, eye, near) && blocked(sl, eye, b.getCenter()))
-			return flag(sp, "duvar", "duvarın arkasından vuruş");
+		if (level instanceof ServerLevel sl && blocked(sl, eye, near) && blocked(sl, eye, b.getCenter())
+				&& !hasReachableEdge(sl, eye, target.getBoundingBox(), reach))
+			return flag("duvar", "duvarın arkasından vuruş");
+		int now = sp.getServer().getTickCount();
+		var q = swings.computeIfAbsent(sp.getUUID(), k -> new ArrayDeque<>());
+		while (!q.isEmpty() && now - q.peekFirst() >= 20) q.pollFirst();
+		if (q.size() == 18) violations.merge("tiklama_gozlem", 1, Integer::sum);
+		if (q.size() < 19) q.addLast(now);
 		return InteractionResult.PASS;
 	}
 
-	private static InteractionResult flag(ServerPlayer p, String kind, String text) {
+	/**
+	 * A partially exposed target may be hit at an edge although its closest point
+	 * and center are behind a full block. Test only points on the actual hitbox,
+	 * within reach, and only when the two fast rays were both blocked.
+	 * Conservative samples are not a proof of visibility for every possible ray.
+	 */
+	private static boolean hasReachableEdge(ServerLevel level, Vec3 eye, AABB box, double reach) {
+		double[] xs = {box.minX + 1e-5, box.getCenter().x, box.maxX - 1e-5};
+		double[] ys = {box.minY + 1e-5, box.getCenter().y, box.maxY - 1e-5};
+		double[] zs = {box.minZ + 1e-5, box.getCenter().z, box.maxZ - 1e-5};
+		double limit = reach * reach;
+		for (double x : xs) for (double y : ys) for (double z : zs) {
+			Vec3 point = new Vec3(x, y, z);
+			if (eye.distanceToSqr(point) <= limit && !blocked(level, eye, point)) return true;
+		}
+		return false;
+	}
+
+	public static void onDisconnect(ServerPlayer p) {
+		swings.remove(p.getUUID());
+		cache.keySet().removeIf(key -> (int) (key >> 32) == p.getId() || (int) key.longValue() == p.getId());
+	}
+
+	private static InteractionResult flag(String kind, String text) {
 		int n = violations.merge(kind, 1, Integer::sum);
-		Kapisma.LOG.info("[koruma] {}: {} (toplam {} {})", p.getGameProfile().getName(), text, n, kind);
+		if (n == 1 || n % 50 == 0) Kapisma.LOG.info("[koruma] {} (toplam {} {})", text, n, kind);
 		return InteractionResult.FAIL;
 	}
 
